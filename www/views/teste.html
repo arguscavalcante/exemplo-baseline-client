@@ -1,0 +1,19 @@
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <td> MARCA </td>
+            <td> MODELO </td>
+            <td> COR </td>
+            <td> ANO </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="id in carro"> 
+            <td>{{id.make}}</td>
+            <td>{{id.model}}</td>
+            <td>{{id.color}}</td>
+            <td>{{id.year}}</td>
+        </tr>
+    </tbody>
+</table>

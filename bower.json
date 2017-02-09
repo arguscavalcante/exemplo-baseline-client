@@ -1,0 +1,21 @@
+{
+  "name": "exemplo-baseline-client",
+  "description": "",
+  "main": "app.js",
+  "authors": [
+    "EdsonNascimentoJr <egustavo@br.ibm.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/arguscavalcante/exemplo-baseline-client",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "angular-resource": "^1.6.2"
+  }
+}
