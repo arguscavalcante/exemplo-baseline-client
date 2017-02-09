@@ -6,7 +6,6 @@
     "EdsonNascimentoJr <egustavo@br.ibm.com>"
   ],
   "license": "ISC",
-  "homepage": "https://github.com/arguscavalcante/exemplo-baseline-client",
   "ignore": [
     "**/.*",
     "node_modules",
