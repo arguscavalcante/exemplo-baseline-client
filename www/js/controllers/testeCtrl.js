@@ -8,7 +8,7 @@ angular
 
         //find, findOne, findById
         function listarCarros(){
-            Car.find().$promise.then(function(res, err){
+            Car.find({where: {make:'Toyota'}}).$promise.then(function(res, err){
                 $scope.carro = res;
             });
             

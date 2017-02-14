@@ -1,19 +1,53 @@
 
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <td> MARCA </td>
-            <td> MODELO </td>
-            <td> COR </td>
-            <td> ANO </td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="id in carro"> 
-            <td>{{id.make}}</td>
-            <td>{{id.model}}</td>
-            <td>{{id.color}}</td>
-            <td>{{id.year}}</td>
-        </tr>
-    </tbody>
-</table>
+    <section class="menu-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="navbar-collapse collapse ">
+                        <ul id="menu-top" class="nav navbar-nav navbar-right">
+                            <li><a ui-sref="config">Configuração</a></li>
+                            <li><a ui-sref="blank">Cadastro de Projetos</a></li>
+                            <li><a class="menu-top-active" ui-sref="teste">Relatório</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- MENU SECTION END-->
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4 class="page-head-line">Blank Page</h4>
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <td> MARCA </td>
+                                <td> MODELO </td>
+                                <td> COR </td>
+                                <td> ANO </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="id in carro"> 
+                                <td>{{id.make}}</td>
+                                <td>{{id.model}}</td>
+                                <td>{{id.color}}</td>
+                                <td>{{id.year}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+ 

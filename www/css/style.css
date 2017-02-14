@@ -174,15 +174,15 @@ header {
 }
 
 .menu-top-active {
-    background-color: #C36464;
+    background-color: #31b0d5;
 }
 
 .menu-section .nav > li > a:hover,.menu-section .nav > li > a:focus {
-    background-color: #F0677C!important;
+    background-color: #23527c!important;
 }
 
 .menu-section .dropdown-menu > li > a:hover,.menu-section .dropdown-menu > li > a:focus {
-    background-color: #F0677C!important;
+    background-color: #23527c!important;
 }
 
 .navbar-inverse {
@@ -258,7 +258,7 @@ footer {
     text-align: center;
     padding: 15px;
     color: #fff;
-    margin-bottom: 50px;
+    margin-bottom: 15px;
 }
 
     .dashboard-div-wrapper .progress {

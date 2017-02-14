@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/arguscavalcante/exemplo-baseline-client#readme",
   "dependencies": {
+    "angular-modal-service": "^0.10.1",
     "angular-ui-router": "^0.4.2",
     "express": "^4.14.1"
   },

@@ -1,9 +1,9 @@
   
-angular.module('starter', ['ui.router', 'lbServices'])
+var app = angular.module('starter', ['ui.router', 'lbServices'])
 
     .config(function(LoopBackResourceProvider, $stateProvider, $urlRouterProvider) {
-        LoopBackResourceProvider.setUrlBase('http://exemplo-baseline-api.mybluemix.net/api');
-        //LoopBackResourceProvider.setUrlBase('http://localhost:7000/api');
+        //LoopBackResourceProvider.setUrlBase('http://exemplo-baseline-api.mybluemix.net');
+        LoopBackResourceProvider.setUrlBase('http://localhost:7000/api');
     })
   
     .config(function($stateProvider, $urlRouterProvider) {
@@ -25,11 +25,46 @@ angular.module('starter', ['ui.router', 'lbServices'])
         controller: 'loginCtrl'
         })
 
-        //TESTE
+        // BLANK
         .state('blank', {
         url: '/blank',
         templateUrl: 'views/blank.html',
         controller: 'blankCtrl'
+        })
+
+        // CONFIG
+        .state('config', {
+        url: '/config',
+        templateUrl: 'views/config.html',
+        controller: 'configCtrl'
+        })
+
+        // TORRE
+        .state('torre', {
+        url: '/torre',
+        templateUrl: 'views/configtorre.html',
+        controller: 'configTorreCtrl'
+        })
+
+        // SUBTORRE
+        .state('subtorre', {
+        url: '/subtorre',
+        templateUrl: 'views/configsubtorre.html',
+        controller: 'configSubTorreCtrl'
+        })
+
+        // USUARIO
+        .state('usuario', {
+        url: '/usuario',
+        templateUrl: 'views/configusuario.html',
+        controller: 'configUsuarioCtrl'
+        })
+
+        // CONFIG1
+        .state('config1', {
+        url: '/config1',
+        templateUrl: 'views/config.1.html',
+        controller: 'configCtrl'
         })
 
         //TESTE CHAMADA BANCO
