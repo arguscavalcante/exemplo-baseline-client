@@ -2,7 +2,7 @@
 var app = angular.module('starter', ['ui.router', 'lbServices'])
 
     .config(function(LoopBackResourceProvider, $stateProvider, $urlRouterProvider) {
-        LoopBackResourceProvider.setUrlBase('http://exemplo-baseline-api.mybluemix.net/api');
+        LoopBackResourceProvider.setUrlBase('https://exemplo-baseline-api.mybluemix.net/api');
         //LoopBackResourceProvider.setUrlBase('http://localhost:7000/api');
     })
   
