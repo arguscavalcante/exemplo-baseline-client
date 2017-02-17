@@ -10,7 +10,9 @@ app.controller('loginCtrl', ['$scope', '$state', '$window', '$rootScope', 'User'
 
     $scope.usuario = usuario; //Valida se o usuario foi digitado
 
-    $scope.login = {}; //Valida o usuario cadastrado no banco
+    $scope.login = {}; //Grava as informações para realizar a validação
+
+    var valida; //Variavel responsável por armazenar o retorno
 
     function load ()
     {
@@ -27,8 +29,11 @@ app.controller('loginCtrl', ['$scope', '$state', '$window', '$rootScope', 'User'
             alert('Os campos de login e senha devem ser preenchidos!!');
         }
         else {
-            if ( validaLogin() ){
-                alert('entrei2');
+
+            validaLogin();
+
+            if ( valida ){
+                alert('entrei3');
                 $window.localStorage.setItem('nome', JSON.stringify($scope.usuario.nome));
                 $window.localStorage.setItem('senha', JSON.stringify($scope.usuario.senha));
 
@@ -42,44 +47,23 @@ app.controller('loginCtrl', ['$scope', '$state', '$window', '$rootScope', 'User'
     //find, findOne, findById
     function validaLogin(){
         alert('entrei2');
-        //User.find({where: {and: [{login: 'admin'}, {senha: 'adm123'}]}}), function(res, err, users){
-        User.find({ where: {login:'admin'} }), function(res, err){
-            console.log(res);
-           
-        };
+        User.find({filter:{where: {login_user: '' + $scope.usuario.nome + ''}}}).$promise.then(function(res, err){
+
+            $scope.login = res[0];
+
+            if(res.length == 0){
+                alert('Usuário não cadastrado!');
+                valida = false;
+                return;
+            }
+            if($scope.login.login_pass != $scope.usuario.senha){
+                alert('Senha incorreta!');
+                valida = false;
+                return;
+            }
+            valida = true;
+        });
     }
         
-
-
-  /*  User.findOne({email: req.body.email, password: req.body.password}, function(err, user) {
-        if (err) {
-            res.json({
-                type: false,
-                data: "Error occured: " + err
-            });
-        } else {
-            if (user) {
-                res.json({
-                    type: false,
-                    data: "User already exists!"
-                });
-            } else {
-                var userModel = new User();
-                userModel.email = req.body.email;
-                userModel.password = req.body.password;
-                userModel.save(function(err, user) {
-                    user.token = jwt.sign(user, process.env.JWT_SECRET);
-                    user.save(function(err, user1) {
-                        res.json({
-                            type: true,
-                            data: user1,
-                            token: user1.token
-                        });
-                    });
-                })
-            }
-        }
-    });*/
-
 }]);
 
