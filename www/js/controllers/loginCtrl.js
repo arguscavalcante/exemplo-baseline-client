@@ -33,7 +33,7 @@ app.controller('loginCtrl', ['$scope', '$state', '$window', '$rootScope', 'User'
             validaLogin();
 
             if ( valida ){
-                alert('entrei3');
+              
                 $window.localStorage.setItem('nome', JSON.stringify($scope.usuario.nome));
                 $window.localStorage.setItem('senha', JSON.stringify($scope.usuario.senha));
 
@@ -46,7 +46,7 @@ app.controller('loginCtrl', ['$scope', '$state', '$window', '$rootScope', 'User'
 
     //find, findOne, findById
     function validaLogin(){
-        alert('entrei2');
+ 
         User.find({filter:{where: {login_user: '' + $scope.usuario.nome + ''}}}).$promise.then(function(res, err){
 
             $scope.login = res[0];
