@@ -10,37 +10,38 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <form>
+                    <form ng-submit="validaLogin('teste')">
                         <label class="login-text">Enter IBM ID : </label>
                         <input type="text" ng-model="usuario.nome" value="" class="form-control" />
                         <br />
                         <label class="login-text">Enter Baseline User Password :  </label>
                         <input type="password" ng-model="usuario.senha" value="" class="form-control" />
                         <hr />
-                        <a ng-click="goTo('blank');" class="btn btn-info"><span class="glyphicon glyphicon-user"></span> &nbsp;Sign In </a>&nbsp;
+                        <button type="submit" class="btn btn-info" value=""><span class="glyphicon glyphicon-user"></span> &nbsp;Sign In </button>&nbsp;
                     </form>
                 </div>
                 <div class="col-md-6">
                     <div class="alert alert-info">
-                        This is a free bootstrap admin template with basic pages you need to craft your project. 
-                        Use this template for free to use for personal and commercial use.
-                        <br />
-                        <strong> Instructions To Use:</strong>
+                        <strong> Precauções e Avisos:</strong>
                         <ul>
                             <li>
-                               Lorem ipsum dolor sit amet ipsum dolor sit ame
+                               Use somente em navegadores Firefox e Internet Explorer.<br />
+                               Estamos resolvendo problemas sobre permissão HTTPS nos navegadores Chrome.
+                               <b style="color:red;">Verificar se o problema foi solucionado.</b>
                             </li>
                             <li>
-                                 Aamet ipsum dolor sit ame
+                               Incluída a tela de configuração de Torre.
                             </li>
                             <li>
-                               Lorem ipsum dolor sit amet ipsum dolor
+                               Incluída a tela de configuração de SubTorre.
                             </li>
                             <li>
-                                 Cpsum dolor sit ame
+                               Incluída a tela de configuração de Usuário.
+                            </li>
+                            <li>
+                               Incluída a tela de Cadastro de Projetos.
                             </li>
                         </ul>
-                       
                     </div>
 
                 </div>

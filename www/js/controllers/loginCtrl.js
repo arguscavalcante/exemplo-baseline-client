@@ -1,43 +1,45 @@
 'use strict';
 
-app.controller('loginCtrl', ['$scope', '$state', '$window', '$rootScope', 'User', function($scope, $state, $window, $rootScope, User){
+app.controller('loginCtrl', ['$scope', '$state', '$rootScope', 'User', function($scope, $state, $rootScope, User){
     console.log('loginCtrl')
     
-    var usuario = {
+ /*   var usuario = {
             "nome":"",
             "senha": ""
     };
-
-    $scope.usuario = usuario; //Valida se o usuario foi digitado
+*/
+    $scope.usuario = {}; //Valida se o usuario foi digitado
 
     $scope.login = {}; //Grava as informações para realizar a validação
 
     var valida; //Variavel responsável por armazenar o retorno
 
-    function load ()
+/*    function load ()
     {
         $scope.usuario.nome = JSON.parse($window.localStorage.getItem('nome'));
         $scope.usuario.senha = JSON.parse($window.localStorage.getItem('senha'));
     }
 
-    load();
+    load();*/
 
-    $scope.goTo = function(pagina)
+    $scope.validaLogin = function(pagina)
     {
-        if($scope.usuario.nome == null || $scope.usuario.senha == null)
+        console.log($scope.usuario.nome);
+
+        if($scope.usuario.nome == null || $scope.usuario.senha == null || $scope.usuario.nome.replace(/[\s]/g, '') == '' ||  $scope.usuario.senha.replace(/[\s]/g, '') == '')
         {
             alert('Os campos de login e senha devem ser preenchidos!!');
         }
         else {
 
-            validaLogin();
+            Login();
 
             if ( valida ){
               
-                $window.localStorage.setItem('nome', JSON.stringify($scope.usuario.nome));
+            /*    $window.localStorage.setItem('nome', JSON.stringify($scope.usuario.nome));
                 $window.localStorage.setItem('senha', JSON.stringify($scope.usuario.senha));
 
-                $rootScope.usuario = $scope.usuario;
+                $rootScope.usuario = $scope.usuario; */
                 console.log($scope.usuario.nome);
                 $state.go(pagina);
             }
@@ -45,7 +47,7 @@ app.controller('loginCtrl', ['$scope', '$state', '$window', '$rootScope', 'User'
     };
 
     //find, findOne, findById
-    function validaLogin(){
+    function Login(){
  
         User.find({filter:{where: {login_user: '' + $scope.usuario.nome + ''}}}).$promise.then(function(res, err){
 

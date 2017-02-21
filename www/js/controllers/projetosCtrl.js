@@ -2,8 +2,8 @@
 
 angular
     .module('starter')
-    .controller('configUsuarioCtrl', ['$scope', '$state', 'Torre', 'SubTorre', 'User',  function($scope, $state, Torre, SubTorre, User){
-        console.log('configUsuarioCtrl')
+    .controller('projetosCtrl', ['$scope', '$state', 'Torre', 'SubTorre', 'User',  function($scope, $state, Torre, SubTorre, User){
+        console.log('projetosCtrl')
 
         $scope.torre = {};
         $scope.subtorre = {};
@@ -88,9 +88,9 @@ angular
             })
 
             if (bool){
-                User.create($scope.formusuario, function(res, err){
+               /* User.create($scope.formusuario, function(res, err){
                     console.log(res);
-                })
+                })*/
             
             }
         

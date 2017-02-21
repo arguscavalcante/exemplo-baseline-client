@@ -2,21 +2,13 @@
 var app = angular.module('starter', ['ui.router', 'lbServices'])
 
     .config(function(LoopBackResourceProvider, $stateProvider, $urlRouterProvider) {
-        LoopBackResourceProvider.setUrlBase('https://exemplo-baseline-api.mybluemix.net/api');
+        LoopBackResourceProvider.setUrlBase('http://exemplo-baseline-api.mybluemix.net/api');
         //LoopBackResourceProvider.setUrlBase('http://localhost:7000/api');
     })
   
     .config(function($stateProvider, $urlRouterProvider) {
 
         $stateProvider
-
-
-    //      .state('pesquisa', {
-    //      url: '/pesquisa',
-    //      cache: false,
-    //      templateUrl: 'view/pesquisa.html',
-    //      controller: 'pesquisaCtrl'
-    //    })
 
         // LOGIN
         .state('login', {
@@ -32,6 +24,13 @@ var app = angular.module('starter', ['ui.router', 'lbServices'])
         controller: 'blankCtrl'
         })
 
+        // CADASTRO DE PROJETOS
+        .state('projetos', {
+        url: '/projetos',
+        templateUrl: 'views/projetos.html',
+        controller: 'projetosCtrl'
+        })
+        
         // CONFIG
         .state('config', {
         url: '/config',
