@@ -19,7 +19,10 @@
    GENERAL STYLES
  ============================================================ */
 
-@import url(http://fonts.googleapis.com/css?family=Roboto); /* FREE GOOGLE FONT */
+@font-face {
+  font-family: 'Roboto';
+  src: url("../fonts/Roboto-Regular.ttf") format("truetype");
+}
 
 body {
     font-family: 'Roboto', sans-serif;

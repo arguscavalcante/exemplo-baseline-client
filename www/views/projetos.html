@@ -1,5 +1,4 @@
-﻿<script src="../js/grafico-projtetos.js"></script> <!-- configUsuario -->
-    <section class="menu-section">
+﻿    <section class="menu-section">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -19,70 +18,51 @@
     <div class="content-wrapper">
         <div class="container">
             <div class="row">
-                <div id="containergraf" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+                <div id="grafproj" style="min-width: 400px; height: 200px; margin: 1 auto"></div>
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-12">
                     <form>
-                        <label>ID IBM:&nbsp; </label>
-                        <input type="text" ng-model="formusuario.login_user" value="" class="form-control" />
-                        <br />
-                        <label>Nome:&nbsp; </label>
-                        <input type="text" ng-model="formusuario.login_nome" value="" class="form-control" />
-                        <br />
-                        <label>Perfil:&nbsp; </label>
-                        <select ng-model="formusuario.perfil">
-                            <option ng-repeat="id in perfil.opcoes" value="{{id.nome}}">{{id.nome}}</option>
-                        </select>
-                        <br />
-                        <label>Torre:&nbsp; </label>
-                        <select ng-model="formusuario.torre">
-                            <option ng-repeat="id in torre" value="{{id.Torre}}"  >{{id.Torre}}</option>
-                        </select>
-                        <br />
-                        <label>SubTorre:&nbsp; </label>
-                        <select ng-model="formusuario.subtorre" ng-options="val for val in selectOptionSubTorres()">
-                             <option value="">Select</option>
-                        </select>
-                        <br />
-                        
-                         <br />
-                        <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
-                        <br />
+                        <table class="table table-striped">
+                            <tr>
+                                <td><label>Proposta:</label></td>
+                                <td> <input type="text" ng-model="formproj.proposta" value="" class="form-control col-md-3" /> </td>
+                                <td><label>Gerente:</label></td>
+                                <td> <input type="text" ng-model="formproj.gerente" value="" class="form-control" /> </td>
+                                <td><label>Família:</label></td>
+                                <td> <select ng-model="formproj.familia" class="form-control" ng-options="val for val in selectOptionFamilia() | orderBy:'toString()' "></select></td>                                
+                            </tr>
+                            <tr>
+                                 <td><label>Sistema:</label></td>
+                                <td> <select ng-model="formproj.sistema" class="form-control">
+                                        <option ng-repeat="id in sistema.opcoes" value="{{id.nome}}">{{id.nome}}</option>
+                                     </select> 
+                                </td>
+                                <td><label>Classificação Geral:</label></td>
+                                <td> <select ng-model="formproj.classificacao_geral" class="form-control">
+                                        <option ng-repeat="id in classificacao_geral.opcoes" value="{{id.nome}}">{{id.nome}}</option>
+                                     </select> 
+                                </td>
+                                 <td><label>Fase:</label></td>
+                                <td> <select ng-model="formproj.fase" class="form-control">
+                                        <option ng-repeat="id in fase.opcoes" value="{{id.nome}}">{{id.nome}}</option>
+                                     </select> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label>Mes/Ano:</label></td>
+                                <td> <select ng-model="formproj.mes_ano" class="form-control">
+                                        <option ng-repeat="id in perfil.opcoes" value="{{id.nome}}">{{id.nome}}</option>
+                                     </select> 
+                                </td>
+                                <td><label>Valor Mes/Ano:</label></td>
+                                <td> <input type="text" ng-model="formproj.gerente" value="" class="form-control" /> </td>
+                                <td><button type="button" ng-click="ValidaForm();" class="btn">Salvar</button></td>
+                            </tr>
+                        </table>
                     </form>
-                </div>
-                <div class="col-md-1">
-                </div>
-                <div class="col-md-6">
-                    <div>
-                        <h3> Usuários Cadastrados </h3>
-                        <div>
-                            <table class="table table-striped table-hover table-responsive">
-                                <thead>
-                                    <tr>
-                                        <th>Login</th>
-                                        <th>Senha</th>
-                                        <th>Nome</th>
-                                        <th>Perfil</th>
-                                        <th>Torre</th>
-                                        <th>SubTorre</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="id in usuario">
-                                        <td>{{id.login_user}}</td>
-                                        <td>******</td>
-                                        <td>{{id.login_nome}}</td>
-                                        <td>{{id.perfil}}</td>
-                                        <td>{{id.torre}}</td>
-                                        <td>{{id.subtorre}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
- 
+

@@ -5,9 +5,43 @@ angular
     .controller('projetosCtrl', ['$scope', '$state', 'Torre', 'SubTorre', 'User',  function($scope, $state, Torre, SubTorre, User){
         console.log('projetosCtrl')
 
-        $scope.torre = {};
+        var i;
+        var d = new Date();
+        $scope.date = []; 
+
         $scope.subtorre = {};
-        $scope.usuario = {};
+
+        $scope.classificacao_geral = {
+            model: null,
+            opcoes: [
+                {nome: 'Aprovado'},
+                {nome: 'Aprovado Autonomia'},
+                {nome: 'Pipeline Aprovado com Cronograma '},
+                {nome: 'Pipeline Aprovado sem Cronograma'},
+                {nome: 'Pipeline Aprovado Autonomia'}
+            ]
+        };
+
+        $scope.fase = {
+            model: null,
+            opcoes: [
+                {nome: 'VSOL'},
+                {nome: 'DSOL'},
+                {nome: 'VDSOL'},
+                {nome: 'DESENV'},
+                {nome: 'TI-UAT'},
+                {nome: 'Suporte TI'}
+            ]
+        };
+
+        $scope.sistema = {
+            model: null,
+            opcoes: [
+                {nome: 'R1'},
+                {nome: 'R2'}
+            ]
+        };
+
         $scope.perfil = {
             model: null,
             opcoes: [
@@ -19,22 +53,7 @@ angular
 
         var bool = true;
 
-        $scope.formusuario = {};
-
-        $scope.formusuario.login_pass = 'Trocar123';
-
-        var bool = true;
-
-        //Options Torre
-        function selectOptionTorres(){
-            Torre.find().$promise.then(function(res, err){
-                $scope.torre = res;
-                console.log(res);
-            });
-            
-        }
-
-        selectOptionTorres();
+        $scope.formproj = {};
 
         // Alimenta com todas as Subtorres
         SubTorre.find().$promise.then(function(res, err){
@@ -42,28 +61,24 @@ angular
             console.log(res);
         });
 
-        //Option SubTorre
-        $scope.selectOptionSubTorres = function(){
+        //Alimentando os valores de data
+        $scope.date.push(d)
+        for(i=1; i<12; i++){
+            //d.add(1, 'month');
+            d.setMonth(d.getMonth() + 1);
+            $scope.date.push(d)
+        }
+
+        console.log($scope.date)
+        //Option Familia
+        $scope.selectOptionFamilia = function(){
             var options = [];
             angular.forEach($scope.subtorre, function(value,index){
-                if (value.Torre_id == $scope.formusuario.torre){
-                    options.push(value.Subtorre);
-                }
+                options.push(value.Torre_id + " - " + value.Subtorre);
             })
 
             return options;       
         }
-
-        //Listar Usuarios
-        function listarUsuarios(){
-            User.find().$promise.then(function(res, err){
-                $scope.usuario = res;
-                console.log(res);
-            });
-            
-        }
-
-        listarUsuarios();
 
         $scope.ValidaForm = function(){
             console.log($scope.formusuario);

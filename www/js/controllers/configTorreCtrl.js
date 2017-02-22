@@ -7,6 +7,7 @@ angular
 
         $scope.torre = {};
         $scope.formtorre = {};
+        var bool = true;
 
         //find, findOne, findById
         function listarTorres(){
@@ -30,14 +31,16 @@ angular
             angular.forEach($scope.torre,function(value,index){
                 if (angular.lowercase(value.Torre).replace(/[\s]/g, '') == angular.lowercase($scope.formtorre.Torre).replace(/[\s]/g, '')){
                     alert('Esse registro já existe.');
-                    return;
+                    bool = false;
                 }
             })
 
-            Torre.create($scope.formtorre, function(res, err){
-                console.log(res);
-            })
-           
+            if (bool){
+                Torre.create($scope.formtorre, function(res, err){
+                    console.log(res);
+                })
+            }
+
             $state.reload();
         }
 
