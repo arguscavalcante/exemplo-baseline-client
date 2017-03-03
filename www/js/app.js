@@ -52,6 +52,20 @@ var app = angular.module('starter', ['ui.router', 'lbServices'])
         controller: 'configSubTorreCtrl'
         })
 
+        // LIMITE GRAFICO
+        .state('limitegraf', {
+        url: '/limitegraf',
+        templateUrl: 'views/configlimitegraf.html',
+        controller: 'configLimiteGrafCtrl'
+        })
+
+        // LIMITE REAL
+        .state('limitereal', {
+        url: '/limitereal',
+        templateUrl: 'views/configlimitereal.html',
+        controller: 'configLimiteRealCtrl'
+        })
+
         // USUARIO
         .state('usuario', {
         url: '/usuario',
@@ -66,11 +80,11 @@ var app = angular.module('starter', ['ui.router', 'lbServices'])
         controller: 'configCtrl'
         })
 
-        //TESTE CHAMADA BANCO
-        .state('teste', {
-        url: '/teste',
-        templateUrl: 'views/teste.html',
-        controller: 'testeCtrl'
+        //RELATORIO
+        .state('relatorio', {
+        url: '/relatorio',
+        templateUrl: 'views/relatorio.html',
+        controller: 'relatorioCtrl'
         });
 
         // if none of the above states are matched, use this as the fallback

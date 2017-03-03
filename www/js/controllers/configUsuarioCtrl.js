@@ -70,7 +70,7 @@ angular
             
             if(angular.isUndefined($scope.formusuario.torre) || angular.isUndefined($scope.formusuario.subtorre) || angular.isUndefined($scope.formusuario.perfil) || angular.isUndefined($scope.formusuario.login_user) || angular.isUndefined($scope.formusuario.login_nome) )
             {
-                 alert('Favor, preencha todas as informações!');
+                alert('Favor, preencha todas as informações!');
                 return;
             }
 

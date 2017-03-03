@@ -1,76 +1,108 @@
-$(function () {
-    Highcharts.chart('grafproj', {
+function grafProjetos(objChartProj) {
+    var chartOptions = {
         chart: {
+            renderTo: objChartProj.render,
             type: 'column'
         },
         title: {
-            text: 'Efficiency Optimization by Branch'
+            text: 'Baseline de Projetos'
         },
         xAxis: {
-            categories: [
-                'Seattle HQ',
-                'San Francisco',
-                'Tokyo'
-            ]
+            categories: objChartProj.categorias,
+            crosshair: true
         },
-        yAxis: [{
-            min: 0,
+        yAxis: { 
             title: {
-                text: 'Employees'
-            }
-        }, {
-            title: {
-                text: 'Profit (millions)'
+                text: 'baseline'
             },
-            opposite: true
-        }],
+            min: objChartProj.minimo,
+            max: objChartProj.maximo, //valor passado por subprojeto.
+            title: {
+                text: 'Valor mensal'
+            }
+        },
         legend: {
+            align: 'right',
+            x: 20,
+            width: 1050,
+            verticalAlign: 'top',
+            y: 30,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+            borderColor: '#CCC',
+            borderWidth: 1,
             shadow: false
         },
         tooltip: {
-            shared: true
+            headerFormat: '<b>{point.x}</b><br/>',
+            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
         },
         plotOptions: {
             column: {
-                grouping: false,
-                shadow: false,
-                borderWidth: 0
+                stacking: 'normal'
             }
         },
         series: [{
-            name: 'Employees',
-            color: 'rgba(165,170,217,1)',
-            data: [150, 73, 20],
-            pointPadding: 0.3,
-            pointPlacement: -0.2
+            name: 'TESTE',
+            data: [50000, 20000, 30000, 70000, 30000, 2000, 50000, 10000, 20000, 50000, 15000, 20000 ]
         }, {
-            name: 'Employees Optimized',
-            color: 'rgba(126,86,134,.9)',
-            data: [140, 90, 40],
-            pointPadding: 0.4,
-            pointPlacement: -0.2
+            name: 'Aprovado',
+            data: [50000, 20000, 30000, 70000, 30000, 9000, 30000, 30000, 70000, 30000, 9000, 30000 ]
         }, {
-            name: 'Profit',
-            color: 'rgba(248,161,63,1)',
-            data: [183.6, 178.8, 198.5],
-            tooltip: {
-                valuePrefix: '$',
-                valueSuffix: ' M'
+            name: 'Aprovado Autonomia',
+            data: [50000, 20000, 30000, 70000, 30000, 9000, 30000, 30000, 70000, 30000, 9000, 30000 ]
+        }, {
+            name: 'Pipeline Aprovado com Cronograma',
+            data: [50000, 20000, 30000, 70000, 30000, 9000, 30000, 30000, 70000, 30000, 9000, 30000 ]
+        }, {
+            name: 'Pipeline Aprovado sem Cronograma',
+            data: [50000, 20000, 30000, 70000, 30000, 9000, 30000, 30000, 70000, 30000, 9000, 30000 ]
+        }, {
+            name: 'Pipeline Aprovado Autonomia',
+            data: [50000, 20000, 30000, 70000, 30000, 2000, 50000, 10000, 20000, 50000, 15000, 20000 ]
+        }, {
+            type: 'line',
+            name: 'Limite',
+            data: objChartProj.limite,
+            marker: {
+                enabled: false
             },
-            pointPadding: 0.3,
-            pointPlacement: 0.2,
-            yAxis: 1
-        }, {
-            name: 'Profit Optimized',
-            color: 'rgba(186,60,61,.9)',
-            data: [203.6, 198.8, 208.5],
-            tooltip: {
-                valuePrefix: '$',
-                valueSuffix: ' M'
+            states: {
+                hover: {
+                    lineWidth: 0
+                }
             },
-            pointPadding: 0.4,
-            pointPlacement: 0.2,
-            yAxis: 1
+            enableMouseTracking: false
+        }, {
+            type: 'line',
+            name: 'Limite -5%',
+            data: objChartProj.limite_neg,
+            marker: {
+                enabled: false
+            },
+            dashStyle: 'shortdot',
+            states: {
+                hover: {
+                    lineWidth: 0
+                }
+            },
+            enableMouseTracking: false
+        }, {
+            type: 'line',
+            name: 'Limite +5%',
+            data: objChartProj.limite_pos,
+            marker: {
+                enabled: false
+            },
+            dashStyle: 'dash',
+            states: {
+                hover: {
+                    lineWidth: 0
+                }
+            },
+            enableMouseTracking: false
         }]
-    });
-});
+    }
+
+    new Highcharts.chart(chartOptions);
+}
