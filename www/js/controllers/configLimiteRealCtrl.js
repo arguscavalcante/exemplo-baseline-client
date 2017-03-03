@@ -7,6 +7,7 @@ angular
 
         var i;
         var d = new Date();
+        d.setMonth(d.getMonth() -5);
         var bool = true;
 
         $scope.date = []; 
@@ -18,7 +19,7 @@ angular
         $scope.formlimreal.id = 0;
 
         //find, findOne, findById
-        function listarLimGraf(){
+        function listarLimReal(){
             LimiteReal.find().$promise.then(function(res, err){
                 $scope.limreal = res;
                 console.log(res);
@@ -26,14 +27,14 @@ angular
             
         }
 
-        listarLimGraf();
+        listarLimReal();
 
         //Alimentando os valores de data
-        for(i=0; i<12; i++){
+        for(i=0; i<17; i++){
             $scope.date.push('-'+d.getMonth()+'/'+d.getFullYear())
             d.setMonth(d.getMonth() + 1);
         }
-        for(i=0; i<12; i++){
+        for(i=0; i<17; i++){
             $scope.date[i] = $scope.date[i].replace('-0/','01/');
             $scope.date[i] = $scope.date[i].replace('-1/','02/');
             $scope.date[i] = $scope.date[i].replace('-2/','03/');

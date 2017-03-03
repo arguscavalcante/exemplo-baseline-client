@@ -42,66 +42,7 @@ function grafProjetos(objChartProj) {
                 stacking: 'normal'
             }
         },
-        series: [{
-            name: 'TESTE',
-            data: [50000, 20000, 30000, 70000, 30000, 2000, 50000, 10000, 20000, 50000, 15000, 20000 ]
-        }, {
-            name: 'Aprovado',
-            data: [50000, 20000, 30000, 70000, 30000, 9000, 30000, 30000, 70000, 30000, 9000, 30000 ]
-        }, {
-            name: 'Aprovado Autonomia',
-            data: [50000, 20000, 30000, 70000, 30000, 9000, 30000, 30000, 70000, 30000, 9000, 30000 ]
-        }, {
-            name: 'Pipeline Aprovado com Cronograma',
-            data: [50000, 20000, 30000, 70000, 30000, 9000, 30000, 30000, 70000, 30000, 9000, 30000 ]
-        }, {
-            name: 'Pipeline Aprovado sem Cronograma',
-            data: [50000, 20000, 30000, 70000, 30000, 9000, 30000, 30000, 70000, 30000, 9000, 30000 ]
-        }, {
-            name: 'Pipeline Aprovado Autonomia',
-            data: [50000, 20000, 30000, 70000, 30000, 2000, 50000, 10000, 20000, 50000, 15000, 20000 ]
-        }, {
-            type: 'line',
-            name: 'Limite',
-            data: objChartProj.limite,
-            marker: {
-                enabled: false
-            },
-            states: {
-                hover: {
-                    lineWidth: 0
-                }
-            },
-            enableMouseTracking: false
-        }, {
-            type: 'line',
-            name: 'Limite -5%',
-            data: objChartProj.limite_neg,
-            marker: {
-                enabled: false
-            },
-            dashStyle: 'shortdot',
-            states: {
-                hover: {
-                    lineWidth: 0
-                }
-            },
-            enableMouseTracking: false
-        }, {
-            type: 'line',
-            name: 'Limite +5%',
-            data: objChartProj.limite_pos,
-            marker: {
-                enabled: false
-            },
-            dashStyle: 'dash',
-            states: {
-                hover: {
-                    lineWidth: 0
-                }
-            },
-            enableMouseTracking: false
-        }]
+        series: objChartProj.serie
     }
 
     new Highcharts.chart(chartOptions);

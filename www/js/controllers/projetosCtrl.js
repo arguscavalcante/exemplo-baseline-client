@@ -10,7 +10,8 @@ angular
         var bool = true;
 
         $scope.formproj = {};
-        $scope.formproj.projeto_id = 0;
+        $scope.formproj.id = 0;
+        $scope.formproj.proposta = 'Sem Linha';
 
         $scope.projetos = {};
 
