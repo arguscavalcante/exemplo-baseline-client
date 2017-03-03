@@ -116,32 +116,37 @@ angular
         function listarProjetos(){
             Projeto.find({order: ['classificacao_geral DESC', 'mes_ano ASC']}).$promise.then(function(res, err){
                 $scope.projetos = res;
+
+                LimiteGrafico.find().$promise.then(function(res, err){
+                    $scope.limgraf = res;
+                    linha_lim.data = atribuirvalor();
+                    linha_lim_neg.data = calcularvalorposneg(linha_lim.data, -5);
+                    linha_lim_pos.data = calcularvalorposneg(linha_lim.data, 5);
+
+                    aprov.data = atribuirDado('Aprovado');
+                    aprovauto.data = atribuirDado('Aprovado Autonomia');
+                    pipeccron.data = atribuirDado('Pipeline Aprovado com Cronograma');
+                    pipescron.data = atribuirDado('Pipeline Aprovado sem Cronograma');
+                    pipeauto.data = atribuirDado('Pipeline Aprovado Autonomia');
+                    pipe.data = atribuirDado('Pipeline');
+                    pipeextra.data = atribuirDado('Pipeline Extra Baseline');
+                    extrabase.data = atribuirDado('Extra Baseline');
+
+                    objChartProj.serie.push( extrabase, pipeextra, pipe, aprov, aprovauto, pipeccron, pipescron, pipeauto, linha_lim, linha_lim_neg, linha_lim_pos)
+                    //Inicializa o Grafico de Projetos
+                    grafProjetos(objChartProj);
+                });
             });
-            
+
         }
 
         listarProjetos();
 
+
         //find, findOne, findById
-        LimiteGrafico.find().$promise.then(function(res, err){
-            $scope.limgraf = res;
-            linha_lim.data = atribuirvalor();
-            linha_lim_neg.data = calcularvalorposneg(linha_lim.data, -5);
-            linha_lim_pos.data = calcularvalorposneg(linha_lim.data, 5);
-            aprov.data = atribuirDado('Aprovado');
-            aprovauto.data = atribuirDado('Aprovado Autonomia');
-            pipeccron.data = atribuirDado('Pipeline Aprovado com Cronograma');
-            pipescron.data = atribuirDado('Pipeline Aprovado sem Cronograma');
-            pipeauto.data = atribuirDado('Pipeline Aprovado Autonomia');
-            pipe.data = atribuirDado('Pipeline');
-            pipeextra.data = atribuirDado('Pipeline Extra Baseline');
-            extrabase.data = atribuirDado('Extra Baseline');
-
-
-            objChartProj.serie.push( extrabase, pipeextra, pipe, aprov, aprovauto, pipeccron, pipescron, pipeauto, linha_lim, linha_lim_neg, linha_lim_pos)
-            //Inicializa o Grafico de Projetos
-            grafProjetos(objChartProj);
-        });
+        function montarValoresChart(){
+            
+        }
             
 
         //Alimentando os valores de data
