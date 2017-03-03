@@ -73,13 +73,6 @@ var app = angular.module('starter', ['ui.router', 'lbServices'])
         controller: 'configUsuarioCtrl'
         })
 
-        // CONFIG1
-        .state('config1', {
-        url: '/config1',
-        templateUrl: 'views/config.1.html',
-        controller: 'configCtrl'
-        })
-
         //RELATORIO
         .state('relatorio', {
         url: '/relatorio',

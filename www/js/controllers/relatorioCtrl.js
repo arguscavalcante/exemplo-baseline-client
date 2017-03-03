@@ -7,7 +7,7 @@ angular
         var i;
         var d = new Date();
         var buscaproj = d.getMonth()+'/'+d.getFullYear()
-        //d.setMonth(d.getMonth() + 5);
+        //d.setMonth(d.getMonth() + 1);
         $scope.projetos = {};
         $scope.date = []; 
         $scope.limgraf = {};
