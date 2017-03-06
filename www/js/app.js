@@ -52,6 +52,13 @@ var app = angular.module('starter', ['ui.router', 'lbServices'])
         controller: 'configSubTorreCtrl'
         })
 
+        // SISTEMA
+        .state('sistema', {
+        url: '/sistema',
+        templateUrl: 'views/configsistema.html',
+        controller: 'configSistemaCtrl'
+        })
+
         // LIMITE GRAFICO
         .state('limitegraf', {
         url: '/limitegraf',

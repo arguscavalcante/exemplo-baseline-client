@@ -66,7 +66,7 @@ angular
 
         $scope.ValidaForm = function(){
 
-            if($scope.formlimgraf.Data_corte == null || $scope.formlimgraf.familia == null || $scope.formlimgraf.valor_limite == null )
+            if($scope.formlimgraf.Data_corte == null || $scope.formlimgraf.familia == null || $scope.formlimgraf.valor_limite == null || $scope.formlimgraf.variacao == null )
             {
                 alert('Favor, preencha todas as informações!');
                 return;
@@ -74,6 +74,11 @@ angular
             if($scope.formlimgraf.valor_limite.replace(/[\s]/g, '') == '' || $scope.formlimgraf.valor_limite <= 0 )
             {
                 alert('O valor do Limite deve ser maior que zero!');
+                return;
+            }
+            if($scope.formlimgraf.variacao.replace(/[\s]/g, '') == '' || $scope.formlimgraf.variacao < 0 )
+            {
+                alert('O valor mímino da variacao é zero!');
                 return;
             }
             
@@ -90,6 +95,7 @@ angular
                 })
             }
 
+            $state.reload();
             $state.reload();
         }
 

@@ -6,7 +6,10 @@ angular
         
         var i;
         var d = new Date();
+        d.setMonth(d.getMonth() - 3)
         var buscaproj = d.getMonth()+'/'+d.getFullYear()
+
+        var familia = 'Torre I - TESTE';
         //d.setMonth(d.getMonth() + 1);
         $scope.projetos = {};
         $scope.date = []; 
@@ -80,7 +83,7 @@ angular
 
         var linha_lim_neg = {
             type: 'line',
-            name: 'Limite -5%',
+            name: 'Limite Mínimo',
             data: [],
             marker: {
                 enabled: false
@@ -96,7 +99,7 @@ angular
 
         var linha_lim_pos = {
             type: 'line',
-            name: 'Limite +5%',
+            name: 'Limite Máximo',
             data: [],
             marker: {
                 enabled: false
@@ -110,18 +113,16 @@ angular
             enableMouseTracking: false
         }
 
-         objChartProj.serie.push(aprov) 
-
         //find, findOne, findById
         function listarProjetos(){
-            Projeto.find({order: ['classificacao_geral DESC', 'mes_ano ASC']}).$promise.then(function(res, err){
+            Projeto.find({filter:{where: {familia: '' + familia + ''}}}).$promise.then(function(res, err){
                 $scope.projetos = res;
 
-                LimiteGrafico.find().$promise.then(function(res, err){
+                LimiteGrafico.find({filter:{where: {familia: '' + familia + ''}}}).$promise.then(function(res, err){
                     $scope.limgraf = res;
                     linha_lim.data = atribuirvalor();
-                    linha_lim_neg.data = calcularvalorposneg(linha_lim.data, -5);
-                    linha_lim_pos.data = calcularvalorposneg(linha_lim.data, 5);
+                    linha_lim_neg.data = calcularvalorposneg($scope.valor_proj, 'neg');
+                    linha_lim_pos.data = calcularvalorposneg($scope.valor_proj, 'pos');
 
                     aprov.data = atribuirDado('Aprovado');
                     aprovauto.data = atribuirDado('Aprovado Autonomia');
@@ -133,8 +134,10 @@ angular
                     extrabase.data = atribuirDado('Extra Baseline');
 
                     objChartProj.serie.push( extrabase, pipeextra, pipe, aprov, aprovauto, pipeccron, pipescron, pipeauto, linha_lim, linha_lim_neg, linha_lim_pos)
+                    console.log(objChartProj.serie);
                     //Inicializa o Grafico de Projetos
                     grafProjetos(objChartProj);
+
                 });
             });
 
@@ -150,11 +153,11 @@ angular
             
 
         //Alimentando os valores de data
-        for(i=0; i<12; i++){
+        for(i=0; i<15; i++){
             $scope.date.push('-'+d.getMonth()+'/'+d.getFullYear())
             d.setMonth(d.getMonth() + 1);
         }
-        for(i=0; i<12; i++){
+        for(i=0; i<15; i++){
             $scope.date[i] = $scope.date[i].replace('-0/','01/');
             $scope.date[i] = $scope.date[i].replace('-1/','02/');
             $scope.date[i] = $scope.date[i].replace('-2/','03/');
@@ -182,11 +185,13 @@ angular
             console.log('vetor de datas: %j', $scope.date);
             console.log('Dados do banco: $j', $scope.limgraf);
             var valorAntigo = 0;
+            var variacao = 0;
             var indice = 0;
 
             angular.forEach($scope.limgraf, function(value, index){
-                if(value.Data_corte < $scope.date[0]){
+                if(trasformParInt(value.Data_corte) < trasformParInt($scope.date[0])){
                     valorAntigo = value.valor_limite;
+                    variacao = value.variacao;
                 }
             });
 
@@ -198,13 +203,16 @@ angular
                     // console.log('Dados: $s, $s, $s', value, $scope.limgraf[i].Data_corte, (value ==  $scope.limgraf[i].Data_corte));
                     if (value ==  $scope.limgraf[i].Data_corte) {
                         lim.push([ indice , $scope.limgraf[i].valor_limite]);
-                        valorAntigo = $scope.limgraf[i].valor_limite
+                        $scope.valor_proj.push([ indice , $scope.limgraf[i].valor_limite, $scope.limgraf[i].variacao]);
+                        valorAntigo = $scope.limgraf[i].valor_limite;
+                        variacao = $scope.limgraf[i].variacao;
                         found = true;
                         break;
                     }
                 }
                 if (!found) {
                     lim.push([ indice , valorAntigo]);
+                    $scope.valor_proj.push([ indice , valorAntigo, variacao]);
                 }
                 indice++;
             });
@@ -215,13 +223,21 @@ angular
          function calcularvalorposneg(valor, indicador){
             var indice = 0;
             var conta = 0;
+            var sinal = 1
             var calculo = [];
 
+            if(indicador=='neg'){
+                sinal = -1;
+            }
+
+            console.log('vetor da variacao: ', valor);
+            console.log('variacao: ',indicador);
             angular.forEach(valor, function(value, index){
-                conta = valor[indice][1] + (valor[indice][1] * (indicador /100));
+                conta = valor[indice][1] + (valor[indice][1] * (valor[indice][2]*sinal /100));
                 calculo.push([indice, conta]);
                 indice++;
             })
+            
             return calculo;
          }     
 
@@ -240,5 +256,9 @@ angular
             console.log('Dados do hightchart: $j', tipo, dados);
             return dados;
          }  
+
+         function trasformParInt(value){
+           return value.substring(3, value.length)+ value.substring(0,1);
+         }
 
     }]);
