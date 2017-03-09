@@ -2,18 +2,23 @@
 
 angular
     .module('starter')
-    .controller('projetosCtrl', ['$scope', '$state', 'SubTorre', 'User', 'Projeto',  function($scope, $state, SubTorre, User, Projeto){
+    .controller('projetosCtrl', ['$scope', '$state', 'SubTorre', 'User', 'Projeto', 'LimiteGrafico',  function($scope, $state, SubTorre, User, Projeto, LimiteGrafico){
         console.log('projetosCtrl')
 
         var i;
         var d = new Date();
         var bool = true;
+        var meses = 0;
+
+        $scope.mostrar =[true, false, false, false, false, false, false, false, false, false, false, false, false, false ]
+        $scope.mostrarbotao = [true, false, false, false, false, false, false, false, false, false, false, false, false, false]
 
         $scope.formproj = {};
         $scope.formproj.id = 0;
         $scope.formproj.proposta = 'Sem Linha';
 
         $scope.projetos = {};
+        $scope.limite = {};
 
         $scope.date = []; 
 
@@ -75,12 +80,38 @@ angular
             ]
         };
 
+        //Funcao para incluir e excluir meses
+        $scope.funcMes = function (valor){
+            if(meses==0 && valor==-1){
+                alert('Não há como desabilitar mais meses.');
+                return;
+            }
+
+            meses = meses + valor;
+
+            for(var i=0; i<$scope.mostrar.length; i++){                
+                if(i<=meses){
+                    $scope.mostrar[i] = true;
+                } else {
+                    $scope.mostrar[i] = false;
+                }
+                
+                if (i==meses){
+                    $scope.mostrarbotao[i] = true;
+                }else{
+                    $scope.mostrarbotao[i] = false;
+                }
+            }
+            //console.log('Mostrar: ', $scope.mostrar)
+            //console.log('Mostrar Botoes: ', $scope.mostrarbotao)
+        }
+
         //Alimentando os valores de data
-        for(i=0; i<12; i++){
+        for(i=0; i<15; i++){
             $scope.date.push('-'+d.getMonth()+'/'+d.getFullYear())
             d.setMonth(d.getMonth() + 1);
         }
-        for(i=0; i<12; i++){
+        for(i=0; i<15; i++){
             $scope.date[i] = $scope.date[i].replace('-0/','01/');
             $scope.date[i] = $scope.date[i].replace('-1/','02/');
             $scope.date[i] = $scope.date[i].replace('-2/','03/');
@@ -131,39 +162,40 @@ angular
 
 
         $scope.ValidaForm = function(){
-            console.log($scope.formproj);
-            
+            var dados=[];
+            //console.log($scope.meses.valor_mes_ano);
+            //console.log($scope.meses.mes_ano);
             //Algum campo indefinido ou Nulo 
-            if(angular.isUndefined($scope.formproj.proposta) || angular.isUndefined($scope.formproj.gerente) || angular.isUndefined($scope.formproj.familia) || angular.isUndefined($scope.formproj.sistema) || angular.isUndefined($scope.formproj.classificacao_geral) || angular.isUndefined($scope.formproj.fase) || angular.isUndefined($scope.formproj.mes_ano) || angular.isUndefined($scope.formproj.valor_mes_ano))
-            {
-                 alert('Favor, preencha todas as informações!');
-                return;
-            }
+            //if(angular.isUndefined($scope.formproj.proposta) || angular.isUndefined($scope.formproj.gerente) || angular.isUndefined($scope.formproj.familia) || angular.isUndefined($scope.formproj.sistema) || angular.isUndefined($scope.formproj.classificacao_geral) || angular.isUndefined($scope.formproj.fase) || angular.isUndefined($scope.formproj.mes_ano) || angular.isUndefined($scope.formproj.valor_mes_ano))
+            //{
+                 //alert('Favor, preencha todas as informações!');
+                //return;
+            //}
 
             //Campo vazio com espaço em branco
-            if($scope.formproj.mes_ano == '' || $scope.formproj.fase == '' || $scope.formproj.familia == '' || $scope.formproj.sistema == '' || $scope.formproj.gerente == '' || $scope.formproj.classificacao_geral == '' || $scope.formproj.proposta.replace(/[\s]/g, '') == '' ||  $scope.formproj.valor_mes_ano.replace(/[\s]/g, '') == '')
-            {
-                alert('Favor, preencha todas as informações!');
-                return;
-            }
-            
-            /*angular.forEach($scope.usuario, function(value,index){
-                if (angular.lowercase(value.login_user).replace(/[\s]/g, '') == angular.lowercase($scope.formusuario.login_user.replace(/[\s]/g, ''))){
-                    alert('Esse usuário já existe.');
-                    bool = false;
-                }
-            })*/
+            //if($scope.formproj.mes_ano == '' || $scope.formproj.fase == '' || $scope.formproj.familia == '' || $scope.formproj.sistema == '' || $scope.formproj.gerente == '' || $scope.formproj.classificacao_geral == '' || $scope.formproj.proposta.replace(/[\s]/g, '') == '' ||  $scope.formproj.valor_mes_ano.replace(/[\s]/g, '') == '')
+            //{
+              //  alert('Favor, preencha todas as informações!');
+            //    return;
+            //}
 
-            if (bool){
-                Projeto.create($scope.formproj, function(res, err){
-                    console.log(res);
-                })
-            
+            for(i=0; i<=meses; i++){
+                dados.push({mes: $scope.meses.mes_ano[i], valor: $scope.meses.valor_mes_ano[i]})
             }
+            $scope.formproj.meses = dados;
+
+            console.log($scope.formproj);
+
+            //if (bool){
+            //    Projeto.create($scope.formproj, function(res, err){
+            //        console.log(res);
+            //    })
+            
+            //}
         
-            $state.reload();
+            //$state.reload();
         }
-
+/*
         //find, findOne, findById
         function listarProjetos(){
             Projeto.find().$promise.then(function(res, err){
@@ -173,5 +205,15 @@ angular
         }
 
         listarProjetos();
+
+        //find, findOne, findById
+        function listarLimites(){
+            LimiteGrafico.find().$promise.then(function(res, err){
+                $scope.limite = res;
+            });
+            
+        }
+
+        listarLimites(); */
 
     }]);

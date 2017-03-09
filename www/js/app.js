@@ -37,6 +37,13 @@ var app = angular.module('starter', ['ui.router', 'lbServices'])
         templateUrl: 'views/config.html',
         controller: 'configCtrl'
         })
+        
+        // TORRE
+        .state('fase', {
+        url: '/fase',
+        templateUrl: 'views/configfase.html',
+        controller: 'configFaseCtrl'
+        })
 
         // TORRE
         .state('torre', {

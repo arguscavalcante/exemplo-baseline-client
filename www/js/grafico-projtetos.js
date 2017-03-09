@@ -1,4 +1,4 @@
-function grafProjetos(objChartProj) {
+function grafProjetos(objChartProj, refresh) {
     var chartOptions = {
         chart: {
             renderTo: objChartProj.render,
@@ -46,4 +46,5 @@ function grafProjetos(objChartProj) {
     }
 
     new Highcharts.chart(chartOptions);
+    
 }

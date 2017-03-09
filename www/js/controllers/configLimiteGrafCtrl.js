@@ -28,25 +28,43 @@ angular
 
         listarLimGraf();
 
-        //Alimentando os valores de data
-        for(i=0; i<12; i++){
-            $scope.date.push('-'+d.getMonth()+'/'+d.getFullYear())
-            d.setMonth(d.getMonth() + 1);
+        function alimentaData(d, qnt){
+            //Alimentando os valores de data
+            for(i=0; i < qnt; i++){
+                $scope.date.push({valor:d.getFullYear()+'/-'+d.getMonth(), texto:'-'+d.getMonth()+'/'+d.getFullYear()})
+                d.setMonth(d.getMonth() + 1);
+            }
+            console.log($scope.date);
+            for(i=0; i<12; i++){
+                $scope.date[i].texto = $scope.date[i].texto.replace('-0/','01/');
+                $scope.date[i].texto = $scope.date[i].texto.replace('-1/','02/');
+                $scope.date[i].texto = $scope.date[i].texto.replace('-2/','03/');
+                $scope.date[i].texto = $scope.date[i].texto.replace('-3/','04/');
+                $scope.date[i].texto = $scope.date[i].texto.replace('-4/','05/');
+                $scope.date[i].texto = $scope.date[i].texto.replace('-5/','06/');
+                $scope.date[i].texto = $scope.date[i].texto.replace('-6/','07/');
+                $scope.date[i].texto = $scope.date[i].texto.replace('-7/','08/');
+                $scope.date[i].texto = $scope.date[i].texto.replace('-8/','09/');
+                $scope.date[i].texto = $scope.date[i].texto.replace('-9/','10/');
+                $scope.date[i].texto = $scope.date[i].texto.replace('-10/','11/');
+                $scope.date[i].texto = $scope.date[i].texto.replace('-11/','12/');
+
+                $scope.date[i].valor = $scope.date[i].valor.replace('/-0','01');
+                $scope.date[i].valor = $scope.date[i].valor.replace('/-11','12');
+                $scope.date[i].valor = $scope.date[i].valor.replace('/-10','11');
+                $scope.date[i].valor = $scope.date[i].valor.replace('/-1','02');
+                $scope.date[i].valor = $scope.date[i].valor.replace('/-2','03');
+                $scope.date[i].valor = $scope.date[i].valor.replace('/-3','04');
+                $scope.date[i].valor = $scope.date[i].valor.replace('/-4','05');
+                $scope.date[i].valor = $scope.date[i].valor.replace('/-5','06');
+                $scope.date[i].valor = $scope.date[i].valor.replace('/-6','07');
+                $scope.date[i].valor = $scope.date[i].valor.replace('/-7','08');
+                $scope.date[i].valor = $scope.date[i].valor.replace('/-8','09');
+                $scope.date[i].valor = $scope.date[i].valor.replace('/-9','10');
+            }
         }
-        for(i=0; i<12; i++){
-            $scope.date[i] = $scope.date[i].replace('-0/','01/');
-            $scope.date[i] = $scope.date[i].replace('-1/','02/');
-            $scope.date[i] = $scope.date[i].replace('-2/','03/');
-            $scope.date[i] = $scope.date[i].replace('-3/','04/');
-            $scope.date[i] = $scope.date[i].replace('-4/','05/');
-            $scope.date[i] = $scope.date[i].replace('-5/','06/');
-            $scope.date[i] = $scope.date[i].replace('-6/','07/');
-            $scope.date[i] = $scope.date[i].replace('-7/','08/');
-            $scope.date[i] = $scope.date[i].replace('-8/','09/');
-            $scope.date[i] = $scope.date[i].replace('-9/','10/');
-            $scope.date[i] = $scope.date[i].replace('-10/','11/');
-            $scope.date[i] = $scope.date[i].replace('-11/','12/');
-        }
+
+        alimentaData(d, 12);
 
          // Alimenta com todas as Subtorres
         SubTorre.find().$promise.then(function(res, err){

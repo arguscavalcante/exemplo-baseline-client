@@ -19,20 +19,38 @@
     <div class="content-wrapper">
         <div class="container">
             <div class="row">
-                <div id="grafproj" style="min-width:310px; height:500px; margin-bottom:50px"></div>
+                <div id="grafproj" style="min-width:310px; height:500px;"></div>
             </div>
-            <!--<div class="row">
+            <div class="row">
                 <div class="col-md-12">
-                    <table class="table">
-                        <tbody>
-                            <tr> 
-                                <td>Projetos</td><td>teste1</td>
-                                <td>Responsável</td><td>teste1</td>
-                                <td>Mes inicial</td><td>teste1</td>
-                                <td>submit</td>                               
+                    <h3>Filtros:</h3>
+                    <form>
+                        <table class="table table-striped">
+                            <tr>
+                                <td>
+                                    <label>Mês Inicio: &nbsp;</label>
+                                    <select ng-model="formfiltro.mes_ano_inicio" class="form-control">
+                                        <option ng-repeat="id in opcaodate" value="{{id}}">{{id}}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <label>Quantidade de Meses: &nbsp;</label>
+                                    <select ng-model="formfiltro.qnt_meses_pos" class="form-control">
+                                        <option ng-repeat="id in opcaoqnt" value="{{id}}">{{id}}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <label>Gerentes Responsáveis: &nbsp;</label>
+                                    <select ng-model="formfiltro.ger_resp" class="form-control">
+                                        <option ng-repeat="id in opcaoqnt" value="{{id}}">{{id}}</option>
+                                    </select>
+                                </td>
                             </tr>
-                        </tbody>
-                    </table>
+                            <tr>
+                                <td colspan=3><button type="button" ng-click="redesenharGraf();" class="btn btn-info">Gerar</button></td>
+                            </tr>
+                        </table>                            
+                    </form>
                 </div>
             </div>
         </div>

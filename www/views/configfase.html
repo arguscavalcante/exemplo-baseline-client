@@ -21,17 +21,11 @@
             <div class="row">
                 <div class="col-md-5">
                     <form>
-                        <label>SubTorre: </label>
-                        <input type="text" ng-model="formsubtorre.Subtorre" value="" class="form-control" />
+                        <label>Fase: </label>
+                        <input type="text" ng-model="formfase.Fase" value="" class="form-control" />
                         <br />
-                        <label>Torre:&nbsp; </label>
-                        <select ng-model="formsubtorre.Torre_id">
-                            <option ng-repeat="id in torre" value="{{id.Torre}}">{{id.Torre}}</option>
-                        </select>
-                        <br />
-                        <label>Valor Máx. do Gráfico: </label>
-                        <input type="text" ng-model="formsubtorre.Limite_grafico" value="" class="form-control" />
-                        <br />
+                        <label>Descrição: </label>
+                        <input type="text" ng-model="formfase.Descricao" value="" class="form-control" />
                         <br />
                         <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
                         <br />
@@ -41,21 +35,19 @@
                 </div>
                 <div class="col-md-5">
                     <div>
-                        <h3> SubTorres Cadastradas </h3>
+                        <h3> Fases Cadastradas </h3>
                         <div>
                             <table class="table table-striped table-hover table-responsive">
                                 <thead>
                                     <tr>
-                                        <th>Torre</th>
-                                        <th>SubTorre</th>
-                                        <th>Valor Máx. do Gráfico</th>
+                                        <th>Fase</th>
+                                        <th>Descrição</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="id in subtorre">
-                                        <td>{{id.Torre_id}}</td>
-                                        <td>{{id.Subtorre}}</td>
-                                        <td>{{id.Limite_grafico}}</td>
+                                    <tr ng-repeat="id in fase">
+                                        <td>{{id.Fase}}</td>
+                                        <td>{{id.Descricao}}</td>
                                     </tr>
                                 </tbody>
                             </table>
