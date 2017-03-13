@@ -17,13 +17,6 @@ var app = angular.module('starter', ['ui.router', 'lbServices'])
         controller: 'loginCtrl'
         })
 
-        // BLANK
-        .state('blank', {
-        url: '/blank',
-        templateUrl: 'views/blank.html',
-        controller: 'blankCtrl'
-        })
-
         // CADASTRO DE PROJETOS
         .state('projetos', {
         url: '/projetos',

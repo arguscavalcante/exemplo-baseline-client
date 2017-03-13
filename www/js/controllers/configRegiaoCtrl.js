@@ -2,41 +2,42 @@
 
 angular
     .module('starter')
-    .controller('configRegiaoCtrl', ['$scope', '$state', 'Torre',  function($scope, $state, Torre){
+    .controller('configRegiaoCtrl', ['$scope', '$state', 'Regiao',  function($scope, $state, Regiao){
         console.log('configRegiaoCtrl')
 
-        $scope.torre = {};
-        $scope.formtorre = {};
+        $scope.regiao = {};
+        $scope.formregiao = {};
+        $scope.formregiao.Sistemas = []
         var bool = true;
 
         //find, findOne, findById
-        function listarTorres(){
-            Torre.find().$promise.then(function(res, err){
-                $scope.torre = res;
+        function listarRegioes(){
+            Regiao.find().$promise.then(function(res, err){
+                $scope.regiao = res;
                 console.log(res);
             });
             
         }
 
-        listarTorres();
+        listarRegioes();
 
         $scope.ValidaForm = function(){
 
-            if($scope.formtorre.Torre == null || $scope.formtorre.Descricao_Torre == null || $scope.formtorre.Torre.replace(/[\s]/g, '') == '' ||  $scope.formtorre.Descricao_Torre.replace(/[\s]/g, '') == '')
+            if($scope.formregiao.Regiao_id == null || $scope.formregiao.Descricao == null || $scope.formregiao.Regiao_id.replace(/[\s]/g, '') == '' ||  $scope.formregiao.Descricao.replace(/[\s]/g, '') == '')
             {
                 alert('Favor, preencha todas as informações!');
                 return;
             }
             
-            angular.forEach($scope.torre,function(value,index){
-                if (angular.lowercase(value.Torre).replace(/[\s]/g, '') == angular.lowercase($scope.formtorre.Torre).replace(/[\s]/g, '')){
+            angular.forEach($scope.regiao,function(value,index){
+                if (angular.lowercase(value.Regiao_id).replace(/[\s]/g, '') == angular.lowercase($scope.formregiao.Regiao_id).replace(/[\s]/g, '')){
                     alert('Esse registro já existe.');
                     bool = false;
                 }
             })
 
             if (bool){
-                Torre.create($scope.formtorre, function(res, err){
+                Regiao.create($scope.formregiao, function(res, err){
                     console.log(res);
                 })
             }

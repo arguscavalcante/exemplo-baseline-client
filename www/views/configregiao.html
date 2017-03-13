@@ -22,11 +22,11 @@
             <div class="row">
                 <div class="col-md-5">
                     <form>
-                        <label>Torre: </label>
-                        <input type="text" ng-model="formtorre.Torre" value="" class="form-control" />
+                        <label>Região: </label>
+                        <input type="text" ng-model="formregiao.Regiao_id" value="" class="form-control" />
                         <br />
                         <label>Descrição: </label>
-                        <input type="text" ng-model="formtorre.Descricao_Torre" value="" class="form-control" />
+                        <input type="text" ng-model="formregiao.Descricao" value="" class="form-control" />
                         <br />
                         <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
                         <br />
@@ -36,19 +36,19 @@
                 </div>
                 <div class="col-md-5">
                     <div>
-                        <h3> Torres Cadastradas </h3>
+                        <h3> Regiões Cadastradas </h3>
                         <div>
                             <table class="table table-striped table-hover table-responsive">
                                 <thead>
                                     <tr>
-                                        <th>Torre</th>
+                                        <th>Região</th>
                                         <th>Descrição</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="id in torre">
-                                        <td>{{id.Torre}}</td>
-                                        <td>{{id.Descricao_Torre}}</td>
+                                    <tr ng-repeat="id in regiao">
+                                        <td>{{id.Regiao_id}}</td>
+                                        <td>{{id.Descricao}}</td>
                                     </tr>
                                 </tbody>
                             </table>

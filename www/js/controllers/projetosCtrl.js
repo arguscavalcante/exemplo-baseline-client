@@ -2,7 +2,7 @@
 
 angular
     .module('starter')
-    .controller('projetosCtrl', ['$scope', '$state', 'SubTorre', 'User', 'Projeto', 'LimiteGrafico',  function($scope, $state, SubTorre, User, Projeto, LimiteGrafico){
+    .controller('projetosCtrl', ['$scope', '$state', 'SubTorre', 'User', 'Projeto', 'LimiteReal', 'Fase', 'Regiao', function($scope, $state, SubTorre, User, Projeto, LimiteReal, Fase, Regiao){
         console.log('projetosCtrl')
 
         var i;
@@ -23,6 +23,9 @@ angular
 
         $scope.subtorre = {};
         $scope.gerentes = {};
+        $scope.fase = {};
+        $scope.regiao = {};
+        $scope.sistema = [];
         $scope.projHigh = {};
 
         $scope.classificacao_geral = {
@@ -36,37 +39,6 @@ angular
                 {nome: 'Pipeline'},
                 {nome: 'Extra Baseline'},
                 {nome: 'Pipeline Extra Baseline'}
-            ]
-        };
-
-        $scope.fase = {
-            model: null,
-            opcoes: [
-                {nome: 'VSOL'},
-                {nome: 'DSOL'},
-                {nome: 'VDSOL'},
-                {nome: 'DESENV'},
-                {nome: 'TI-UAT'},
-                {nome: 'Suporte TI'}
-            ]
-        };
-
-        $scope.regiao = {
-            model: null,
-            opcoes: [
-                {nome: 'R1'},
-                {nome: 'R2'}
-            ]
-        };
-
-        $scope.sistema = {
-            opcoes: [
-                {regiao: 'R1', nome: 'Teste R1 SEL1'},
-                {regiao: 'R2', nome: 'Teste R2 SEL1'},
-                {regiao: 'R1', nome: 'Teste R1 SEL2'},
-                {regiao: 'R2', nome: 'Teste R2 SEL2'},
-                {regiao: 'R1', nome: 'Teste R1 SEL3'},
-                {regiao: 'R2', nome: 'Teste R2 SEL3'}
             ]
         };
 
@@ -125,11 +97,36 @@ angular
             $scope.date[i] = $scope.date[i].replace('-11/','12/');
         }
 
-        // Alimenta com todas as Subtorres
+        // Alimenta objeto com todas as Subtorres
         SubTorre.find().$promise.then(function(res, err){
             $scope.subtorre = res;
             console.log(res);
         });
+
+        // Alimenta objeto com todas os Gerentes
+        User.find().$promise.then(function(res, err){
+            $scope.gerentes = res;
+            //console.log(res);
+        });
+
+        // Alimenta objeto com todas as Fases
+        Fase.find().$promise.then(function(res, err){
+            $scope.fase = res;
+            //console.log(res);
+        });
+
+        // Alimenta objeto com todas as Regiões/Sistemas
+        Regiao.find().$promise.then(function(res, err){
+            $scope.regiao = res;
+            //console.log(res);
+            
+            angular.forEach($scope.regiao, function(value,index){
+                for(var i=0; i<value.Sistemas.length; i++){
+                    $scope.sistema.push({regiao: value.Regiao_id, sistema: value.Sistemas[i]});
+                }
+            });
+        });
+
 
         //Option Familia
         $scope.selectOptionFamilia = function(){
@@ -141,18 +138,12 @@ angular
             return options;       
         }
 
-        // Alimenta com todas os Gerentes
-        User.find().$promise.then(function(res, err){
-            $scope.gerentes = res;
-            console.log(res);
-        });
-
          //Option Sistema
         $scope.selectOptionSistema = function(){
             var options = [];
-            angular.forEach($scope.sistema.opcoes, function(value,index){
+            angular.forEach($scope.sistema, function(value,index){
                 if (value.regiao == $scope.formproj.regiao){
-                    options.push(value.nome);
+                    options.push(value.sistema);
                 }
             })
 

@@ -60,7 +60,7 @@
                         <tr>
                             <td><label>Região:</label></td>
                             <td> <select ng-model="formproj.regiao" class="form-control">
-                                    <option ng-repeat="id in regiao.opcoes" value="{{id.nome}}">{{id.nome}}</option>
+                                    <option ng-repeat="id in regiao" value="{{id.Regiao_id}}">{{id.Regiao_id}}</option>
                                     </select> 
                             </td>
                             <td><label>Sistema:</label></td>
@@ -71,7 +71,7 @@
                         <tr>
                             <td><label>Fase:</label></td>
                             <td> <select ng-model="formproj.fase" class="form-control">
-                                    <option ng-repeat="id in fase.opcoes" value="{{id.nome}}">{{id.nome}}</option>
+                                    <option ng-repeat="id in fase" value="{{id.Fase}}">{{id.Fase}}</option>
                                     </select> 
                             </td>
                             <td><label>Classificação Geral:</label></td>

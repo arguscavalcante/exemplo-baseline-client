@@ -28,7 +28,7 @@
                             <tr>
                                 <td class="col-md-3"><h5>Filtro:</h5></td>
                                 <td class="col-md-6">
-                                    <select ng-model="filtroResult" ng-change="filtraResultado()" class="form-control" >
+                                    <select ng-model="filtroResult" ng-change="filtraResultado()" class="form-control" ng-options="val for val in selectOptionFamilia() | orderBy:'toString()' "></select>
                                         <option ng-repeat="id in torre" value="{{id.Torre}}">{{id.Torre}}</option>
                                     </select>
                                 </td>
@@ -43,9 +43,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="id in torre">
-                                        <td>{{id.Torre}}</td>
-                                        <td>{{id.Descricao_Torre}}</td>
+                                    <tr ng-repeat="id in tabela">
+                                        <td>{{id.Familia}}</td>
+                                        <td>{{id.Projeto}}</td>
                                     </tr>
                                 </tbody>
                             </table>

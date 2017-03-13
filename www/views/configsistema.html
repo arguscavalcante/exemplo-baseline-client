@@ -22,12 +22,12 @@
             <div class="row">
                 <div class="col-md-5">
                     <form>
-                        <label>SubTorre: </label>
-                        <input type="text" ng-model="formsubtorre.Subtorre" value="" class="form-control" />
+                        <label>Sistema: </label>
+                        <input type="text" ng-model="formsistema.Sistema" value="" class="form-control" />
                         <br />
-                        <label>Torre:&nbsp; </label>
-                        <select ng-model="formsubtorre.Torre_id">
-                            <option ng-repeat="id in torre" value="{{id.Torre}}">{{id.Torre}}</option>
+                        <label>Região:&nbsp; </label>
+                        <select ng-model="formsistema.Regiao_id" class="form-control">
+                            <option ng-repeat="id in regiao" value="{{id.Regiao_id}}">{{id.Regiao_id}}</option>
                         </select>
                         <br />
                          <br />
@@ -39,19 +39,19 @@
                 </div>
                 <div class="col-md-5">
                     <div>
-                        <h3> SubTorres Cadastradas </h3>
+                        <h3> Sistemas Cadastrados </h3>
                         <div>
                             <table class="table table-striped table-hover table-responsive">
                                 <thead>
                                     <tr>
-                                        <th>Torre</th>
-                                        <th>SubTorre</th>
+                                        <th>Região</th>
+                                        <th>Descrição</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="id in subtorre">
-                                        <td>{{id.Torre_id}}</td>
-                                        <td>{{id.Subtorre}}</td>
+                                    <tr ng-repeat="id in tabelasis" ng-click="alteraSistema(id)">
+                                        <td>{{id.regiao}}</td>
+                                        <td>{{id.sistema}}</td>
                                     </tr>
                                 </tbody>
                             </table>

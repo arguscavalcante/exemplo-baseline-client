@@ -2,23 +2,77 @@
 
 angular
     .module('starter')
-    .controller('alteraprojCtrl', ['$scope', '$state', 'Torre',  function($scope, $state, Torre){
+    .controller('alteraprojCtrl', ['$scope', '$state', 'SubTorre', 'Projeto',  function($scope, $state, SubTorre, Projeto){
         console.log('alteraprojCtrl')
 
-        $scope.torre = {};
+        $scope.subtorre = {};
+        $scope.projeto = {};
+        $scope.tabela = {};
         $scope.formtorre = {};
+        var user = {};
+        user = {
+            //torre: 'Torre I',
+            subtorre: 'TESTE',
+            torre: 'Torre 0',
+            //subtorre: 'Subtorre X',
+            perfil: 'Admin'
+        }
         var bool = true;
 
         //find, findOne, findById
-        function listarTorres(){
-            Torre.find().$promise.then(function(res, err){
-                $scope.torre = res;
+        function listarSubTorres(){
+            SubTorre.find().$promise.then(function(res, err){
+                $scope.subtorre = res;
                 console.log(res);
             });
             
         }
 
-        listarTorres();
+        listarSubTorres();
+
+        //Alimentar Option
+        $scope.selectOptionFamilia = function(){
+            var options = [];
+            angular.forEach($scope.subtorre, function(value,index){
+                if(user.torre == 'Torre 0'){
+                    if(user.subtorre == 'Subtorre 0'){
+                        options.push(value.Torre_id + " - " + value.Subtorre);
+                    } else{
+                        if(user.subtorre == value.Subtorre){
+                            options.push(value.Torre_id + " - " + value.Subtorre);
+                        }
+                    }
+                } else if(user.subtorre == 'Subtorre 0'){
+                        if(user.torre == value.Torre_id){
+                            options.push(value.Torre_id + " - " + value.Subtorre);
+                        } 
+                } else {
+                        if(user.torre == value.Torre_id && user.subtorre == value.Subtorre){
+                            options.push(value.Torre_id + " - " + value.Subtorre);
+                        }
+                    }
+            })
+
+            return options;       
+        }
+
+        function alimentaObjProj(){
+            Projeto.find().$promise.then(function(res, err){
+                $scope.projeto = res;
+                //console.log(res);
+            });
+        }
+
+        alimentaObjProj();
+
+        $scope.filtraResultado = function(){
+            alert($scope.filtroResult);
+            angular.forEach($scope.projeto, function (value, index) {
+                if(value.familia == $scope.filtroResult){
+                    $scope.tabela.push(value);
+                }
+            });
+        }
 
         $scope.ValidaForm = function(){
 
