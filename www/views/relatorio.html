@@ -7,6 +7,7 @@
                         <ul id="menu-top" class="nav navbar-nav navbar-right">
                             <li><a ui-sref="config">Configuração</a></li>
                             <li><a ui-sref="projetos">Cadastro de Projetos</a></li>
+                            <li><a ui-sref="alteraproj">Alteração de Projetos</a></li>
                             <li><a class="menu-top-active" ui-sref="relatorio">Relatório</a></li>
                         </ul>
                     </div>
@@ -42,7 +43,7 @@
                                 <td>
                                     <label>Gerentes Responsáveis: &nbsp;</label>
                                     <select ng-model="formfiltro.ger_resp" class="form-control">
-                                        <option ng-repeat="id in opcaoqnt" value="{{id}}">{{id}}</option>
+                                        <option ng-repeat="id in gerentes" value="{{id.login_user}}">{{id.login_user}}</option>
                                     </select>
                                 </td>
                             </tr>

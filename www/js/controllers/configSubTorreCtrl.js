@@ -14,7 +14,7 @@ angular
         function selectOptionTorres(){
             Torre.find().$promise.then(function(res, err){
                 $scope.torre = res;
-                console.log(res);
+                //console.log(res);
             });
             
         }
@@ -25,7 +25,7 @@ angular
         function listarSubTorres(){
             SubTorre.find().$promise.then(function(res, err){
                 $scope.subtorre = res;
-                console.log(res);
+                //console.log(res);
             });
             
         }
@@ -49,7 +49,7 @@ angular
 
             if (bool){
                 SubTorre.create($scope.formsubtorre, function(res, err){
-                    console.log(res);
+                    //console.log(res);
                 })
             
             }

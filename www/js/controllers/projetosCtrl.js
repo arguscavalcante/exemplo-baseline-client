@@ -7,7 +7,6 @@ angular
 
         var i;
         var d = new Date();
-        var bool = true;
         var meses = 0;
 
         $scope.mostrar =[true, false, false, false, false, false, false, false, false, false, false, false, false, false ]
@@ -160,40 +159,100 @@ angular
             return options;       
         }
 
+        function add(a, b) {
+            return a + b;
+        }
+
+        function equal(value) {
+            var mes;
+
+            for(var i=0; i<value.length; i++){
+                mes = value[i];
+                for(var j=0; j<value.length; j++){
+                    if(i!=j){
+                        if(mes==value[j]){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        function verificaNulo(value){
+            for(var i=0; i<value.length; i++){
+                if(value[i]==null || value[i] == ''){
+                    return true;
+                }
+                if(value[i]<= 0){
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
         $scope.ValidaForm = function(){
-            var dados=[];
-            //console.log($scope.meses.valor_mes_ano);
-            //console.log($scope.meses.mes_ano);
+            var bool = true;
+            var dados_mes=[];
+            var dados_valor=[];
+            $scope.formproj.meses = {
+                mes: [],
+                valor: []
+            }
+
             //Algum campo indefinido ou Nulo 
-            //if(angular.isUndefined($scope.formproj.proposta) || angular.isUndefined($scope.formproj.gerente) || angular.isUndefined($scope.formproj.familia) || angular.isUndefined($scope.formproj.sistema) || angular.isUndefined($scope.formproj.classificacao_geral) || angular.isUndefined($scope.formproj.fase) || angular.isUndefined($scope.formproj.mes_ano) || angular.isUndefined($scope.formproj.valor_mes_ano))
-            //{
-                 //alert('Favor, preencha todas as informações!');
-                //return;
-            //}
+            if(angular.isUndefined($scope.formproj.proposta) || angular.isUndefined($scope.formproj.gerente) || angular.isUndefined($scope.formproj.familia) || angular.isUndefined($scope.formproj.sistema) || angular.isUndefined($scope.formproj.classificacao_geral) || angular.isUndefined($scope.formproj.fase))
+            {
+                alert('Favor, preencha todas as informações!');
+                return;
+            }
 
             //Campo vazio com espaço em branco
-            //if($scope.formproj.mes_ano == '' || $scope.formproj.fase == '' || $scope.formproj.familia == '' || $scope.formproj.sistema == '' || $scope.formproj.gerente == '' || $scope.formproj.classificacao_geral == '' || $scope.formproj.proposta.replace(/[\s]/g, '') == '' ||  $scope.formproj.valor_mes_ano.replace(/[\s]/g, '') == '')
-            //{
-              //  alert('Favor, preencha todas as informações!');
-            //    return;
-            //}
+            if($scope.formproj.fase == '' || $scope.formproj.familia == '' || $scope.formproj.sistema == '' || $scope.formproj.gerente == '' || $scope.formproj.classificacao_geral == '' || $scope.formproj.proposta.replace(/[\s]/g, '') == '' || $scope.formproj.valor_total_proj == '' )
+            {
+                alert('Favor, preencha todas as informações!');
+                return;
+            }
 
             for(i=0; i<=meses; i++){
-                dados.push({mes: $scope.meses.mes_ano[i], valor: $scope.meses.valor_mes_ano[i]})
+                dados_mes.push($scope.meses.mes_ano[i]);
+                dados_valor.push($scope.meses.valor_mes_ano[i]);
             }
-            $scope.formproj.meses = dados;
+            //console.log(dados_valor.reduce(add));
+
+            if(dados_valor.reduce(add)!=$scope.formproj.valor_total_proj){
+                alert('O valor total do projeto é diferente do somatório dos valores informados nos meses!');
+                return;
+            }
+
+            if(verificaNulo(dados_valor)){
+                alert('Informe um valor maior que zero para realizar a inclusão.');
+                return;
+            }
+
+            if(verificaNulo(dados_mes)){
+                alert('Selecione um mes para realizar a inclusão.');
+                return;
+            }
+
+            if(equal(dados_mes)){
+                 alert('Foram informados meses que se repetem, favor olhar os dados informados!');
+                return;
+            }
+
+            $scope.formproj.meses = {mes: dados_mes, valor: dados_valor};
+
 
             console.log($scope.formproj);
 
-            //if (bool){
-            //    Projeto.create($scope.formproj, function(res, err){
-            //        console.log(res);
-            //    })
+            if (bool){
+                Projeto.create($scope.formproj, function(res, err){
+                    console.log(res);
+                })
             
-            //}
+            }
         
-            //$state.reload();
+            $state.reload();
         }
 /*
         //find, findOne, findById

@@ -35,7 +35,7 @@ angular
                 d.setMonth(d.getMonth() + 1);
             }
             console.log($scope.date);
-            for(i=0; i<12; i++){
+            for(i=0; i<qnt; i++){
                 $scope.date[i].texto = $scope.date[i].texto.replace('-0/','01/');
                 $scope.date[i].texto = $scope.date[i].texto.replace('-1/','02/');
                 $scope.date[i].texto = $scope.date[i].texto.replace('-2/','03/');
@@ -64,7 +64,7 @@ angular
             }
         }
 
-        alimentaData(d, 12);
+        alimentaData(d, 15);
 
          // Alimenta com todas as Subtorres
         SubTorre.find().$promise.then(function(res, err){

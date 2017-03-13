@@ -2,53 +2,53 @@
 
 angular
     .module('starter')
-    .controller('configSistemaCtrl', ['$scope', '$state', 'Torre', 'SubTorre',  function($scope, $state, Torre, SubTorre){
+    .controller('configSistemaCtrl', ['$scope', '$state', 'Sistema', 'Regiao',  function($scope, $state, Sistema, Regiao){
         console.log('configSistemaCtrl')
 
-        $scope.torre = {};
-        $scope.subtorre = {};
-        $scope.formsubtorre = {};
+        $scope.regiao = {};
+        $scope.sistema = {};
+        $scope.formsistema = {};
         var bool = true;
 
         //find, findOne, findById
-        function selectOptionTorres(){
-            Torre.find().$promise.then(function(res, err){
-                $scope.torre = res;
-                console.log(res);
+        function selectOptionRegiao(){
+            Regiao.find().$promise.then(function(res, err){
+                $scope.regiao = res;
+                //console.log(res);
             });
             
         }
 
-        selectOptionTorres();
+        selectOptionRegiao();
 
         //find, findOne, findById
-        function listarSubTorres(){
-            SubTorre.find().$promise.then(function(res, err){
-                $scope.subtorre = res;
+        function listarSistemas(){
+            sistema.find().$promise.then(function(res, err){
+                $scope.sistema = res;
                 console.log(res);
             });
             
         }
 
-        listarSubTorres();
+        listarSistemas();
 
         $scope.ValidaForm = function(){
 
-            if($scope.formsubtorre.Torre_id == null || $scope.formsubtorre.Subtorre == null || $scope.formsubtorre.Torre_id.replace(/[\s]/g, '') == '' ||  $scope.formsubtorre.Subtorre.replace(/[\s]/g, '') == '')
+            if($scope.formsistema.Regiao == null || $scope.formsistema.Sistema == null || $scope.formsistema.Regiao.replace(/[\s]/g, '') == '' ||  $scope.formsistema.Sistema.replace(/[\s]/g, '') == '')
             {
                 alert('Favor, preencha todas as informações!');
                 return;
             }
             
-            angular.forEach($scope.subtorre, function(value,index){
-                if (value.Torre_id == $scope.formsubtorre.Torre_id && angular.lowercase(value.Subtorre).replace(/[\s]/g, '') == angular.lowercase($scope.formsubtorre.Subtorre.replace(/[\s]/g, ''))){
+            angular.forEach($scope.sistema, function(value,index){
+                if (value.Regiao == $scope.formsistema.Regiao && angular.lowercase(value.Sistema).replace(/[\s]/g, '') == angular.lowercase($scope.formsistema.Sistema.replace(/[\s]/g, ''))){
                     alert('Esse registro já existe.');
                     bool = false;
                 }
             })
 
             if (bool){
-                SubTorre.create($scope.formsubtorre, function(res, err){
+                Sistema.create($scope.formsistema, function(res, err){
                     console.log(res);
                 })
             

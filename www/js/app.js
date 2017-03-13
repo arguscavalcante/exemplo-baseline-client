@@ -2,8 +2,8 @@
 var app = angular.module('starter', ['ui.router', 'lbServices'])
 
     .config(function(LoopBackResourceProvider, $stateProvider, $urlRouterProvider) {
-        LoopBackResourceProvider.setUrlBase('https://exemplo-baseline-api.mybluemix.net/api');
-        //LoopBackResourceProvider.setUrlBase('http://localhost:7000/api');
+        //LoopBackResourceProvider.setUrlBase('https://exemplo-baseline-api.mybluemix.net/api');
+        LoopBackResourceProvider.setUrlBase('http://localhost:7000/api');
     })
   
     .config(function($stateProvider, $urlRouterProvider) {
@@ -29,6 +29,13 @@ var app = angular.module('starter', ['ui.router', 'lbServices'])
         url: '/projetos',
         templateUrl: 'views/projetos.html',
         controller: 'projetosCtrl'
+        })
+        
+        // ALTERAÇÃO DE PROJETOS
+        .state('alteraproj', {
+        url: '/alteraproj',
+        templateUrl: 'views/alteraproj.html',
+        controller: 'alteraprojCtrl'
         })
         
         // CONFIG
@@ -58,12 +65,26 @@ var app = angular.module('starter', ['ui.router', 'lbServices'])
         templateUrl: 'views/configsubtorre.html',
         controller: 'configSubTorreCtrl'
         })
+        
+        // REGIAO
+        .state('regiao', {
+        url: '/regiao',
+        templateUrl: 'views/configregiao.html',
+        controller: 'configRegiaoCtrl'
+        })
 
         // SISTEMA
         .state('sistema', {
         url: '/sistema',
         templateUrl: 'views/configsistema.html',
         controller: 'configSistemaCtrl'
+        })
+        
+        // SISTEMA
+        .state('classgeral', {
+        url: '/classgeral',
+        templateUrl: 'views/configclassgeral.html',
+        controller: 'configClassGeralCtrl'
         })
 
         // LIMITE GRAFICO

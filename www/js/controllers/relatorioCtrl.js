@@ -2,7 +2,7 @@
 
 angular
     .module('starter')
-    .controller('relatorioCtrl', ['$scope', '$state', 'LimiteGrafico', 'Projeto', 'SubTorre', 'Fase', function ($scope, $state, LimiteGrafico, Projeto, SubTorre, Fase) {
+    .controller('relatorioCtrl', ['$scope', '$state', 'LimiteGrafico', 'Projeto', 'SubTorre', 'User', function ($scope, $state, LimiteGrafico, Projeto, SubTorre, User) {
 
         var i;
         var d = new Date();
@@ -26,6 +26,7 @@ angular
         //d.setMonth(d.getMonth() + 1);
         $scope.formfiltro = {}; //filtro para regerar o Grafico
         $scope.subtorre = {};
+        $scope.gerentes = {};
         $scope.projetos = {};
         $scope.date = [];
         $scope.opcaoqnt = [];
@@ -59,6 +60,15 @@ angular
                 $scope.subtorre = res;
             })            
         }
+
+        //Funcao para buscar na subtorre o valor do limite do grafico
+        function buscaUsuarios(){
+            //SubTorre.find({ filter: { where: {Subtorre: '' + user.subtorre + ''}} }).$promise.then(function (res, err) {
+            User.find().$promise.then(function (res, err) {
+                $scope.gerentes = res;
+            })            
+        }
+        buscaUsuarios();
 
         //Funcao para buscar na subtorre o valor do limite do grafico
         /*function buscaclassgeral(){
@@ -103,16 +113,20 @@ angular
         //atribui valores do projetos
         function atribuirDado(tipo, qnt) {
             var dados = [];
+            var gerente = $scope.formfiltro.ger_resp;
             for (var i = 0; i < qnt; i++) {
                 dados.push(0);
             }
 
             angular.forEach($scope.projetos, function (value, index) {
-                if (value.classificacao_geral == tipo) {
-                    for (var i = 0; i < $scope.date.length; i++) {
-
-                        if ($scope.date[i] == value.mes_ano) {
-                            dados[i] = dados[i] + value.valor_mes_ano;
+                if (gerente==null || gerente==value.gerente){
+                    if (value.classificacao_geral == tipo) {
+                        for (var i = 0; i < $scope.date.length; i++) {
+                            for(var j=0; j<value.meses.mes.length; j++){
+                                if ($scope.date[i] == value.meses.mes[j]) {
+                                    dados[i] = dados[i] + value.meses.valor[j];
+                                }
+                            }
                         }
                     }
                 }
