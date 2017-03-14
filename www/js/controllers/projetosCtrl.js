@@ -9,8 +9,8 @@ angular
         var d = new Date();
         var meses = 0;
 
-        $scope.mostrar =[true, false, false, false, false, false, false, false, false, false, false, false, false, false ]
-        $scope.mostrarbotao = [true, false, false, false, false, false, false, false, false, false, false, false, false, false]
+        $scope.mostrar =[true, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+        $scope.mostrarbotao = [true, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
 
         $scope.formproj = {};
         $scope.formproj.id = 0;
@@ -184,12 +184,9 @@ angular
 
         $scope.ValidaForm = function(){
             var bool = true;
-            var dados_mes=[];
-            var dados_valor=[];
-            $scope.formproj.meses = {
-                mes: [],
-                valor: []
-            }
+            $scope.formproj.meses = []
+            var dados_valor = []
+            var dados_mes = []
 
             //Algum campo indefinido ou Nulo 
             if(angular.isUndefined($scope.formproj.proposta) || angular.isUndefined($scope.formproj.gerente) || angular.isUndefined($scope.formproj.familia) || angular.isUndefined($scope.formproj.sistema) || angular.isUndefined($scope.formproj.classificacao_geral) || angular.isUndefined($scope.formproj.fase))
@@ -206,8 +203,9 @@ angular
             }
 
             for(i=0; i<=meses; i++){
-                dados_mes.push($scope.meses.mes_ano[i]);
+                $scope.formproj.meses.push({mes: $scope.meses.mes_ano[i], valor: $scope.meses.valor_mes_ano[i]})
                 dados_valor.push($scope.meses.valor_mes_ano[i]);
+                dados_mes.push($scope.meses.mes_ano[i])
             }
             //console.log(dados_valor.reduce(add));
 
@@ -231,19 +229,20 @@ angular
                 return;
             }
 
-            $scope.formproj.meses = {mes: dados_mes, valor: dados_valor};
-
-
             console.log($scope.formproj);
 
             if (bool){
                 Projeto.create($scope.formproj, function(res, err){
                     console.log(res);
+                    if(!err){
+                        $state.reload();
+                    }
+                     
                 })
             
             }
         
-            $state.reload();
+           
         }
 /*
         //find, findOne, findById

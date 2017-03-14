@@ -122,9 +122,9 @@ angular
                 if (gerente==null || gerente==value.gerente){
                     if (value.classificacao_geral == tipo) {
                         for (var i = 0; i < $scope.date.length; i++) {
-                            for(var j=0; j<value.meses.mes.length; j++){
-                                if ($scope.date[i] == value.meses.mes[j]) {
-                                    dados[i] = dados[i] + value.meses.valor[j];
+                            for(var j=0; j<value.meses.length; j++){
+                                if ($scope.date[i] == value.meses[j].mes) {
+                                    dados[i] = dados[i] + value.meses[j].valor;
                                 }
                             }
                         }

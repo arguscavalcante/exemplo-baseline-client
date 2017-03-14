@@ -61,7 +61,8 @@ angular
 
                angular.forEach($scope.regiao, function(value,index){
                     if(value.Regiao_id == $scope.formsistema.Regiao_id){
-                        projsist = value.Sistema[$scope.formsistema.intervalo];
+                        projsist = value.Sistemas[$scope.formsistema.intervalo];
+                        //console.log(value.Sistemas[$scope.formsistema.intervalo]);
                     }
                 });
                 
@@ -73,12 +74,20 @@ angular
                         }else{
                             angular.forEach($scope.regiao, function(value,index){
                                 if(value.Regiao_id == $scope.formsistema.Regiao_id){
-                                    value.Sistema[$scope.formsistema.intervalo] = $scope.formsistema.Sistema
+                                    value.Sistemas[$scope.formsistema.intervalo] = $scope.formsistema.Sistema
                                     $scope.sistemas = value.Sistemas;
                                     console.log($scope.sistemas);
                                 }
                             });
                         }
+                     }else{
+                        angular.forEach($scope.regiao, function(value,index){
+                            if(value.Regiao_id == $scope.formsistema.Regiao_id){
+                                value.Sistemas[$scope.formsistema.intervalo] = $scope.formsistema.Sistema
+                                $scope.sistemas = value.Sistemas;
+                                console.log($scope.sistemas);
+                            }
+                        });
                     }
                 });
             } else {
@@ -92,7 +101,7 @@ angular
             }
 
             if (bool){
-                Regiao.updateAll({where: {Regiao_id: ""+ $scope.formsistema.Regiao_id +""}}, {Sistemas: $scope.sistemas}, function(info, err) {
+                Regiao.updateAll({where: {Regiao_id: ""+ $scope.formsistema.Regiao_id +""}}, {Sistemas: $scope.sistemas}).$promise.then(function(info, err) {
                 })
             
             }

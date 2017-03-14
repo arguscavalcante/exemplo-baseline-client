@@ -1,0 +1,60 @@
+﻿
+    <section class="menu-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="navbar-collapse collapse ">
+                        <ul id="menu-top" class="nav navbar-nav navbar-right">
+                            <li><a ui-sref="config" class="menu-top-active">Configuração</a></li>
+                            <li><a ui-sref="projetos">Cadastro de Projetos</a></li>
+                            <li><a ui-sref="alteraproj">Alteração de Projetos</a></li>
+                            <li><a ui-sref="relatorio">Relatório</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- MENU SECTION END-->
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <form>
+                        <label>Fase: </label>
+                        <input type="text" ng-model="formfase.Fase" value="" class="form-control" />
+                        <br />
+                        <label>Descrição: </label>
+                        <input type="text" ng-model="formfase.Descricao" value="" class="form-control" />
+                        <br />
+                        <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
+                        <br />
+                    </form>
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-5">
+                    <div>
+                        <h3> Fases Cadastradas </h3>
+                        <div>
+                            <table class="table table-striped table-hover table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Fase</th>
+                                        <th>Descrição</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="id in fase" ng-click="alteraFase(id)">
+                                        <td>{{id.Fase}}</td>
+                                        <td>{{id.Descricao}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
