@@ -2,7 +2,7 @@
 
 angular
     .module('starter')
-    .controller('relatorioCtrl', ['$scope', '$state', 'LimiteGrafico', 'Projeto', 'SubTorre', 'User', function ($scope, $state, LimiteGrafico, Projeto, SubTorre, User) {
+    .controller('relatorioCtrl', ['$scope', '$state', 'LimiteGrafico', 'Projeto', 'SubTorre', 'User', 'ClassGeral', function ($scope, $state, LimiteGrafico, Projeto, SubTorre, User, ClassGeral) {
 
         var i;
         var d = new Date();
@@ -37,7 +37,7 @@ angular
         $scope.projLimite = [];
 
         $scope.classgeral = []; //montar vetor com banco Classificacao Geral colocar ordenação extrabase, pipeextra, pipe, aprov, aprovauto, pipeccron, pipescron, pipeauto
-        $scope.classgeral = ['Extra Baseline', 'Pipeline Extra Baseline', 'Pipeline', 'Aprovado', 'Aprovado Autonomia', 'Pipeline Aprovado com Cronograma', 'Pipeline Aprovado sem Cronograma', 'Pipeline Aprovado Autonomia'];
+        //$scope.classgeral = ['Extra Baseline', 'Pipeline Extra Baseline', 'Pipeline', 'Aprovado', 'Aprovado Autonomia', 'Pipeline Aprovado com Cronograma', 'Pipeline Aprovado sem Cronograma', 'Pipeline Aprovado Autonomia'];
         //$scope.classgeral = ['Extra Baseline', 'Pipeline Extra Baseline', 'Pipeline']
         $scope.limite = [{
             nome: 'Limite', tipoLinha: 'line', variacao: 0
@@ -71,19 +71,19 @@ angular
         buscaUsuarios();
 
         //Funcao para buscar na subtorre o valor do limite do grafico
-        /*function buscaclassgeral(){
-            Fase.find().$promise.then(function (res, err) {
-                $scope.fase = res;
+        function buscaclassgeral(){
+            ClassGeral.find().$promise.then(function (res, err) {
+                //$scope.classgeral = res;
 
-                angular.forEach($scope.fase, function (value, index){
-                    $scope.classgeral.push(value.Fase);
+                angular.forEach(res, function (value, index){
+                    $scope.classgeral.push(value.ClassGeral_id);
                 })
-                console.log('classgeral: ',  $scope.classgeral)
+                console.log('classificacao geral: ',  $scope.classgeral)
                 
             })
             
         }
-        buscaclassgeral();*/
+        buscaclassgeral();
 
         //Funcao para incluir os valores dos projetos.
         function alimentaProjetos(qnt) {
@@ -101,10 +101,10 @@ angular
 
             //criando a variavel de projeto
             for (var i = 0; i < $scope.classgeral.length; i++) {
-                console.log('FASE: ', $scope.classgeral[i]);
+                console.log('Classificacao Geral: ', $scope.classgeral[i]);
                 $scope.projBase.push({ name: $scope.classgeral[i], data: [] })
             }
-            //atribuindo os valores dos projetos por mes/fase
+            //atribuindo os valores dos projetos por mes/Classificacao Geral
             for (var i = 0; i < $scope.classgeral.length; i++) {
                 $scope.projBase[i].data = atribuirDado($scope.classgeral[i], qnt);
             }
@@ -305,7 +305,7 @@ angular
 
         //funcao de trasnformação para data -- FACTORY
         function trasformParDate(value) {
-            return value.substring(3, value.length) + '-' + value.substring(0, 2) + '-02';
+            return value.substring(3, value.length) + '-' + value.substring(0, 2) + '-15';
         }
 
         //Acerto das datas por função -- FACTORY

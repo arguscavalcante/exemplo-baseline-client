@@ -22,11 +22,11 @@
             <div class="row">
                 <div class="col-md-5">
                     <form>
-                        <label>Fase: </label>
-                        <input type="text" ng-model="formfase.Fase" value="" class="form-control" />
+                        <label>Classificação Geral: </label>
+                        <input type="text" ng-model="formclassgeral.ClassGeral_id" value="" class="form-control" />
                         <br />
                         <label>Descrição: </label>
-                        <input type="text" ng-model="formfase.Descricao" value="" class="form-control" />
+                        <input type="text" ng-model="formclassgeral.Descricao" value="" class="form-control" />
                         <br />
                         <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
                         <br />
@@ -36,18 +36,18 @@
                 </div>
                 <div class="col-md-5">
                     <div>
-                        <h3> Fases Cadastradas </h3>
+                        <h3> Classificações Gerais Cadastradas </h3>
                         <div>
                             <table class="table table-striped table-hover table-responsive">
                                 <thead>
                                     <tr>
-                                        <th>Fase</th>
+                                        <th>Classificação Geral</th>
                                         <th>Descrição</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="id in fase" ng-click="alteraFase(id)">
-                                        <td>{{id.Fase}}</td>
+                                    <tr ng-repeat="id in classgeral" ng-click="alteraClassGeral(id)">
+                                        <td>{{id.ClassGeral_id}}</td>
                                         <td>{{id.Descricao}}</td>
                                     </tr>
                                 </tbody>

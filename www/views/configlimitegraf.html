@@ -28,7 +28,7 @@
                         </select> 
                         <br />
                         <label>Família:</label></td>
-                        <select ng-model="formlimgraf.familia" class="form-control" ng-options="val for val in selectOptionFamilia() | orderBy:'toString()' "></select>
+                        <select ng-model="formlimgraf.familia" class="form-control" ng-options="val for val in selectOptionFamilia() | orderBy:'toString()' " ng-change="atribuirTorre();"></select>
                         <br />
                         <label>Valor Limite: </label>
                         <input type="text" ng-model="formlimgraf.valor_limite" value="" class="form-control" />
@@ -36,6 +36,17 @@
                         <label>Porcentagem de Limite: </label>
                         <input type="text" ng-model="formlimgraf.variacao" value="" class="form-control" />
                         <br />
+                        <label>Familia disponibiliza valor a Torre? </label>
+                        <input type="checkbox" ng-model="disptorre">
+                        <br />
+                        <div ng-show="disptorre" class="check-element animate-show-hide">
+                            <label>Torre: </label>
+                            <input type="text" ng-model="formlimgraf.torre" value="" class="form-control" readonly/>
+                            <br />
+                            <label>Porcentagem da Variação: </label>
+                            <input type="text" ng-model="formlimgraf.variacao_torre" value="" class="form-control" />
+                            <br />
+                        </div>
                         <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
                         <br />
                     </form>
@@ -53,6 +64,8 @@
                                         <th>SubTorre</th>
                                         <th>Valor Limite</th>
                                         <th>Porcentagem Limite</th>
+                                        <th>Torre</th>
+                                        <th>Variação Torre</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -61,6 +74,8 @@
                                         <td>{{id.familia}}</td>
                                         <td>{{id.valor_limite}}</td>
                                         <td>{{id.variacao}}</td>
+                                        <td>{{id.torre}}</td>
+                                        <td>{{id.variacao_torre}}</td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -6538,7 +6538,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
       'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
       function(LoopBackResource, LoopBackAuth, $injector, $q) {
         var R = LoopBackResource(
-        urlBase + "/ClassGerals/:id",
+        urlBase + "/ClassGerais/:id",
           { 'id': '@id' },
           {
 
@@ -6576,7 +6576,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
             "create": {
-              url: urlBase + "/ClassGerals",
+              url: urlBase + "/ClassGerais",
               method: "POST",
             },
 
@@ -6615,7 +6615,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
             "createMany": {
               isArray: true,
-              url: urlBase + "/ClassGerals",
+              url: urlBase + "/ClassGerais",
               method: "POST",
             },
 
@@ -6653,7 +6653,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
             "upsert": {
-              url: urlBase + "/ClassGerals",
+              url: urlBase + "/ClassGerais",
               method: "PUT",
             },
 
@@ -6691,7 +6691,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
             "replaceOrCreate": {
-              url: urlBase + "/ClassGerals/replaceOrCreate",
+              url: urlBase + "/ClassGerais/replaceOrCreate",
               method: "POST",
             },
 
@@ -6728,7 +6728,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
             "upsertWithWhere": {
-              url: urlBase + "/ClassGerals/upsertWithWhere",
+              url: urlBase + "/ClassGerais/upsertWithWhere",
               method: "POST",
             },
 
@@ -6760,7 +6760,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `exists` – `{boolean=}` -
              */
             "exists": {
-              url: urlBase + "/ClassGerals/:id/exists",
+              url: urlBase + "/ClassGerais/:id/exists",
               method: "GET",
             },
 
@@ -6795,7 +6795,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
             "findById": {
-              url: urlBase + "/ClassGerals/:id",
+              url: urlBase + "/ClassGerais/:id",
               method: "GET",
             },
 
@@ -6832,7 +6832,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
             "replaceById": {
-              url: urlBase + "/ClassGerals/:id/replace",
+              url: urlBase + "/ClassGerais/:id/replace",
               method: "POST",
             },
 
@@ -6866,7 +6866,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
             "find": {
               isArray: true,
-              url: urlBase + "/ClassGerals",
+              url: urlBase + "/ClassGerais",
               method: "GET",
             },
 
@@ -6899,7 +6899,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
             "findOne": {
-              url: urlBase + "/ClassGerals/findOne",
+              url: urlBase + "/ClassGerais/findOne",
               method: "GET",
             },
 
@@ -6933,7 +6933,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * Information related to the outcome of the operation
              */
             "updateAll": {
-              url: urlBase + "/ClassGerals/update",
+              url: urlBase + "/ClassGerais/update",
               method: "POST",
             },
 
@@ -6966,7 +6966,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
             "deleteById": {
-              url: urlBase + "/ClassGerals/:id",
+              url: urlBase + "/ClassGerais/:id",
               method: "DELETE",
             },
 
@@ -6998,7 +6998,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
             "count": {
-              url: urlBase + "/ClassGerals/count",
+              url: urlBase + "/ClassGerais/count",
               method: "GET",
             },
 
@@ -7035,7 +7035,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
             "prototype$updateAttributes": {
-              url: urlBase + "/ClassGerals/:id",
+              url: urlBase + "/ClassGerais/:id",
               method: "PUT",
             },
 
@@ -7072,7 +7072,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `changes` – `{ReadableStream=}` -
              */
             "createChangeStream": {
-              url: urlBase + "/ClassGerals/change-stream",
+              url: urlBase + "/ClassGerais/change-stream",
               method: "POST",
             },
           }

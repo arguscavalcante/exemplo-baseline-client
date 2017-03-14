@@ -2,7 +2,7 @@
 
 angular
     .module('starter')
-    .controller('configLimiteGrafCtrl', ['$scope', '$state', 'LimiteGrafico', 'SubTorre',  function($scope, $state, LimiteGrafico, SubTorre){
+    .controller('configLimiteGrafCtrl', ['$scope', '$state', 'LimiteGrafico', 'SubTorre', 'LimiteReal', 'Projeto', 'ClassGeral',  function($scope, $state, LimiteGrafico, SubTorre, LimiteReal, Projeto, ClassGeral){
         console.log('configLimiteGrafCtrl')
 
         var i;
@@ -14,14 +14,19 @@ angular
         $scope.limgrafico = {};
         $scope.formlimgraf = {};
         $scope.subtorre = {};
+        $scope.projeto = {};
+        $scope.classgeral =[];
 
         $scope.formlimgraf.id = 0;
 
         //find, findOne, findById
         function listarLimGraf(){
             LimiteGrafico.find().$promise.then(function(res, err){
-                $scope.limgrafico = res;
-                console.log(res);
+                $scope.limgrafico = res
+                //angular.forEach(res, function(value, index){
+                //    $scope.limgrafico.Data_corte = trasformVizualDate(value.Data_corte)
+                //});
+                console.log($scope.limgrafico)
             });
             
         }
@@ -34,7 +39,7 @@ angular
                 $scope.date.push({valor:d.getFullYear()+'/-'+d.getMonth(), texto:'-'+d.getMonth()+'/'+d.getFullYear()})
                 d.setMonth(d.getMonth() + 1);
             }
-            console.log($scope.date);
+            //console.log($scope.date);
             for(i=0; i<qnt; i++){
                 $scope.date[i].texto = $scope.date[i].texto.replace('-0/','01/');
                 $scope.date[i].texto = $scope.date[i].texto.replace('-1/','02/');
@@ -66,10 +71,65 @@ angular
 
         alimentaData(d, 15);
 
-         // Alimenta com todas as Subtorres
+        function alimentaData2(data, qnt){
+            
+            var vetor = [];
+            for(i=0; i<15; i++){
+                vetor.push('-'+data.getMonth()+'/'+data.getFullYear())
+                data.setMonth(data.getMonth() + 1);
+            }
+            for(i=0; i<15; i++){
+                vetor[i] = vetor[i].replace('-0/','01/');
+                vetor[i] = vetor[i].replace('-1/','02/');
+                vetor[i] = vetor[i].replace('-2/','03/');
+                vetor[i] = vetor[i].replace('-3/','04/');
+                vetor[i] = vetor[i].replace('-4/','05/');
+                vetor[i] = vetor[i].replace('-5/','06/');
+                vetor[i] = vetor[i].replace('-6/','07/');
+                vetor[i] = vetor[i].replace('-7/','08/');
+                vetor[i] = vetor[i].replace('-8/','09/');
+                vetor[i] = vetor[i].replace('-9/','10/');
+                vetor[i] = vetor[i].replace('-10/','11/');
+                vetor[i] = vetor[i].replace('-11/','12/');
+            }
+            return vetor;
+        }
+        
+        function criarObjLimiteReal(value){
+
+            $scope.limreal = [];
+            var data;
+            var data_vetor = [];
+
+            for(var i=0; i< $scope.date.length; i++){
+                if($scope.date[i].valor==$scope.formlimgraf.Data_corte){
+                    data = new Date(trasformParDate($scope.date[i].texto))
+                }
+            }
+            // console.log(data);
+            data_vetor = alimentaData2(data, 15);
+            // console.log(data_vetor);
+
+            angular.forEach($scope.projetos, function (value, index) {
+                if ($scope.classgeral.includes(value.classificacao_geral)) {
+                    
+                }
+            });
+
+            for(var i=0; i<data_vetor.length; i++){
+                $scope.limreal.push({mes: data_vetor[i] })
+            }
+        }
+
+        //funcao de trasnformação para data -- FACTORY
+        function trasformParDate(value) {
+            return value.substring(3, value.length) + '-' + value.substring(0, 2) + '-15';
+        }
+
+        // Alimenta com todas as Subtorres
         SubTorre.find().$promise.then(function(res, err){
             $scope.subtorre = res;
-            console.log(res);
+            //console.log(res);
         });
 
         // Alimenta a selecao da pagina
@@ -80,6 +140,30 @@ angular
             })
 
             return options;       
+        }
+
+         // Alimenta com os Projetos
+        Projeto.find().$promise.then(function(res, err){
+            $scope.projeto = res;
+            //console.log(res);
+        });
+
+        // Alimenta com todas as Classificacoes Gerais que interferem no baseline
+        ClassGeral.find({ filter: { where: {Baseline: true}} }).$promise.then(function(res, err){
+            //console.log(res);
+            angular.forEach(res, function(value,index){
+                $scope.classgeral.push(value.ClassGeral_id)
+            })
+        });
+
+        //funcao de trasnformação para data para vizualizacao em tela -- FACTORY
+        function trasformVizualDate(value) {
+            //console.log(value.substring(0, 4) + '/' + value.substring(5, value.length));
+            return value.substring(0, 4) + '/' + value.substring(5, value.length) ;
+        }
+
+        $scope.atribuirTorre = function(){
+            $scope.formlimgraf.torre = $scope.formlimgraf.familia.substring(0, $scope.formlimgraf.familia.indexOf("-")-1);
         }
 
         $scope.ValidaForm = function(){
@@ -96,7 +180,7 @@ angular
             }
             if($scope.formlimgraf.variacao.replace(/[\s]/g, '') == '' || $scope.formlimgraf.variacao < 0 )
             {
-                alert('O valor mímino da variacao é zero!');
+                alert('O valor mímino da variação é zero!');
                 return;
             }
             
@@ -107,14 +191,26 @@ angular
                 }
             })
 
-            if (bool){
-                LimiteGrafico.create($scope.formlimgraf, function(res, err){
-                    console.log(res);
-                })
+            //console.log($scope.disptorre);
+            if($scope.disptorre){
+                 if($scope.formlimgraf.variacao_torre == null || $scope.formlimgraf.variacao_torre < 0){
+                    alert('O valor mímino da variação da Torre é zero!');
+                    return;
+                 }
+            } else {
+                $scope.formlimgraf.torre = null;
+                $scope.formlimgraf.variacao_torre = null;
             }
+            //console.log($scope.formlimgraf)
 
-            $state.reload();
-            $state.reload();
+            criarObjLimiteReal($scope.formlimgraf);
+
+            // if (bool){
+            //     LimiteGrafico.create($scope.formlimgraf, function(res, err){
+            //         //console.log(res);
+            //         $state.reload();
+            //     })
+            // }
         }
 
     }]);

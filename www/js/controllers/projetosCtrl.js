@@ -2,7 +2,7 @@
 
 angular
     .module('starter')
-    .controller('projetosCtrl', ['$scope', '$state', 'SubTorre', 'User', 'Projeto', 'LimiteReal', 'Fase', 'Regiao', function($scope, $state, SubTorre, User, Projeto, LimiteReal, Fase, Regiao){
+    .controller('projetosCtrl', ['$scope', '$state', 'SubTorre', 'User', 'Projeto', 'LimiteReal', 'Fase', 'Regiao', 'ClassGeral', function($scope, $state, SubTorre, User, Projeto, LimiteReal, Fase, Regiao, ClassGeral){
         console.log('projetosCtrl')
 
         var i;
@@ -24,11 +24,12 @@ angular
         $scope.subtorre = {};
         $scope.gerentes = {};
         $scope.fase = {};
+        $scope.classificacao_geral = {};
         $scope.regiao = {};
         $scope.sistema = [];
         $scope.projHigh = {};
 
-        $scope.classificacao_geral = {
+        /*$scope.classificacao_geral = {
             model: null,
             opcoes: [
                 {nome: 'Aprovado'},
@@ -40,7 +41,7 @@ angular
                 {nome: 'Extra Baseline'},
                 {nome: 'Pipeline Extra Baseline'}
             ]
-        };
+        };*/
 
         $scope.perfil = {
             model: null,
@@ -125,6 +126,11 @@ angular
                     $scope.sistema.push({regiao: value.Regiao_id, sistema: value.Sistemas[i]});
                 }
             });
+        });
+
+        ClassGeral.find().$promise.then(function(res, err){         
+             $scope.classificacao_geral = res;
+            //console.log(res);
         });
 
 
