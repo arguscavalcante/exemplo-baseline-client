@@ -31,10 +31,10 @@
                         <select ng-model="formlimgraf.familia" class="form-control" ng-options="val for val in selectOptionFamilia() | orderBy:'toString()' " ng-change="atribuirTorre();"></select>
                         <br />
                         <label>Valor Limite: </label>
-                        <input type="text" ng-model="formlimgraf.valor_limite" value="" class="form-control" />
+                        <input type="number" ng-model="formlimgraf.valor_limite" value="" class="form-control" />
                         <br />
                         <label>Porcentagem de Limite: </label>
-                        <input type="text" ng-model="formlimgraf.variacao" value="" class="form-control" />
+                        <input type="number" ng-model="formlimgraf.variacao" value="" class="form-control" />
                         <br />
                         <label>Familia disponibiliza valor a Torre? </label>
                         <input type="checkbox" ng-model="disptorre">
@@ -44,7 +44,7 @@
                             <input type="text" ng-model="formlimgraf.torre" value="" class="form-control" readonly/>
                             <br />
                             <label>Porcentagem da Variação: </label>
-                            <input type="text" ng-model="formlimgraf.variacao_torre" value="" class="form-control" />
+                            <input type="number" ng-model="formlimgraf.variacao_torre" value="" class="form-control" />
                             <br />
                         </div>
                         <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>

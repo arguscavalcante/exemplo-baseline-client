@@ -100,6 +100,10 @@ angular
             $scope.limreal = [];
             var data;
             var data_vetor = [];
+            var dados = [];
+            var meses_acima = "";
+            var ret = true;
+            var val_baseline = 0;
 
             for(var i=0; i< $scope.date.length; i++){
                 if($scope.date[i].valor==$scope.formlimgraf.Data_corte){
@@ -108,17 +112,44 @@ angular
             }
             // console.log(data);
             data_vetor = alimentaData2(data, 15);
-            // console.log(data_vetor);
+             //console.log(data_vetor);
 
-            angular.forEach($scope.projetos, function (value, index) {
-                if ($scope.classgeral.includes(value.classificacao_geral)) {
-                    
+             for (var i = 0; i < data_vetor.length; i++) {
+                dados.push(0);
+            }
+
+            angular.forEach($scope.projeto, function (value, index) {
+                //console.log($scope.classgeral.includes(value.classificacao_geral));
+                if ($scope.classgeral.includes(value.classificacao_geral) && value.familia == $scope.formlimgraf.familia) {
+                    for (var i = 0; i < data_vetor.length; i++) {
+                        for(var j=0; j<value.meses.length; j++){
+                            if (data_vetor[i] == value.meses[j].mes) {
+                                dados[i] = dados[i] + value.meses[j].valor;
+                            }
+                        }
+                    }
                 }
+                //console.log('dados de valores', dados);
+                //console.log('projetos',$scope.projeto);
             });
 
-            for(var i=0; i<data_vetor.length; i++){
-                $scope.limreal.push({mes: data_vetor[i] })
+            val_baseline = $scope.formlimgraf.valor_limite + ($scope.formlimgraf.valor_limite*($scope.formlimgraf.variacao/100))
+            console.log(val_baseline);
+            for(var i=0; i<dados.length; i++){
+                if(dados[i]>val_baseline){
+                    meses_acima = data_vetor[i] + ', ' + meses_acima;
+                    ret = false;
+                }
             }
+            
+            if(!ret){
+                alert('Os meses esão com seu baseline ultrapassando o limite sugerido! ' + meses_acima.substring(0, meses_acima.length -2));
+                return ret;
+            }
+
+            // for(var i=0; i<data_vetor.length; i++){
+            //     $scope.limreal.push({mes: data_vetor[i] })
+            // }
         }
 
         //funcao de trasnformação para data -- FACTORY
@@ -149,12 +180,13 @@ angular
         });
 
         // Alimenta com todas as Classificacoes Gerais que interferem no baseline
-        ClassGeral.find({ filter: { where: {Baseline: true}} }).$promise.then(function(res, err){
-            //console.log(res);
-            angular.forEach(res, function(value,index){
-                $scope.classgeral.push(value.ClassGeral_id)
-            })
-        });
+        // ClassGeral.find({ filter: { where: {Baseline: true}} }).$promise.then(function(res, err){
+        //     //console.log(res);
+        //     angular.forEach(res, function(value,index){
+        //         $scope.classgeral.push(value.ClassGeral_id)
+        //     })
+        // });
+        $scope.classgeral.push("Aprovado");
 
         //funcao de trasnformação para data para vizualizacao em tela -- FACTORY
         function trasformVizualDate(value) {
@@ -173,12 +205,12 @@ angular
                 alert('Favor, preencha todas as informações!');
                 return;
             }
-            if($scope.formlimgraf.valor_limite.replace(/[\s]/g, '') == '' || $scope.formlimgraf.valor_limite <= 0 )
+            if($scope.formlimgraf.valor_limite == '' || $scope.formlimgraf.valor_limite <= 0 )
             {
                 alert('O valor do Limite deve ser maior que zero!');
                 return;
             }
-            if($scope.formlimgraf.variacao.replace(/[\s]/g, '') == '' || $scope.formlimgraf.variacao < 0 )
+            if($scope.formlimgraf.variacao == '' || $scope.formlimgraf.variacao < 0 )
             {
                 alert('O valor mímino da variação é zero!');
                 return;
@@ -203,7 +235,7 @@ angular
             }
             //console.log($scope.formlimgraf)
 
-            criarObjLimiteReal($scope.formlimgraf);
+            bool = criarObjLimiteReal($scope.formlimgraf);
 
             // if (bool){
             //     LimiteGrafico.create($scope.formlimgraf, function(res, err){
