@@ -28,6 +28,9 @@
                         <label>Descrição: </label>
                         <input type="text" ng-model="formclassgeral.Descricao" value="" class="form-control" />
                         <br />
+                        <label>Interfere no Baseline? </label>
+                        <input type="checkbox" ng-model="formclassgeral.Baseline" value="" class="form" />
+                        <br />
                         <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
                         <br />
                     </form>
@@ -43,12 +46,14 @@
                                     <tr>
                                         <th>Classificação Geral</th>
                                         <th>Descrição</th>
+                                        <th>Interfere no Baseline?</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="id in classgeral" ng-click="alteraClassGeral(id)">
                                         <td>{{id.ClassGeral_id}}</td>
                                         <td>{{id.Descricao}}</td>
+                                        <td>{{id.BaseTabela}}</td>
                                     </tr>
                                 </tbody>
                             </table>

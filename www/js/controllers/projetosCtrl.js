@@ -8,8 +8,17 @@ angular
         var i;
         var d = new Date();
         var meses = 0;
+        var user = {};
 
-        $scope.mostrar =[true, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+        user = {
+            torre: 'Torre I',
+            subtorre: 'TESTE',
+            perfil: 'Admin'
+        }
+
+        var familia = user.torre + ' - ' + user.subtorre;
+
+        $scope.mostrar = [true, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
         $scope.mostrarbotao = [true, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
 
         $scope.formproj = {};
@@ -18,8 +27,11 @@ angular
 
         $scope.projetos = {};
         $scope.limite = {};
+        var contador = 0;
 
-        $scope.date = []; 
+        $scope.teste =[0]
+
+        $scope.baseline= {data: [], valor:[]}; 
 
         $scope.subtorre = {};
         $scope.gerentes = {};
@@ -29,28 +41,14 @@ angular
         $scope.sistema = [];
         $scope.projHigh = {};
 
-        /*$scope.classificacao_geral = {
-            model: null,
-            opcoes: [
-                {nome: 'Aprovado'},
-                {nome: 'Aprovado Autonomia'},
-                {nome: 'Pipeline Aprovado com Cronograma'},
-                {nome: 'Pipeline Aprovado sem Cronograma'},
-                {nome: 'Pipeline Aprovado Autonomia'},
-                {nome: 'Pipeline'},
-                {nome: 'Extra Baseline'},
-                {nome: 'Pipeline Extra Baseline'}
-            ]
-        };*/
-
-        $scope.perfil = {
-            model: null,
-            opcoes: [
-                {nome: 'Superusuario'},
-                {nome: 'Gerente'},
-                {nome: 'Visitante'}
-            ]
-        };
+        $scope.funcMes2 = function(valor){
+            if(valor==-1){
+                $scope.teste.splice($index, 1);
+                contador = contador + valor;
+            } else {
+                $scope.teste.push(contador + valor);
+            }
+        }
 
         //Funcao para incluir e excluir meses
         $scope.funcMes = function (valor){
@@ -78,25 +76,57 @@ angular
             //console.log('Mostrar Botoes: ', $scope.mostrarbotao)
         }
 
-        //Alimentando os valores de data
-        for(i=0; i<15; i++){
-            $scope.date.push('-'+d.getMonth()+'/'+d.getFullYear())
-            d.setMonth(d.getMonth() + 1);
+        //FACTORY
+        function alimentaData(data, qnt){
+            var date = [];
+            //Alimentando os valores de data
+            for(i=0; i<15; i++){
+                date.push('-'+data.getMonth()+'/'+data.getFullYear())
+                data.setMonth(data.getMonth() + 1);
+            }
+            for(i=0; i<15; i++){
+                date[i] = date[i].replace('-0/','01/');
+                date[i] = date[i].replace('-1/','02/');
+                date[i] = date[i].replace('-2/','03/');
+                date[i] = date[i].replace('-3/','04/');
+                date[i] = date[i].replace('-4/','05/');
+                date[i] = date[i].replace('-5/','06/');
+                date[i] = date[i].replace('-6/','07/');
+                date[i] = date[i].replace('-7/','08/');
+                date[i] = date[i].replace('-8/','09/');
+                date[i] = date[i].replace('-9/','10/');
+                date[i] = date[i].replace('-10/','11/');
+                date[i] = date[i].replace('-11/','12/');
+            }
+
+            return date;
         }
-        for(i=0; i<15; i++){
-            $scope.date[i] = $scope.date[i].replace('-0/','01/');
-            $scope.date[i] = $scope.date[i].replace('-1/','02/');
-            $scope.date[i] = $scope.date[i].replace('-2/','03/');
-            $scope.date[i] = $scope.date[i].replace('-3/','04/');
-            $scope.date[i] = $scope.date[i].replace('-4/','05/');
-            $scope.date[i] = $scope.date[i].replace('-5/','06/');
-            $scope.date[i] = $scope.date[i].replace('-6/','07/');
-            $scope.date[i] = $scope.date[i].replace('-7/','08/');
-            $scope.date[i] = $scope.date[i].replace('-8/','09/');
-            $scope.date[i] = $scope.date[i].replace('-9/','10/');
-            $scope.date[i] = $scope.date[i].replace('-10/','11/');
-            $scope.date[i] = $scope.date[i].replace('-11/','12/');
+
+        function alimentaValor(vetor, objLimite, busca){
+            var valor = [];
+            for(var i=0; i<vetor.length; i++){
+                valor.push(0)
+            }
+
+            angular.forEach(objLimite, function(value, index){
+                if(value.familia == busca){
+                    for(var i=0; i<value.dados.length; i++){
+                        for(var j=0; j<vetor.length; j++){
+                            if(vetor[i]==value.dados[i].mes){
+                                valor[i] = value.dados[i].resto_mes;
+                            }
+                        }
+                    }
+                }
+            });
+
+            if(valor.includes(0)){
+                alert('Não há valores de limite real parametrizados para um ou mais meses. Favor, informar ao Administrador.');
+            }
+            return valor;
         }
+
+        $scope.baseline.data = alimentaData(d,15); 
 
         // Alimenta objeto com todas as Subtorres
         SubTorre.find().$promise.then(function(res, err){
@@ -114,6 +144,13 @@ angular
         Fase.find().$promise.then(function(res, err){
             $scope.fase = res;
             //console.log(res);
+        });
+
+        // Alimenta objeto com todas os Limites Reais
+        LimiteReal.find().$promise.then(function(res, err){
+            $scope.limite = res;
+            //console.log(res);
+            $scope.baseline.valor = alimentaValor($scope.baseline.data, $scope.limite, familia);
         });
 
         // Alimenta objeto com todas as Regiões/Sistemas
@@ -237,38 +274,30 @@ angular
 
             console.log($scope.formproj);
 
-            if (bool){
-                Projeto.create($scope.formproj, function(res, err){
-                    console.log(res);
-                    if(!err){
-                        $state.reload();
+            angular.forEach($scope.formproj.meses, function(value, index){
+                for(var i=0; i<$scope.baseline.data.length; i++){
+                    if(value.mes==$scope.baseline.data[i]){
+                        if(value.valor<$scope.baseline.valor[i]){
+                            alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
+                            bool = false;
+                            return;
+                        }
                     }
+                }
+            })
+
+            // if (bool){
+            //     Projeto.create($scope.formproj, function(res, err){
+            //         console.log(res);
+            //         if(!err){
+            //             $state.reload();
+            //         }
                      
-                })
+            //     })
             
-            }
+            // }
         
            
         }
-/*
-        //find, findOne, findById
-        function listarProjetos(){
-            Projeto.find().$promise.then(function(res, err){
-                $scope.projetos = res;
-            });
-            
-        }
-
-        listarProjetos();
-
-        //find, findOne, findById
-        function listarLimites(){
-            LimiteGrafico.find().$promise.then(function(res, err){
-                $scope.limite = res;
-            });
-            
-        }
-
-        listarLimites(); */
 
     }]);

@@ -268,7 +268,7 @@ angular
         $scope.redesenharGraf = function () {
 
             var qnt;
-            if ($scope.formfiltro.qnt_meses_pos != null || $scope.formfiltro.mes_ano_inicio != null) {
+            if ($scope.formfiltro.qnt_meses_pos != null || $scope.formfiltro.mes_ano_inicio != null || $scope.formfiltro.ger_resp != null) {
 
                 if ($scope.formfiltro.mes_ano_inicio == null) {
                     datasel = new Date();

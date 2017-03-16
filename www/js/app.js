@@ -1,5 +1,5 @@
   
-var app = angular.module('starter', ['ui.router', 'lbServices'])
+var app = angular.module('starter', ['ui.router', 'lbServices', 'angularUtils.directives.dirPagination'])
 
     .config(function(LoopBackResourceProvider, $stateProvider, $urlRouterProvider) {
         LoopBackResourceProvider.setUrlBase('https://exemplo-baseline-api.mybluemix.net/api');

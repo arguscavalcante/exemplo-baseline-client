@@ -30,25 +30,22 @@
                             <tr>
                                 <td>
                                     <label>Mês Inicio: &nbsp;</label>
-                                    <select ng-model="formfiltro.mes_ano_inicio" class="form-control">
+                                    <select ng-model="formfiltro.mes_ano_inicio" class="form-control" ng-change="redesenharGraf();">
                                         <option ng-repeat="id in opcaodate" value="{{id}}">{{id}}</option>
                                     </select>
                                 </td>
                                 <td>
                                     <label>Quantidade de Meses: &nbsp;</label>
-                                    <select ng-model="formfiltro.qnt_meses_pos" class="form-control">
+                                    <select ng-model="formfiltro.qnt_meses_pos" class="form-control" ng-change="redesenharGraf();">
                                         <option ng-repeat="id in opcaoqnt" value="{{id}}">{{id}}</option>
                                     </select>
                                 </td>
                                 <td>
                                     <label>Gerentes Responsáveis: &nbsp;</label>
-                                    <select ng-model="formfiltro.ger_resp" class="form-control">
+                                    <select ng-model="formfiltro.ger_resp" class="form-control" ng-change="redesenharGraf();">
                                         <option ng-repeat="id in gerentes" value="{{id.login_user}}">{{id.login_user}}</option>
                                     </select>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td colspan=3><button type="button" ng-click="redesenharGraf();" class="btn btn-info">Gerar</button></td>
                             </tr>
                         </table>                            
                     </form>

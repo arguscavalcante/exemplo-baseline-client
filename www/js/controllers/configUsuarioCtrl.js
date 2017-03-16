@@ -2,10 +2,9 @@
 
 angular
     .module('starter')
-    .controller('configUsuarioCtrl', ['$scope', '$state', 'Torre', 'SubTorre', 'User',  function($scope, $state, Torre, SubTorre, User){
+    .controller('configUsuarioCtrl', ['$scope', '$state', 'SubTorre', 'User',  function($scope, $state, SubTorre, User){
         console.log('configUsuarioCtrl')
 
-        $scope.torre = {};
         $scope.subtorre = {};
         $scope.usuario = {};
         $scope.perfil = {
@@ -25,34 +24,21 @@ angular
 
         var bool = true;
 
-        //Options Torre
-        function selectOptionTorres(){
-            Torre.find().$promise.then(function(res, err){
-                $scope.torre = res;
-                console.log(res);
-            });
-            
-        }
+        //Option Familia
+        $scope.selectOptionFamilia = function(){
+            var options = [];
+            angular.forEach($scope.subtorre, function(value,index){
+                options.push(value.Torre_id + " - " + value.Subtorre);
+            })
 
-        selectOptionTorres();
+            return options;       
+        }
 
         // Alimenta com todas as Subtorres
         SubTorre.find().$promise.then(function(res, err){
             $scope.subtorre = res;
             console.log(res);
         });
-
-        //Option SubTorre
-        $scope.selectOptionSubTorres = function(){
-            var options = [];
-            angular.forEach($scope.subtorre, function(value,index){
-                if (value.Torre_id == $scope.formusuario.torre){
-                    options.push(value.Subtorre);
-                }
-            })
-
-            return options;       
-        }
 
         //Listar Usuarios
         function listarUsuarios(){
@@ -68,13 +54,13 @@ angular
         $scope.ValidaForm = function(){
             console.log($scope.formusuario);
             
-            if(angular.isUndefined($scope.formusuario.torre) || angular.isUndefined($scope.formusuario.subtorre) || angular.isUndefined($scope.formusuario.perfil) || angular.isUndefined($scope.formusuario.login_user) || angular.isUndefined($scope.formusuario.login_nome) )
+            if(angular.isUndefined($scope.formusuario.familia) || angular.isUndefined($scope.formusuario.perfil) || angular.isUndefined($scope.formusuario.login_user) || angular.isUndefined($scope.formusuario.login_nome) )
             {
                 alert('Favor, preencha todas as informações!');
                 return;
             }
 
-            if($scope.formusuario.torre == '' || $scope.formusuario.subtorre == '' || $scope.formusuario.perfil == '' || $scope.formusuario.login_user.replace(/[\s]/g, '') == '' ||  $scope.formusuario.login_nome.replace(/[\s]/g, '') == '')
+            if($scope.formusuario.familia == '' || $scope.formusuario.perfil == '' || $scope.formusuario.login_user.replace(/[\s]/g, '') == '' ||  $scope.formusuario.login_nome.replace(/[\s]/g, '') == '')
             {
                 alert('Favor, preencha todas as informações!');
                 return;

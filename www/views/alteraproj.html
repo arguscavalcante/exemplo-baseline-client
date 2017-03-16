@@ -21,36 +21,312 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <div>
-                        <h3> Projetos Cadastrados </h3>
-                        <br>
-                        <table>
+                    <h3> Projetos Cadastrados </h3><br />
+                </div>
+            </div>
+            <div class="row" ng-show="buscar">
+                <div class="col-md-12">
+                    <table class="table table-striped">
+                        <tr>
+                            <td colspan="4"><h4> Busca </h4></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2"><label>Projeto:</label></td>
+                            <td class="col-md-3">
+                                <input type="text" ng-model="filtroResult.projeto" value="" class="form-control" placeholder="Procurar..." />
+                            </td>
+                            <td class="col-md-2"><label>Familia:</label></td>
+                            <td class="col-md-3">
+                                <select ng-model="filtroResult.familia" class="form-control" ng-options="val for val in selectOptionFamilia() | orderBy:'toString()' "></select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2"><label>Região:</label></td>
+                            <td class="col-md-3">
+                                <select ng-model="filtroResult.regiao" class="form-control">
+                                    <option ng-repeat="id in regiao" value="{{id.Regiao_id}}">{{id.Regiao_id}}</option>
+                                </select>
+                            </td>
+                            <td class="col-md-2"><label>Sistema:</label></td>
+                            <td class="col-md-3">
+                                <select ng-model="filtroResult.sistema" class="form-control" ng-options="val for val in selectOptionSistema()" ></select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><button type="button" ng-click="limparFiltros();" class="btn btn-info">Limpar Filtros</button></td>
+                            <td></td>
+                            <td><label>Quantidade de itens:</label></td>
+                            <td class="col-md-1">
+                                <select ng-model="filtroResult.qnt_itens" class="form-control">
+                                    <option ng-repeat="id in qnt" value="{{id}}">{{id}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row" ng-show="mostrar">
+                <div class="col-md-12">
+                    <table class="table table-striped table-hover table-responsive">
+                        <thead>
                             <tr>
-                                <td class="col-md-3"><h5>Filtro:</h5></td>
-                                <td class="col-md-6">
-                                    <select ng-model="filtroResult" ng-change="filtraResultado()" class="form-control" ng-options="val for val in selectOptionFamilia() | orderBy:'toString()' "></select>
-                                        <option ng-repeat="id in torre" value="{{id.Torre}}">{{id.Torre}}</option>
-                                    </select>
-                                </td>
+                                <th ng-click="ordenar('id.projeto')">Projeto</th>
+                                <th ng-click="ordenar('id.proposta')">Proposta</th>
+                                <th ng-click="ordenar('id.classificacao_geral')">Classificação Geral</th>   
+                                <th ng-click="ordenar('id.fase')">Fase</th>                                     
+                                <th ng-click="ordenar('id.familia')">Familia</th>
+                                <th ng-click="ordenar('id.sistema')">Sistema</th>
+                                <th ng-click="ordenar('id.valor_total_proj')">Valor Total do Projeto</th>
                             </tr>
-                        </table>
-                        <div>
-                            <table class="table table-striped table-hover table-responsive">
-                                <thead>
-                                    <tr>
-                                        <th>Torre</th>
-                                        <th>Descrição</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="id in tabela">
-                                        <td>{{id.Familia}}</td>
-                                        <td>{{id.Projeto}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="id in projeto|filter:{projeto:filtroResult.projeto}|filter:{sistema:filtroResult.sistema}|filter:{familia:filtroResult.familia}|orderBy:sortKey:reverse|itemsPerPage:filtroResult.qnt_itens" ng-click="alteraProj(id)">
+                                <td>{{id.projeto}}</td>
+                                <td>{{id.proposta}}</td>
+                                <td>{{id.classificacao_geral}}</td>
+                                <td>{{id.fase}}</td>
+                                <td>{{id.familia}}</td>
+                                <td>{{id.sistema}}</td>
+                                <td>{{id.valor_total_proj}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <dir-pagination-controls max-size="5" boundary-links="true"></dir-pagination-controls>
+                </div>
+            </div>
+            <div class="row" ng-show="mostrar_sel">
+                <div class="col-md-12">
+                    <table class="table table-striped table-hover table-responsive">
+                        <thead>
+                            <th>Projeto</th>
+                            <th>Proposta</th>
+                            <th>Classificação Geral</th>   
+                            <th>Fase</th>                                     
+                            <th>Familia</th>
+                            <th>Sistema</th>
+                            <th>Valor Total do Projeto</th>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="dados in tabela">
+                                <td>{{dados.projeto}}</td>
+                                <td>{{dados.proposta}}</td>
+                                <td>{{dados.classificacao_geral}}</td>
+                                <td>{{dados.fase}}</td>
+                                <td>{{dados.familia}}</td>
+                                <td>{{dados.sistema}}</td>
+                                <td>{{dados.valor_total_proj}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row" ng-show="alterar">
+                <div class="col-md-12">
+                    <table class="table table-striped">
+                        <tr>
+                            <td><label>Projeto:</label></td>
+                            <td> <input type="text" ng-model="formaltproj.projeto" value="" class="form-control col-md-3" readonly/> </td>
+                            <td><label>Proposta:</label></td>
+                            <td> <input type="text" ng-model="formaltproj.proposta" value="" class="form-control col-md-3" /> </td>
+                            <td><label>Gerente:</label></td>
+                            <td><select ng-model="formaltproj.gerente" class="form-control">
+                                    <option ng-repeat="id in gerentes" value="{{id.login_user}}">{{id.login_user}}</option>
+                                </select> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label>Região:</label></td>
+                            <td><select ng-model="formaltproj.regiao" class="form-control">
+                                    <option ng-repeat="id in regiao" value="{{id.Regiao_id}}">{{id.Regiao_id}}</option>
+                                </select> 
+                            </td>
+                            <td><label>Sistema:</label></td>
+                            <td><select ng-model="formaltproj.sistema" ng-options="val for val in selectOptionSistema()"  class="form-control"></select></td>
+                                <td><label>Família:</label></td>
+                            <td><select ng-model="formaltproj.familia" class="form-control" ng-options="val for val in selectOptionFamilia() | orderBy:'toString()' "></select></td>
+                        </tr>
+                        <tr>
+                            <td><label>Fase:</label></td>
+                            <td><select ng-model="formaltproj.fase" class="form-control">
+                                    <option ng-repeat="id in fase" value="{{id.Fase}}">{{id.Fase}}</option>
+                                </select> 
+                            </td>
+                            <td><label>Classificação Geral:</label></td>
+                            <td><select ng-model="formaltproj.classificacao_geral" class="form-control">
+                                    <option ng-repeat="id in classificacao_geral" value="{{id.ClassGeral_id}}">{{id.ClassGeral_id}}</option>
+                                </select> 
+                            </td>
+                            <td><label>Valor Total:</label></td>
+                            <td> <input type="number" ng-model="formaltproj.valor_total_proj" class="form-control" /> </td>
+                        </tr>
+                    </table>
+                    <br /><br />
+                    <table class="table table-striped">
+                        <tr >  
+                            <td><label>Mes/Ano:</label></td>
+                            <td> <select ng-model="meses.mes_ano[0]" class="form-control">
+                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
+                                    </select> 
+                            </td>
+                            <td><label>Valor Mes/Ano:</label></td>
+                            <td> <input type="number" ng-model="meses.valor_mes_ano[0]" class="form-control" /> </td>
+                            <td colspan="2"><button type="button" ng-show='mostrarbotao[0]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
+                        </tr>
+                        <tr ng-show='mostrar[1]'>  
+                            <td><label>Mes/Ano:</label></td>
+                            <td> <select ng-model="meses.mes_ano[1]" class="form-control">
+                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
+                                    </select> 
+                            </td>
+                            <td><label>Valor Mes/Ano:</label></td>
+                            <td> <input type="number" ng-model="meses.valor_mes_ano[1]" class="form-control" /> </td>
+                            <td><button type="button" ng-show='mostrarbotao[1]'  ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
+                            <td><button type="button" ng-show='mostrarbotao[1]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
+                        </tr>
+                        <tr ng-show='mostrar[2]'>    
+                            <td><label>Mes/Ano:</label></td>
+                            <td> <select ng-model="meses.mes_ano[2]" class="form-control">
+                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
+                                    </select> 
+                            </td>
+                            <td><label>Valor Mes/Ano:</label></td>
+                            <td> <input type="number" ng-model="meses.valor_mes_ano[2]" class="form-control" /> </td>
+                            <td><button type="button" ng-show='mostrarbotao[2]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
+                            <td><button type="button" ng-show='mostrarbotao[2]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
+                        </tr>
+                        <tr ng-show='mostrar[3]'>    
+                            <td><label>Mes/Ano:</label></td>
+                            <td> <select ng-model="meses.mes_ano[3]" class="form-control">
+                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
+                                    </select> 
+                            </td>
+                            <td><label>Valor Mes/Ano:</label></td>
+                            <td> <input type="number" ng-model="meses.valor_mes_ano[3]" class="form-control" /> </td>
+                            <td><button type="button" ng-show='mostrarbotao[3]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
+                            <td><button type="button" ng-show='mostrarbotao[3]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
+                        </tr>
+                        <tr ng-show='mostrar[4]'>    
+                            <td><label>Mes/Ano:</label></td>
+                            <td> <select ng-model="meses.mes_ano[4]" class="form-control">
+                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
+                                    </select> 
+                            </td>
+                            <td><label>Valor Mes/Ano:</label></td>
+                            <td> <input type="number" ng-model="meses.valor_mes_ano[4]" class="form-control" /> </td>
+                            <td><button type="button" ng-show='mostrarbotao[4]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
+                            <td><button type="button" ng-show='mostrarbotao[4]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
+                        </tr>
+                        <tr ng-show='mostrar[5]'>    
+                            <td><label>Mes/Ano:</label></td>
+                            <td> <select ng-model="meses.mes_ano[5]" class="form-control">
+                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
+                                    </select> 
+                            </td>
+                            <td><label>Valor Mes/Ano:</label></td>
+                            <td> <input type="number" ng-model="meses.valor_mes_ano[5]" class="form-control" /> </td>
+                            <td><button type="button" ng-show='mostrarbotao[5]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
+                            <td><button type="button" ng-show='mostrarbotao[5]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
+                        </tr>
+                        <tr ng-show='mostrar[6]'>    
+                            <td><label>Mes/Ano:</label></td>
+                            <td> <select ng-model="meses.mes_ano[6]" class="form-control">
+                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
+                                    </select> 
+                            </td>
+                            <td><label>Valor Mes/Ano:</label></td>
+                            <td> <input type="number" ng-model="meses.valor_mes_ano[6]" class="form-control" /> </td>
+                            <td><button type="button" ng-show='mostrarbotao[6]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
+                            <td><button type="button" ng-show='mostrarbotao[6]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
+                        </tr>
+                        <tr ng-show='mostrar[7]'>    
+                            <td><label>Mes/Ano:</label></td>
+                            <td> <select ng-model="meses.mes_ano[7]" class="form-control">
+                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
+                                    </select> 
+                            </td>
+                            <td><label>Valor Mes/Ano:</label></td>
+                            <td> <input type="number" ng-model="meses.valor_mes_ano[7]" class="form-control" /> </td>
+                            <td><button type="button" ng-show='mostrarbotao[7]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
+                            <td><button type="button" ng-show='mostrarbotao[7]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
+                        </tr>
+                        <tr ng-show='mostrar[8]'>    
+                            <td><label>Mes/Ano:</label></td>
+                            <td> <select ng-model="meses.mes_ano[8]" class="form-control">
+                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
+                                    </select> 
+                            </td>
+                            <td><label>Valor Mes/Ano:</label></td>
+                            <td> <input type="number" ng-model="meses.valor_mes_ano[8]" class="form-control" /> </td>
+                            <td><button type="button" ng-show='mostrarbotao[8]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
+                            <td><button type="button" ng-show='mostrarbotao[8]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
+                        </tr>
+                        <tr ng-show='mostrar[9]'>    
+                            <td><label>Mes/Ano:</label></td>
+                            <td> <select ng-model="meses.mes_ano[9]" class="form-control">
+                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
+                                    </select> 
+                            </td>
+                            <td><label>Valor Mes/Ano:</label></td>
+                            <td> <input type="number" ng-model="meses.valor_mes_ano[9]" class="form-control" /> </td>
+                            <td><button type="button" ng-show='mostrarbotao[9]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
+                            <td><button type="button" ng-show='mostrarbotao[9]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
+                        </tr>
+                        <tr ng-show='mostrar[10]'>    
+                            <td><label>Mes/Ano:</label></td>
+                            <td> <select ng-model="meses.mes_ano[10]" class="form-control">
+                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
+                                    </select> 
+                            </td>
+                            <td><label>Valor Mes/Ano:</label></td>
+                            <td> <input type="number" ng-model="meses.valor_mes_ano[10]" class="form-control" /> </td>
+                            <td><button type="button" ng-show='mostrarbotao[10]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
+                            <td><button type="button" ng-show='mostrarbotao[10]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
+                        </tr>
+                        <tr ng-show='mostrar[11]'>    
+                            <td><label>Mes/Ano:</label></td>
+                            <td> <select ng-model="meses.mes_ano[11]" class="form-control">
+                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
+                                    </select> 
+                            </td>
+                            <td><label>Valor Mes/Ano:</label></td>
+                            <td> <input type="number" ng-model="meses.valor_mes_ano[11]" class="form-control" /> </td>
+                            <td><button type="button" ng-show='mostrarbotao[11]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
+                            <td><button type="button" ng-show='mostrarbotao[11]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
+                        </tr>
+                        <tr ng-show='mostrar[12]'>    
+                            <td><label>Mes/Ano:</label></td>
+                            <td> <select ng-model="meses.mes_ano[12]" class="form-control">
+                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
+                                    </select> 
+                            </td>
+                            <td><label>Valor Mes/Ano:</label></td>
+                            <td> <input type="number" ng-model="meses.valor_mes_ano[12]" class="form-control" /> </td>
+                            <td><button type="button" ng-show='mostrarbotao[12]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
+                            <td><button type="button" ng-show='mostrarbotao[12]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
+                        </tr>
+                        <tr ng-show='mostrar[13]'>    
+                            <td><label>Mes/Ano:</label></td>
+                            <td> <select ng-model="meses.mes_ano[13]" class="form-control">
+                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
+                                 </select> 
+                            </td>
+                            <td><label>Valor Mes/Ano:</label></td>
+                            <td> <input type="number" ng-model="meses.valor_mes_ano[13]" class="form-control" /> </td>
+                            <td><button type="button" ng-show='mostrarbotao[13]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
+                            <td><button type="button" ng-show='mostrarbotao[13]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
+                        </tr>
+                        <tr ng-show='mostrar[14]'>    
+                            <td><label>Mes/Ano:</label></td>
+                            <td> <select ng-model="meses.mes_ano[14]" class="form-control">
+                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
+                                 </select> 
+                            </td>
+                            <td><label>Valor Mes/Ano:</label></td>
+                            <td> <input type="number" ng-model="meses.valor_mes_ano[14]" class="form-control" /> </td>
+                            <td colspan="2"><button type="button"  ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
+                        </tr>                       
+                    </table>
+                    <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
                 </div>
             </div>
         </div>

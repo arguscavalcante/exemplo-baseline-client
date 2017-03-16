@@ -38,12 +38,11 @@
                             <option ng-repeat="id in torre" value="{{id.Torre}}"  >{{id.Torre}}</option>
                         </select>
                         <br />
-                        <label>SubTorre:&nbsp; </label>
-                        <select ng-model="formusuario.subtorre" ng-options="val for val in selectOptionSubTorres()">
-                        </select>
+                        <label>Familia:&nbsp; </label>
+                        <select ng-model="formusuario.subtorre" ng-options="val for val in selectOptionFamilia()" multiple class="form-control"></select>
                         <br />
                         
-                         <br />
+                        <br />
                         <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
                         <br />
                     </form>

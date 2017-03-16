@@ -20,26 +20,7 @@
     <div class="content-wrapper">
         <div class="container">
             <div class="row">
-                <div class="col-md-5">
-                    <form>
-                        <label>Mes/Ano Limite: </label>
-                        <select ng-model="formlimreal.mes_ano_limite" class="form-control">
-                            <option ng-repeat="id in date" value="{{id}}">{{id}}</option>
-                        </select> 
-                        <br />
-                        <label>Família:</label></td>
-                        <select ng-model="formlimreal.subtorre_limite" class="form-control" ng-options="val for val in selectOptionFamilia() | orderBy:'toString()' "></select>
-                        <br />
-                        <label>Valor Limite: </label>
-                        <input type="text" ng-model="formlimreal.valor_limite_mes_ano" value="" class="form-control" />
-                        <br />
-                        <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
-                        <br />
-                    </form>
-                </div>
-                <div class="col-md-2">
-                </div>
-                <div class="col-md-5">
+                <div class="col-md-12">
                     <div>
                         <h3> Limite Real Cadastrado </h3>
                         <div>

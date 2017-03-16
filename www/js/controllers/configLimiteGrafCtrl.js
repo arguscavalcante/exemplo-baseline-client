@@ -16,6 +16,7 @@ angular
         $scope.subtorre = {};
         $scope.projeto = {};
         $scope.classgeral =[];
+        $scope.limreal = {};
 
         $scope.formlimgraf.id = 0;
 
@@ -26,8 +27,12 @@ angular
                 //angular.forEach(res, function(value, index){
                 //    $scope.limgrafico.Data_corte = trasformVizualDate(value.Data_corte)
                 //});
-                console.log($scope.limgrafico)
+                //console.log($scope.limgrafico)
             });
+
+            LimiteReal.find().$promise.then(function(res, err){
+                $scope.limreal = res;
+            })
             
         }
 
@@ -95,18 +100,19 @@ angular
             return vetor;
         }
         
-        function criarObjLimiteReal(value){
+        function criarObjLimiteReal(form){
 
-            $scope.limreal = [];
+            $scope.formlimreal = {id: 0,familia: form.familia, dados:[]};
             var data;
             var data_vetor = [];
-            var dados = [];
+            var dados_proj = [];
+            var dados_resto = []
             var meses_acima = "";
             var ret = true;
             var val_baseline = 0;
 
             for(var i=0; i< $scope.date.length; i++){
-                if($scope.date[i].valor==$scope.formlimgraf.Data_corte){
+                if($scope.date[i].valor==form.Data_corte){
                     data = new Date(trasformParDate($scope.date[i].texto))
                 }
             }
@@ -115,41 +121,56 @@ angular
              //console.log(data_vetor);
 
              for (var i = 0; i < data_vetor.length; i++) {
-                dados.push(0);
+                dados_proj.push(0);
             }
 
             angular.forEach($scope.projeto, function (value, index) {
                 //console.log($scope.classgeral.includes(value.classificacao_geral));
-                if ($scope.classgeral.includes(value.classificacao_geral) && value.familia == $scope.formlimgraf.familia) {
+                if ($scope.classgeral.includes(value.classificacao_geral) && value.familia == form.familia) {
                     for (var i = 0; i < data_vetor.length; i++) {
                         for(var j=0; j<value.meses.length; j++){
                             if (data_vetor[i] == value.meses[j].mes) {
-                                dados[i] = dados[i] + value.meses[j].valor;
+                                dados_proj[i] = dados_proj[i] + value.meses[j].valor;
                             }
                         }
                     }
                 }
-                //console.log('dados de valores', dados);
-                //console.log('projetos',$scope.projeto);
             });
+            //console.log('Valores dos Projetos: ', dados_proj);
+            //console.log('projetos',$scope.projeto);
 
-            val_baseline = $scope.formlimgraf.valor_limite + ($scope.formlimgraf.valor_limite*($scope.formlimgraf.variacao/100))
-            console.log(val_baseline);
-            for(var i=0; i<dados.length; i++){
-                if(dados[i]>val_baseline){
+            val_baseline = form.valor_limite 
+            //console.log(val_baseline);
+            for(var i=0; i<dados_proj.length; i++){
+                if(dados_proj[i]>val_baseline){
                     meses_acima = data_vetor[i] + ', ' + meses_acima;
                     ret = false;
                 }
             }
             
             if(!ret){
-                alert('Os meses esão com seu baseline ultrapassando o limite sugerido! ' + meses_acima.substring(0, meses_acima.length -2));
+                alert('Os meses esão com seu baseline ultrapassando o limite sugerido! \n' + meses_acima.substring(0, meses_acima.length -2));
                 return ret;
             }
 
-            // for(var i=0; i<data_vetor.length; i++){
-            //     $scope.limreal.push({mes: data_vetor[i] })
-            // }
+            angular.forEach(dados_proj, function (value, index){
+                dados_resto.push(val_baseline - value)
+            });
+
+            //console.log('Valores do Baseline Final: ', dados_resto)
+            
+            for(var i=0; i<data_vetor.length; i++){
+                $scope.formlimreal.dados.push(
+                        {   mes: data_vetor[i], 
+                            baseline: val_baseline,
+                            resto_mes: dados_resto[i], 
+                            perc_baseline: $scope.formlimgraf.variacao, 
+                            torre: $scope.formlimgraf.torre,
+                            perc_torre: $scope.formlimgraf.variacao_torre
+                        });
+            }
+            return ret;
+            //console.log($scope.formlimreal);
         }
 
         //funcao de trasnformação para data -- FACTORY
@@ -180,13 +201,12 @@ angular
         });
 
         // Alimenta com todas as Classificacoes Gerais que interferem no baseline
-        // ClassGeral.find({ filter: { where: {Baseline: true}} }).$promise.then(function(res, err){
-        //     //console.log(res);
-        //     angular.forEach(res, function(value,index){
-        //         $scope.classgeral.push(value.ClassGeral_id)
-        //     })
-        // });
-        $scope.classgeral.push("Aprovado");
+        ClassGeral.find({ filter: { where: {Baseline: true}} }).$promise.then(function(res, err){
+            //console.log(res);
+            angular.forEach(res, function(value,index){
+                $scope.classgeral.push(value.ClassGeral_id)
+            })
+        });
 
         //funcao de trasnformação para data para vizualizacao em tela -- FACTORY
         function trasformVizualDate(value) {
@@ -237,12 +257,16 @@ angular
 
             bool = criarObjLimiteReal($scope.formlimgraf);
 
-            // if (bool){
-            //     LimiteGrafico.create($scope.formlimgraf, function(res, err){
-            //         //console.log(res);
-            //         $state.reload();
-            //     })
-            // }
+            console.log($scope.formlimreal)
+            console.log(bool);
+            if (bool){
+                LimiteGrafico.create($scope.formlimgraf, function(res, err){
+                    //console.log(res);
+                    LimiteReal.create($scope.formlimreal, function(res, err){
+                        $state.reload();
+                    })
+                })
+            }
         }
 
     }]);
