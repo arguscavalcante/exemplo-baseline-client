@@ -78,186 +78,27 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-6">
                     <table class="table table-striped">
-                        <tr ng-show='mostrar[0]'>  
+                        <tr ng-repeat="meses in formproj.meses">    
                             <td><label>Mes/Ano:</label></td>
-                            <td> <select ng-model="meses.mes_ano[0]" class="form-control">
-                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
-                                    </select> 
-                            </td>
-                            <td><label>Valor Mes/Ano:</label></td>
-                            <td> <input type="number" ng-model="meses.valor_mes_ano[0]" class="form-control" /> </td>
-                            <td colspan="2"><button type="button" ng-show='mostrarbotao[0]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
-                        </tr>
-                        <tr ng-show='mostrar[1]'>  
-                            <td><label>Mes/Ano:</label></td>
-                            <td> <select ng-model="meses.mes_ano[1]" class="form-control">
-                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
-                                    </select> 
-                            </td>
-                            <td><label>Valor Mes/Ano:</label></td>
-                            <td> <input type="number" ng-model="meses.valor_mes_ano[1]" class="form-control" /> </td>
-                            <td><button type="button" ng-show='mostrarbotao[1]'  ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
-                            <td><button type="button" ng-show='mostrarbotao[1]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
-                        </tr>
-                        <tr ng-show='mostrar[2]'>    
-                            <td><label>Mes/Ano:</label></td>
-                            <td> <select ng-model="meses.mes_ano[2]" class="form-control">
-                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
-                                    </select> 
-                            </td>
-                            <td><label>Valor Mes/Ano:</label></td>
-                            <td> <input type="number" ng-model="meses.valor_mes_ano[2]" class="form-control" /> </td>
-                            <td><button type="button" ng-show='mostrarbotao[2]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
-                            <td><button type="button" ng-show='mostrarbotao[2]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
-                        </tr>
-                        <tr ng-show='mostrar[3]'>    
-                            <td><label>Mes/Ano:</label></td>
-                            <td> <select ng-model="meses.mes_ano[3]" class="form-control">
-                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
-                                    </select> 
-                            </td>
-                            <td><label>Valor Mes/Ano:</label></td>
-                            <td> <input type="number" ng-model="meses.valor_mes_ano[3]" class="form-control" /> </td>
-                            <td><button type="button" ng-show='mostrarbotao[3]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
-                            <td><button type="button" ng-show='mostrarbotao[3]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
-                        </tr>
-                        <tr ng-show='mostrar[4]'>    
-                            <td><label>Mes/Ano:</label></td>
-                            <td> <select ng-model="meses.mes_ano[4]" class="form-control">
-                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
-                                    </select> 
-                            </td>
-                            <td><label>Valor Mes/Ano:</label></td>
-                            <td> <input type="number" ng-model="meses.valor_mes_ano[4]" class="form-control" /> </td>
-                            <td><button type="button" ng-show='mostrarbotao[4]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
-                            <td><button type="button" ng-show='mostrarbotao[4]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
-                        </tr>
-                        <tr ng-show='mostrar[5]'>    
-                            <td><label>Mes/Ano:</label></td>
-                            <td> <select ng-model="meses.mes_ano[5]" class="form-control">
-                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
-                                    </select> 
-                            </td>
-                            <td><label>Valor Mes/Ano:</label></td>
-                            <td> <input type="number" ng-model="meses.valor_mes_ano[5]" class="form-control" /> </td>
-                            <td><button type="button" ng-show='mostrarbotao[5]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
-                            <td><button type="button" ng-show='mostrarbotao[5]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
-                        </tr>
-                        <tr ng-show='mostrar[6]'>    
-                            <td><label>Mes/Ano:</label></td>
-                            <td> <select ng-model="meses.mes_ano[6]" class="form-control">
-                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
-                                    </select> 
-                            </td>
-                            <td><label>Valor Mes/Ano:</label></td>
-                            <td> <input type="number" ng-model="meses.valor_mes_ano[6]" class="form-control" /> </td>
-                            <td><button type="button" ng-show='mostrarbotao[6]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
-                            <td><button type="button" ng-show='mostrarbotao[6]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
-                        </tr>
-                        <tr ng-show='mostrar[7]'>    
-                            <td><label>Mes/Ano:</label></td>
-                            <td> <select ng-model="meses.mes_ano[7]" class="form-control">
-                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
-                                    </select> 
-                            </td>
-                            <td><label>Valor Mes/Ano:</label></td>
-                            <td> <input type="number" ng-model="meses.valor_mes_ano[7]" class="form-control" /> </td>
-                            <td><button type="button" ng-show='mostrarbotao[7]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
-                            <td><button type="button" ng-show='mostrarbotao[7]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
-                        </tr>
-                        <tr ng-show='mostrar[8]'>    
-                            <td><label>Mes/Ano:</label></td>
-                            <td> <select ng-model="meses.mes_ano[8]" class="form-control">
-                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
-                                    </select> 
-                            </td>
-                            <td><label>Valor Mes/Ano:</label></td>
-                            <td> <input type="number" ng-model="meses.valor_mes_ano[8]" class="form-control" /> </td>
-                            <td><button type="button" ng-show='mostrarbotao[8]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
-                            <td><button type="button" ng-show='mostrarbotao[8]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
-                        </tr>
-                        <tr ng-show='mostrar[9]'>    
-                            <td><label>Mes/Ano:</label></td>
-                            <td> <select ng-model="meses.mes_ano[9]" class="form-control">
-                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
-                                    </select> 
-                            </td>
-                            <td><label>Valor Mes/Ano:</label></td>
-                            <td> <input type="number" ng-model="meses.valor_mes_ano[9]" class="form-control" /> </td>
-                            <td><button type="button" ng-show='mostrarbotao[9]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
-                            <td><button type="button" ng-show='mostrarbotao[9]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
-                        </tr>
-                        <tr ng-show='mostrar[10]'>    
-                            <td><label>Mes/Ano:</label></td>
-                            <td> <select ng-model="meses.mes_ano[10]" class="form-control">
-                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
-                                    </select> 
-                            </td>
-                            <td><label>Valor Mes/Ano:</label></td>
-                            <td> <input type="number" ng-model="meses.valor_mes_ano[10]" class="form-control" /> </td>
-                            <td><button type="button" ng-show='mostrarbotao[10]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
-                            <td><button type="button" ng-show='mostrarbotao[10]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
-                        </tr>
-                        <tr ng-show='mostrar[11]'>    
-                            <td><label>Mes/Ano:</label></td>
-                            <td> <select ng-model="meses.mes_ano[11]" class="form-control">
-                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
-                                    </select> 
-                            </td>
-                            <td><label>Valor Mes/Ano:</label></td>
-                            <td> <input type="number" ng-model="meses.valor_mes_ano[11]" class="form-control" /> </td>
-                            <td><button type="button" ng-show='mostrarbotao[11]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
-                            <td><button type="button" ng-show='mostrarbotao[11]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
-                        </tr>
-                        <tr ng-show='mostrar[12]'>    
-                            <td><label>Mes/Ano:</label></td>
-                            <td> <select ng-model="meses.mes_ano[12]" class="form-control">
-                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
-                                    </select> 
-                            </td>
-                            <td><label>Valor Mes/Ano:</label></td>
-                            <td> <input type="number" ng-model="meses.valor_mes_ano[12]" class="form-control" /> </td>
-                            <td><button type="button" ng-show='mostrarbotao[12]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
-                            <td><button type="button" ng-show='mostrarbotao[12]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
-                        </tr>
-                        <tr ng-show='mostrar[13]'>    
-                            <td><label>Mes/Ano:</label></td>
-                            <td> <select ng-model="meses.mes_ano[13]" class="form-control">
+                            <td> <select ng-model="meses.mes" class="form-control">
                                     <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
                                  </select> 
                             </td>
                             <td><label>Valor Mes/Ano:</label></td>
-                            <td> <input type="number" ng-model="meses.valor_mes_ano[13]" class="form-control" /> </td>
-                            <td><button type="button" ng-show='mostrarbotao[13]' ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
-                            <td><button type="button" ng-show='mostrarbotao[13]' ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
-                        </tr>
-                        <tr ng-show='mostrar[14]'>    
-                            <td><label>Mes/Ano:</label></td>
-                            <td> <select ng-model="meses.mes_ano[14]" class="form-control">
-                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
-                                 </select> 
-                            </td>
-                            <td><label>Valor Mes/Ano:</label></td>
-                            <td> <input type="number" ng-model="meses.valor_mes_ano[14]" class="form-control" /> </td>
-                            <td colspan="2"><button type="button"  ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
-                        </tr>                       
+                            <td> <input type="number" ng-model="meses.valor" class="form-control" /> </td>
+                        </tr>   
                     </table>
                     <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
-                    <!--<table>
-                        <tr ng-repeat="teste in teste">    
-                            <td><label>Mes/Ano:</label></td>
-                            <td> <select ng-model="meses.mes_ano[1]" class="form-control">
-                                    <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
-                                 </select> 
-                            </td>
-                            <td><label>Valor Mes/Ano:</label></td>
-                            <td> <input type="number" ng-model="meses.valor_mes_ano[1]" class="form-control" /> </td>
-                            <td><button type="button" ng-show='mostrarbotao[0]' ng-click="funcMes2(1);" class="btn btn-info glyphicon-plus"></button></td>
-                            <td colspan="2"><button type="button"  ng-click="funcMes2(-1);" class="btn btn-info glyphicon-minus"></button></td>
+                </div>
+                <div class="col-md-1">
+                    <table class="table table-striped">
+                        <tr>    
+                            <td><button type="button" ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
+                            <td colspan="2"><button type="button"  ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
                         </tr>   
-                    </table>-->
+                    </table>
                 </div>
             </div>
         </div>

@@ -2,9 +2,10 @@
 
 angular
     .module('starter')
-    .controller('alteraprojCtrl', ['$scope', '$state', 'SubTorre', 'Projeto', 'Regiao', 'LimiteReal', 'Fase', 'ClassGeral', 'User', function($scope, $state, SubTorre, Projeto, Regiao, LimiteReal, Fase, ClassGeral, User){
+    .controller('alteraprojCtrl', ['$scope', '$state', 'Projeto', 'Regiao', 'LimiteReal', 'Fase', 'ClassGeral', 'User', function($scope, $state, Projeto, Regiao, LimiteReal, Fase, ClassGeral, User){
         console.log('alteraprojCtrl')
 
+        var d = new Date();
         $scope.subtorre = {};
         $scope.projeto = {};
         $scope.tabela = [];
@@ -15,58 +16,24 @@ angular
         $scope.reverse = !$scope.reverse;
         $scope.qnt = [5, 10, 15, 20];
 
+        $scope.baseline= {data: [], valor:[]}; 
+
         $scope.buscar = true;
         $scope.mostrar = true;
         $scope.mostrar_sel = false;
         $scope.alterar = false;
 
-        $scope.mostrar = [true, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
-        $scope.mostrarbotao = [true, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
-
         $scope.filtroResult.qnt_itens = 5;
+
+        $scope.formaltproj.meses =[{mes: "", valor: 0}]
 
         var meses = 0;
         var user = {};
         user = {
-            //torre: 'Torre I',
-            subtorre: 'TESTE',
-            torre: 'Torre 0',
-            //subtorre: 'Subtorre X',
+            familia: ['Torre I - TESTE'],
             perfil: 'Admin'
         }
         var bool = true;
-
-        // Alimenta objeto com todas as SubTorres
-        SubTorre.find().$promise.then(function(res, err){
-            $scope.subtorre = res;
-            console.log(res);
-        });
-
-        //Alimentar Option
-        $scope.selectOptionFamilia = function(){
-            var options = [];
-            angular.forEach($scope.subtorre, function(value,index){
-                if(user.torre == 'Torre 0'){
-                    if(user.subtorre == 'Subtorre 0'){
-                        options.push(value.Torre_id + " - " + value.Subtorre);
-                    } else{
-                        if(user.subtorre == value.Subtorre){
-                            options.push(value.Torre_id + " - " + value.Subtorre);
-                        }
-                    }
-                } else if(user.subtorre == 'Subtorre 0'){
-                        if(user.torre == value.Torre_id){
-                            options.push(value.Torre_id + " - " + value.Subtorre);
-                        } 
-                } else {
-                        if(user.torre == value.Torre_id && user.subtorre == value.Subtorre){
-                            options.push(value.Torre_id + " - " + value.Subtorre);
-                        }
-                    }
-            })
-
-            return options;       
-        }
 
          // Alimenta objeto com todas as Regiões/Sistemas
         Regiao.find().$promise.then(function(res, err){
@@ -87,29 +54,40 @@ angular
         });
 
         //Funcao para incluir e excluir meses
-        $scope.funcMes = function (valor){
-            if(meses==0 && valor==-1){
-                alert('Não há como desabilitar mais meses.');
-                return;
-            }
-
-            meses = meses + valor;
-
-            for(var i=0; i<$scope.mostrar.length; i++){                
-                if(i<=meses){
-                    $scope.mostrar[i] = true;
-                } else {
-                    $scope.mostrar[i] = false;
-                }
-                
-                if (i==meses){
-                    $scope.mostrarbotao[i] = true;
-                }else{
-                    $scope.mostrarbotao[i] = false;
+        $scope.funcMes = function(valor){
+            if(valor==-1){
+                $scope.formaltproj.meses.splice($scope.formaltproj.meses.length-1, 1);
+            } else {
+                if($scope.formaltproj.meses.length<15){
+                    $scope.formaltproj.meses.push({mes: "", valor:0});
                 }
             }
-            //console.log('Mostrar: ', $scope.mostrar)
-            //console.log('Mostrar Botoes: ', $scope.mostrarbotao)
+        }
+
+        //FACTORY
+        function alimentaData(data, qnt){
+            var date = [];
+            //Alimentando os valores de data
+            for(var i=0; i<15; i++){
+                date.push('-'+data.getMonth()+'/'+data.getFullYear())
+                data.setMonth(data.getMonth() + 1);
+            }
+            for(i=0; i<15; i++){
+                date[i] = date[i].replace('-0/','01/');
+                date[i] = date[i].replace('-1/','02/');
+                date[i] = date[i].replace('-2/','03/');
+                date[i] = date[i].replace('-3/','04/');
+                date[i] = date[i].replace('-4/','05/');
+                date[i] = date[i].replace('-5/','06/');
+                date[i] = date[i].replace('-6/','07/');
+                date[i] = date[i].replace('-7/','08/');
+                date[i] = date[i].replace('-8/','09/');
+                date[i] = date[i].replace('-9/','10/');
+                date[i] = date[i].replace('-10/','11/');
+                date[i] = date[i].replace('-11/','12/');
+            }
+
+            return date;
         }
 
         //Option Sistema
@@ -136,6 +114,12 @@ angular
             $scope.reverse = !$scope.reverse;
         };
 
+        //Option Familia
+        $scope.selectOptionFamilia = function(){
+            var options = user.familia;
+            return options;       
+        }
+
         //Option Sistema
         $scope.selectOptionSistema = function(){
             var options = [];
@@ -147,6 +131,57 @@ angular
 
             return options;       
         }
+
+        function alimentaValor(vetor, objLimite, busca){
+            var valor = [];
+            var k;
+            var val_baseline = 0;
+            var val_mesant = 0;
+            var bool_familia = true;
+            for(var i=0; i<vetor.length; i++){
+                valor.push(0)
+            }           
+
+            console.log('limite: ', objLimite)
+            angular.forEach(objLimite, function(value, index){
+                if(value.familia == busca){
+                    bool_familia = false;
+                    for(var i=0; i<value.dados.length; i++){
+                        for(var j=0; j<vetor.length; j++){
+                            if(vetor[j]==value.dados[i].mes){
+                                val_baseline = value.dados[i].baseline;
+                                val_mesant = 0;
+                                if (value.dados[i].dependencia == 'S'){
+                                    k = i-1;
+                                    if (!angular.isUndefined(value.dados[k])){
+                                        if (value.dados[k].gasto_mes >= value.dados[k].baseline + value.dados[k].baseline*-0.01){
+                                            val_mesant = value.dados[k].baseline - value.dados[k].gasto_mes;
+                                        }
+                                    }
+                                } 
+                                if(val_mesant==0){
+                                   val_mesant = (value.dados[i].baseline * value.dados[i].perc_baseline/100)
+                                }
+                                console.log(val_mesant);
+                                valor[i] = val_baseline - value.dados[i].gasto_mes + val_mesant + value.dados[i].baseline_bonus;
+                            }
+                        }
+                    }
+                }
+            });
+
+            if(bool_familia){
+                alert('A família ' + busca + ' não está parametrizada! Entre em contato com o Administrador.')
+                return -1;
+            }
+
+            if(valor.includes(0)){
+                alert('Não há valores de limite real parametrizados para um ou mais meses. Favor, informar ao Administrador.');
+            }
+            return valor;
+        }
+
+        $scope.baseline.data = alimentaData(d,15);
 
         $scope.alteraProj = function(value){
             $scope.tabela = [];
@@ -175,19 +210,6 @@ angular
                 meses: value.meses
             };
 
-            
-           
-            // for(var i=0; i<$scope.formaltproj.meses.length; i++){
-            //     $scope.mostrar[i] = true;
-            //     meses = i;
-            // }
-
-            // $scope.mostrarbotao[0]= false;
-            // $scope.mostrarbotao[meses] = true;
-
-            console.log($scope.mostrar);
-            console.log($scope.mostrarbotao);
-
             // Alimenta objeto com todas os Gerentes
             User.find().$promise.then(function(res, err){
                 $scope.gerentes = res;
@@ -204,6 +226,7 @@ angular
             LimiteReal.find().$promise.then(function(res, err){
                 $scope.limite = res;
                 //console.log(res);
+                $scope.baseline.valor = alimentaValor($scope.baseline.data, $scope.limite, user.familia[0]);
             });
 
             ClassGeral.find().$promise.then(function(res, err){         
