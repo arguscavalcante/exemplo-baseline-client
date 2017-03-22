@@ -23,7 +23,7 @@
                 <div class="col-md-5">
                     <form>
                         <label>Fase: </label>
-                        <input type="text" ng-model="formfase.Fase" value="" class="form-control" />
+                        <input type="text" ng-model="formfase.fase" value="" class="form-control" />
                         <br />
                         <label>Descrição: </label>
                         <input type="text" ng-model="formfase.Descricao" value="" class="form-control" />
@@ -47,7 +47,7 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="id in fase" ng-click="alteraFase(id)">
-                                        <td>{{id.Fase}}</td>
+                                        <td>{{id.fase}}</td>
                                         <td>{{id.Descricao}}</td>
                                     </tr>
                                 </tbody>

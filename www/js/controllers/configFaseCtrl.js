@@ -24,7 +24,7 @@ angular
         $scope.alteraFase = function(value){
             altera = 'S'
             $scope.formfase = {
-                Fase: value.Fase,
+                fase: value.fase,
                 Descricao: value.Descricao
             }
         }
@@ -49,17 +49,20 @@ angular
                 if(confirm('Você deseja alterar essa Fase?') == false){
                     return;
                 }
+
+                bool = false;
                 
-                Projeto.find({filter:{where: {fase: '' + $scope.formfase.Fase + ''}}}).$promise.then(function(res, err){
+                Projeto.find({filter:{where: {fase: '' + $scope.formfase.fase + ''}}}).$promise.then(function(res, err){
                     //console.log(res);
                     if(res.length != 0){
                         if(confirm('Existem projetos cadastrados com essa Fase, deseja continuar?') == false){
-                            bool = false;
+                            return;
                         }else{
-                            Fase.updateAll({where: {Fase: ""+ $scope.formfase.Fase +""}}, {Fase: ""+ $scope.formfase.Fase +"" , Descricao: ""+ $scope.formfase.Descricao +""}, function(info, err) {
+                            Fase.upsertWithWhere({where: {fase: ''+ $scope.formfase.fase +''}}, {fase: ''+ $scope.formfase.fase +'', descricao: ''+ $scope.formfase.descricao +''}, function(info, err) {
                                 //console.log(info);
-                            })
-                            bool = false;
+                                $state.reload();
+                                return;
+                            })  
                         }
                     }
                 });
@@ -68,11 +71,10 @@ angular
 
             if (bool){
                 Fase.create($scope.formfase, function(res, err){
-                    console.log(res);
+                    //console.log(res);
+                    $state.reload();
                 })
             }
-
-            $state.reload();
         }
 
     }]);

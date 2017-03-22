@@ -55,7 +55,7 @@ angular
 
         //Funcao para buscar na subtorre o valor do limite do grafico
         function buscaValLimiteGraf(){
-            SubTorre.find({ filter: { where: {Subtorre: '' + user.subtorre + ''}} }).$promise.then(function (res, err) {
+            SubTorre.find({ filter: { where: {subtorre: '' + user.subtorre + ''}} }).$promise.then(function (res, err) {
             //SubTorre.find().$promise.then(function (res, err) {
                 $scope.subtorre = res;
             })            
@@ -95,7 +95,7 @@ angular
                     render: idDivgraf,
                     categorias: $scope.date,
                     minimo: 0,
-                    maximo: $scope.subtorre[0].Limite_grafico,
+                    maximo: $scope.subtorre[0].max_grafico,
                     serie: []
                 };
 

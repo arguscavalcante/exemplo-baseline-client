@@ -106,7 +106,6 @@ angular
             var data;
             var data_vetor = [];
             var dados_proj = [];
-            var dados_resto = []
             var meses_acima = "";
             var ret = true;
             var val_baseline = 0;
@@ -136,7 +135,7 @@ angular
                     }
                 }
             });
-            //console.log('Valores dos Projetos: ', dados_proj);
+            console.log('Valores dos Projetos: ', dados_proj);
             //console.log('projetos',$scope.projeto);
 
             val_baseline = form.valor_limite 
@@ -152,19 +151,15 @@ angular
                 alert('Os meses esão com seu baseline ultrapassando o limite sugerido! \n' + meses_acima.substring(0, meses_acima.length -2));
                 return ret;
             }
-
-            angular.forEach(dados_proj, function (value, index){
-                dados_resto.push(val_baseline - value)
-            });
-
-            //console.log('Valores do Baseline Final: ', dados_resto)
             
             for(var i=0; i<data_vetor.length; i++){
                 $scope.formlimreal.dados.push(
                         {   mes: data_vetor[i], 
                             baseline: val_baseline,
-                            resto_mes: dados_resto[i], 
-                            perc_baseline: $scope.formlimgraf.variacao, 
+                            baseline_bonus: 0,
+                            gasto_mes: dados_proj[i], 
+                            perc_baseline: $scope.formlimgraf.variacao,
+                            dependencia: 'N',
                             torre: $scope.formlimgraf.torre,
                             perc_torre: $scope.formlimgraf.variacao_torre
                         });
@@ -188,7 +183,7 @@ angular
         $scope.selectOptionFamilia = function(){
             var options = [];
             angular.forEach($scope.subtorre, function(value,index){
-                options.push(value.Torre_id + " - " + value.Subtorre);
+                options.push(value.Torre_id + " - " + value.subtorre);
             })
 
             return options;       

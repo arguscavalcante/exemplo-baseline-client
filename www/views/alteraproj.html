@@ -166,7 +166,7 @@
                             <tr>
                                 <td><label>Fase:</label></td>
                                 <td><select ng-model="formaltproj.fase" class="form-control">
-                                        <option ng-repeat="id in fase" value="{{id.Fase}}">{{id.Fase}}</option>
+                                        <option ng-repeat="id in fase" value="{{id.fase}}">{{id.fase}}</option>
                                     </select> 
                                 </td>
                                 <td><label>Classificação Geral:</label></td>
@@ -175,22 +175,23 @@
                                     </select> 
                                 </td>
                                 <td><label>Valor Total:</label></td>
-                                <td> <input type="number" ng-model="formaltproj.valor_total_proj" class="form-control" /> </td>
+                                <td> <input type="number" ng-model="formaltproj.valor_total_proj" class="form-control" ng-value="sumMesPage()" readonly/> </td>
                             </tr>
                         </table>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <table class="table table-striped">
                             <tr ng-repeat="meses in formaltproj.meses">    
                                 <td><label>Mes/Ano:</label></td>
-                                <td> <select ng-model="meses.mes" class="form-control">
+                                <td> <select ng-model="meses.mes" class="form-control" ng-change="atribuiBaseline($index)">
                                         <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
                                     </select> 
                                 </td>
                                 <td><label>Valor Mes/Ano:</label></td>
                                 <td> <input type="number" ng-model="meses.valor" class="form-control" /> </td>
+                                <td><span style="color:red">{{baseline_red[$index]}}</span></td>
                             </tr>   
                         </table>
                         <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
