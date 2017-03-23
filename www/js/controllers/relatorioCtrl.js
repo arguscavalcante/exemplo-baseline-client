@@ -13,13 +13,23 @@ angular
         var user = {};
 
         user = {
-            torre: 'Torre I',
-            subtorre: 'TESTE',
-            perfil: 'Admin'
+            gerente: sessionStorage.getItem('nome'),
+            perfil: sessionStorage.getItem('perfil'),
+            familia: sessionStorage.getItem('familia')
         }
 
+        console.log(user);
+
+        if(sessionStorage.getItem('nome')==null || sessionStorage.getItem('perfil')==null || sessionStorage.getItem('familia')==null ){
+            alert('Usuário não autenticado pelo Sistema!!')
+            $state.go('login');
+        }
+
+        $scope.logout = 
+
+        user.subtorre = 'TESTE'
+
         var idDivgraf = 'grafproj';
-        var familia = user.torre + ' - ' + user.subtorre;
         var qnt_meses = 15;
         var objChartProj = {}
 
@@ -78,7 +88,7 @@ angular
                 angular.forEach(res, function (value, index){
                     $scope.classgeral.push(value.ClassGeral_id);
                 })
-                console.log('classificacao geral: ',  $scope.classgeral)
+                // console.log('classificacao geral: ',  $scope.classgeral)
                 
             })
             
@@ -101,7 +111,7 @@ angular
 
             //criando a variavel de projeto
             for (var i = 0; i < $scope.classgeral.length; i++) {
-                console.log('Classificacao Geral: ', $scope.classgeral[i]);
+                // console.log('Classificacao Geral: ', $scope.classgeral[i]);
                 $scope.projBase.push({ name: $scope.classgeral[i], data: [] })
             }
             //atribuindo os valores dos projetos por mes/Classificacao Geral
@@ -131,7 +141,7 @@ angular
                     }
                 }
             });
-            console.log('Dados do hightchart: $j', tipo, dados);
+            // console.log('Dados do hightchart: $j', tipo, dados);
             return dados;
         }
 
@@ -177,8 +187,8 @@ angular
             var conta = 0;
             var calculo = [];
 
-            console.log('vetor da variacao: ', valor);
-            console.log('variacao: ', indicador);
+            // console.log('vetor da variacao: ', valor);
+            // console.log('variacao: ', indicador);
             angular.forEach(valor, function (value, index) {
                 conta = valor[indice][1] + (valor[indice][1] * (valor[indice][2] * indicador / 100));
                 calculo.push([indice, conta]);
@@ -200,8 +210,8 @@ angular
                 }
                 return 0;
             });
-            console.log('vetor de datas: %j', $scope.date);
-            console.log('Dados do banco: $j', $scope.limgraf);
+            // console.log('vetor de datas: %j', $scope.date);
+            // console.log('Dados do banco: $j', $scope.limgraf);
             var valorAntigo = 0;
             var variacao = 0;
             var indice = 0;
@@ -213,7 +223,7 @@ angular
                 }
             });
 
-            console.log(valorAntigo);
+            // console.log(valorAntigo);
 
             angular.forEach($scope.date, function (value, index) {
                 var found = false;
@@ -232,7 +242,7 @@ angular
                 }
                 indice++;
             });
-            console.log('Array pro grafico: %j', $scope.valor_proj);
+            // console.log('Array pro grafico: %j', $scope.valor_proj);
         }
 
         //find, findOne, findById
@@ -241,11 +251,11 @@ angular
             $scope.date = alimentaData(d, qnt_meses);
             buscaValLimiteGraf();
 
-            Projeto.find({ filter: { where: { familia: '' + familia + '' } } }).$promise.then(function (res, err) {
+            Projeto.find({ filter: { where: { familia: '' + user.familia + '' } } }).$promise.then(function (res, err) {
             //Projeto.find().$promise.then(function (res, err) {
                 $scope.projetos = res;
 
-                LimiteGrafico.find({ filter: { where: { familia: '' + familia + '' } } }).$promise.then(function (res, err) {
+                LimiteGrafico.find({ filter: { where: { familia: '' + user.familia + '' } } }).$promise.then(function (res, err) {
                 //LimiteGrafico.find().$promise.then(function (res, err) {
                     $scope.limgraf = res;
 
@@ -253,7 +263,7 @@ angular
                     alimentaLimites();//alimenta os dados dos limites
 
                     objChartProj.serie = $scope.projBase;
-                    console.log(objChartProj.serie);
+                    // console.log(objChartProj.serie);
                     //Inicializa o Grafico de Projetos
                     grafProjetos(objChartProj);
 
@@ -289,7 +299,7 @@ angular
                 alimentaLimites();//alimenta os dados dos limites
 
                 objChartProj.serie = $scope.projBase;
-                console.log(objChartProj.serie);
+                // console.log(objChartProj.serie);
                 //Inicializa o Grafico de Projetos
                 grafProjetos(objChartProj);
 

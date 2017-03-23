@@ -28,7 +28,7 @@ angular
         $scope.selectOptionFamilia = function(){
             var options = [];
             angular.forEach($scope.subtorre, function(value,index){
-                options.push(value.Torre_id + " - " + value.Subtorre);
+                options.push(value.Torre_id + " - " + value.subtorre);
             })
 
             return options;       

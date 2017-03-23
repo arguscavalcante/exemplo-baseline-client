@@ -25,7 +25,7 @@ angular
         function listarSubTorres(){
             SubTorre.find().$promise.then(function(res, err){
                 $scope.subtorre = res;
-                //console.log(res);
+                console.log(res);
             });
             
         }
@@ -34,14 +34,14 @@ angular
 
         $scope.ValidaForm = function(){
 
-            if($scope.formsubtorre.Torre_id == null || $scope.formsubtorre.Subtorre == null || $scope.formsubtorre.Torre_id.replace(/[\s]/g, '') == '' ||  $scope.formsubtorre.Subtorre.replace(/[\s]/g, '') == '')
+            if($scope.formsubtorre.Torre_id == null || $scope.formsubtorre.subtorre == null || $scope.formsubtorre.Torre_id.replace(/[\s]/g, '') == '' ||  $scope.formsubtorre.subtorre.replace(/[\s]/g, '') == '')
             {
                 alert('Favor, preencha todas as informações!');
                 return;
             }
             
             angular.forEach($scope.subtorre, function(value,index){
-                if (value.Torre_id == $scope.formsubtorre.Torre_id && angular.lowercase(value.Subtorre).replace(/[\s]/g, '') == angular.lowercase($scope.formsubtorre.Subtorre.replace(/[\s]/g, ''))){
+                if (value.Torre_id == $scope.formsubtorre.Torre_id && angular.lowercase(value.subtorre).replace(/[\s]/g, '') == angular.lowercase($scope.formsubtorre.subtorre.replace(/[\s]/g, ''))){
                     alert('Esse registro já existe.');
                     bool = false;
                 }

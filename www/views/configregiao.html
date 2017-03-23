@@ -23,10 +23,13 @@
                 <div class="col-md-5">
                     <form>
                         <label>Região: </label>
-                        <input type="text" ng-model="formregiao.Regiao_id" value="" class="form-control" />
+                        <input type="text" ng-model="formregiao.regiao" value="" class="form-control" />
+                        <br />
+                        <label>Família: </label>
+                        <select ng-model="formregiao.familia" ng-options="val for val in selectOptionFamilia()" class="form-control"></select>
                         <br />
                         <label>Descrição: </label>
-                        <input type="text" ng-model="formregiao.Descricao" value="" class="form-control" />
+                        <input type="text" ng-model="formregiao.descricao" value="" class="form-control" />
                         <br />
                         <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
                         <br />
@@ -42,13 +45,15 @@
                                 <thead>
                                     <tr>
                                         <th>Região</th>
+                                        <th>Família</th>
                                         <th>Descrição</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="id in regiao">
-                                        <td>{{id.Regiao_id}}</td>
-                                        <td>{{id.Descricao}}</td>
+                                        <td>{{id.regiao}}</td>
+                                        <td>{{id.familia}}</td>
+                                        <td>{{id.descricao}}</td>
                                     </tr>
                                 </tbody>
                             </table>

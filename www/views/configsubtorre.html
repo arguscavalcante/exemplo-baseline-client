@@ -31,7 +31,7 @@
                         </select>
                         <br />
                         <label>Valor Máx. do Gráfico: </label>
-                        <input type="text" ng-model="formsubtorre.Limite_grafico" value="" class="form-control" />
+                        <input type="text" ng-model="formsubtorre.max_grafico" value="" class="form-control" />
                         <br />
                         <br />
                         <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
@@ -55,8 +55,8 @@
                                 <tbody>
                                     <tr ng-repeat="id in subtorre">
                                         <td>{{id.Torre_id}}</td>
-                                        <td>{{id.Subtorre}}</td>
-                                        <td>{{id.Limite_grafico}}</td>
+                                        <td>{{id.subtorre}}</td>
+                                        <td>{{id.max_grafico}}</td>
                                     </tr>
                                 </tbody>
                             </table>

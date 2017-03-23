@@ -50,15 +50,12 @@
                             </td>
                         </tr>
                         <tr>
+                            <td><label>Família:</label></td>
+                            <td><select ng-model="formproj.familia" class="form-control" ng-options="val for val in selectOptionFamilia() | orderBy:'toString()' "></select></td>
                             <td><label>Região:</label></td>
-                            <td><select ng-model="formproj.regiao" class="form-control">
-                                    <option ng-repeat="id in regiao" value="{{id.Regiao_id}}">{{id.Regiao_id}}</option>
-                                </select> 
-                            </td>
+                            <td><select ng-model="formproj.regiao" ng-options="val for val in selectOptionRegiao()" class="form-control"></select></td>
                             <td><label>Sistema:</label></td>
                             <td><select ng-model="formproj.sistema" ng-options="val for val in selectOptionSistema()"  class="form-control"></select></td>
-                                <td><label>Família:</label></td>
-                            <td><select ng-model="formproj.familia" class="form-control" ng-options="val for val in selectOptionFamilia() | orderBy:'toString()' "></select></td>
                         </tr>
                         <tr>
                             <td><label>Fase:</label></td>

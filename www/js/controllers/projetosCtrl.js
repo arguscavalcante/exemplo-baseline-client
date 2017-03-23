@@ -18,7 +18,7 @@ angular
         }
 
         $scope.formproj = {};
-        $scope.formproj.id = 0;
+        $scope.formproj.projeto_id = 0;
         $scope.formproj.proposta = 'Sem Linha';
         $scope.formLimReal = {};
 
@@ -165,8 +165,8 @@ angular
             //console.log(res);
             
             angular.forEach($scope.regiao, function(value,index){
-                for(var i=0; i<value.Sistemas.length; i++){
-                    $scope.sistema.push({regiao: value.Regiao_id, sistema: value.Sistemas[i]});
+                for(var i=0; i<value.sistemas.length; i++){
+                    $scope.sistema.push({regiao: value.regiao, sistema: value.sistemas[i], familia: value.familia});
                 }
             });
         });
@@ -183,11 +183,23 @@ angular
             return options;       
         }
 
-         //Option Sistema
+        //Option Regiao
+        $scope.selectOptionRegiao = function(){
+            var options = [];
+            angular.forEach($scope.regiao, function(value,index){
+                if (value.familia == $scope.formproj.familia){
+                    options.push(value.regiao);
+                }
+            })
+
+            return options;       
+        }
+
+        //Option Sistema
         $scope.selectOptionSistema = function(){
             var options = [];
             angular.forEach($scope.sistema, function(value,index){
-                if (value.regiao == $scope.formproj.regiao){
+                if (value.regiao == $scope.formproj.regiao && value.familia == $scope.formproj.familia){
                     options.push(value.sistema);
                 }
             })

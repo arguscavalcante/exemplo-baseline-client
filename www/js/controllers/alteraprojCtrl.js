@@ -47,8 +47,8 @@ angular
             console.log(res);
             
             angular.forEach($scope.regiao, function(value,index){
-                for(var i=0; i<value.Sistemas.length; i++){
-                    $scope.sistema.push({regiao: value.Regiao_id, sistema: value.Sistemas[i]});
+                for(var i=0; i<value.sistemas.length; i++){
+                    $scope.sistema.push({regiao: value.regiao, sistema: value.sistemas[i], familia: value.familia});
                 }
             });
         });
@@ -115,7 +115,7 @@ angular
             // console.log($scope.formaltproj.meses[value].mes);
             for(var i=0; i<$scope.baseline.data.length; i++){
                 if($scope.baseline.data[i] == $scope.formaltproj.meses[value].mes){
-                   $scope.baseline_red[value]=$scope.baseline.valor[i];
+                   $scope.baseline_red[value]=$scope.baseline.valor[i] + $scope.formaltproj.meses[value].valor;
                 }
             }
             // return value;
@@ -138,11 +138,23 @@ angular
             return options;       
         }
 
+        //Option Regiao
+        $scope.selectOptionRegiao = function(){
+            var options = [];
+            angular.forEach($scope.regiao, function(value,index){
+                if (value.familia == $scope.formaltproj.familia){
+                    options.push(value.regiao);
+                }
+            })
+
+            return options;       
+        }
+
         //Option Sistema
-        $scope.selectOptionSistema = function(){
+        $scope.selectOptionSistemaform = function(){
             var options = [];
             angular.forEach($scope.sistema, function(value,index){
-                if (value.regiao == $scope.formaltproj.regiao){
+                if (value.regiao == $scope.formaltproj.regiao && value.familia == $scope.formaltproj.familia){
                     options.push(value.sistema);
                 }
             })
@@ -260,7 +272,7 @@ angular
             });
 
             $scope.formaltproj = {
-                id: value.id,
+                id: value.projeto_id,
                 projeto: value.projeto,
                 proposta: value.proposta,
                 gerente: value.gerente,
@@ -275,7 +287,7 @@ angular
             };
 
             $scope.projantigo = {
-                id: value.id,
+                id: value.projeto_id,
                 projeto: value.projeto,
                 proposta: value.proposta,
                 gerente: value.gerente,
@@ -312,7 +324,7 @@ angular
                 for(var i=0; i<$scope.baseline.data.length; i++){
                     for(var j=0; j<$scope.formaltproj.meses.length; j++){
                         if($scope.baseline.data[i] == $scope.formaltproj.meses[j].mes){
-                            $scope.baseline_red.push($scope.baseline.valor[i]);
+                            $scope.baseline_red.push($scope.baseline.valor[i]+ $scope.formaltproj.meses[j].valor);
                         }
                     }               
                 }
@@ -332,6 +344,7 @@ angular
 
         $scope.ValidaForm = function(){
             var bool = true;
+            var achei = false;
 
             //Algum campo indefinido ou Nulo 
             if(angular.isUndefined($scope.formaltproj.proposta) || angular.isUndefined($scope.formaltproj.gerente) || angular.isUndefined($scope.formaltproj.familia) || angular.isUndefined($scope.formaltproj.sistema) || angular.isUndefined($scope.formaltproj.classificacao_geral) || angular.isUndefined($scope.formaltproj.fase))
@@ -381,20 +394,23 @@ angular
 
             angular.forEach($scope.formaltproj.meses, function(value, index){
                 for(var i=0; i<$scope.baseline.data.length; i++){
+                    achei = false;
                     if(value.mes==$scope.baseline.data[i]){
                         for(var j=0; j<$scope.projantigo.meses.length; j++){
                             if(value.mes==$scope.projantigo.meses[j].mes){
+                                achei = true;
                                  if(value.valor>$scope.baseline.valor[i]+$scope.projantigo.meses[j].valor){
                                     alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
                                     bool = false;
                                     return;
                                 }       
-                            } else {
-                                if(value.valor>$scope.baseline.valor[i]){
-                                    alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
-                                    bool = false;
-                                    return;
-                                }
+                            }
+                        }
+                        if(!achei){
+                            if(value.valor>$scope.baseline.valor[i]){
+                                alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!2');
+                                bool = false;
+                                return;
                             }
                         }
                     }
@@ -407,14 +423,27 @@ angular
                 //console.log(res);
                 $scope.valida_baseline.valor = alimentaValor($scope.valida_baseline.data, $scope.limValidacao, user.familia[0]);
                 angular.forEach($scope.formaltproj.meses, function(value, index){
-                    for(var i=0; i<$scope.valida_baseline.data.length; i++){
-                        if(value.mes==$scope.valida_baseline.data[i]){
-                            if(value.valor>$scope.valida_baseline.valor[i]){
-                                alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
-                                bool = false;
-                                return;
+                    for(var i=0; i<$scope.baseline.data.length; i++){
+                        achei = false;
+                        if(value.mes==$scope.baseline.data[i]){
+                            for(var j=0; j<$scope.projantigo.meses.length; j++){
+                                if(value.mes==$scope.projantigo.meses[j].mes){
+                                    achei = true;
+                                    if(value.valor>$scope.baseline.valor[i]+$scope.projantigo.meses[j].valor){
+                                        alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
+                                        bool = false;
+                                        return;
+                                    }       
+                                }
                             }
-                        }
+                            if(!achei){
+                                if(value.valor>$scope.baseline.valor[i]){
+                                    alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!2');
+                                    bool = false;
+                                    return;
+                                }
+                            }
+                        }                       
                     }
                 })
 
@@ -469,9 +498,20 @@ angular
                     // console.log('limiteReal: ', $scope.limValidacao);
                     // console.log('limiteReal Alterado: ', $scope.formLimReal);
 
-                    // console.log ($scope.formaltproj);
-                    // console.log($scope.formLimReal[0].dados);
-                    // Projeto.upsertWithWhere({where: {id: ''+ $scope.formaltproj.familia +''}}, {dados: $scope.formLimReal[0].dados}, function(res, err){
+                    console.log ($scope.formaltproj);
+                    console.log($scope.formLimReal[0].dados);
+                    // Projeto.upsertWithWhere({where: {projeto_id: ''+ $scope.formaltproj.projeto_id +''}}, 
+                    //                             {classificacao_geral: ''+ $scope.formaltproj.classificacao_geral +'', 
+                    //                             familia: ''+ $scope.formaltproj.familia +'', 
+                    //                             fase:''+ $scope.formaltproj.fase +'', 
+                    //                             gerente:''+ $scope.formaltproj.projeto_id +'', 
+                    //                             projeto:''+ $scope.formaltproj.projeto +'', 
+                    //                             proposta:''+ $scope.formaltproj.proposta +'', 
+                    //                             regiao: ''+ $scope.formaltproj.regiao +'', 
+                    //                             sistema: ''+ $scope.formaltproj.sistema +'', 
+                    //                             valor_total_proj: ''+ $scope.formaltproj.valor_total_proj +'', 
+                    //                             meses: $scope.formaltproj.meses}, 
+                    //                         function(res, err){
                     //     // console.log(res);
                     //     LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formaltproj.familia +''}}, {dados: $scope.formLimReal[0].dados}, function(info, err) {
                     //         // console.log(info);
