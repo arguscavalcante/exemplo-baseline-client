@@ -14,11 +14,11 @@ angular
 
         user = {
             familia: ['Torre I - TESTE'],
-            perfil: 'Admin'
+            perfil: 'Admin',
+            nome: 'egustavo'
         }
 
         $scope.formproj = {};
-        // $scope.formproj.projeto_id = null;
         $scope.formproj.proposta = 'Sem Linha';
         $scope.formLimReal = {};
 
@@ -155,6 +155,13 @@ angular
             //console.log(res);
         });
 
+        // Alimenta objeto com todas as Projeto
+        Projeto.find({filter:{where: {gerente: '' + user.nome + ''}}}).$promise.then(function(res, err){
+            $scope.formproj.projeto_id = user.nome + res.length;
+            //console.log(res);
+        });
+        
+
         // Alimenta objeto com todas os Limites Reais
         LimiteReal.find().$promise.then(function(res, err){
             $scope.limite = res;
@@ -178,12 +185,13 @@ angular
 
         ClassGeral.find().$promise.then(function(res, err){         
              $scope.classificacao_geral = res;
-            //console.log(res);
+            console.log(res);
             angular.forEach($scope.classificacao_geral, function(value,index){
-                if(value.baseline){
+                if(value.Baseline){
                     $scope.classgeral.push(value.ClassGeral_id)
                 }
             })
+            // console.log($scope.classgeral)
         });
 
 

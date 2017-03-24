@@ -274,7 +274,7 @@ angular
             });
 
             $scope.formaltproj = {
-                id: value.projeto_id,
+                projeto_id: value.projeto_id,
                 projeto: value.projeto,
                 proposta: value.proposta,
                 gerente: value.gerente,
@@ -337,7 +337,7 @@ angular
                 $scope.classificacao_geral = res;
                 //console.log(res);
                  angular.forEach($scope.classificacao_geral, function(value,index){
-                    if(value.baseline){
+                    if(value.Baseline){
                         $scope.classgeral.push(value.ClassGeral_id)
                     }
                 })
@@ -399,7 +399,7 @@ angular
             }
 
             // console.log($scope.formaltproj);
-            if ($scope.classgeral.includes($scope.formproj.classificacao_geral)){
+            if ($scope.classgeral.includes($scope.formaltproj.classificacao_geral)){
                 angular.forEach($scope.formaltproj.meses, function(value, index){
                     for(var i=0; i<$scope.baseline.data.length; i++){
                         achei = false;
@@ -430,7 +430,7 @@ angular
             LimiteReal.find().$promise.then(function(res, err){
                 $scope.limValidacao = res;
                 //console.log(res);
-                if ($scope.classgeral.includes($scope.formproj.classificacao_geral)){
+                if ($scope.classgeral.includes($scope.formaltproj.classificacao_geral)){
                     $scope.valida_baseline.valor = alimentaValor($scope.valida_baseline.data, $scope.limValidacao, user.familia[0], false);
                     angular.forEach($scope.formaltproj.meses, function(value, index){
                         for(var i=0; i<$scope.baseline.data.length; i++){
@@ -462,7 +462,7 @@ angular
                 if(bool){
                     $scope.formLimReal.dados = {};
                     $scope.formLimReal = $scope.limValidacao;
-                    if ($scope.classgeral.includes($scope.formproj.classificacao_geral)){
+                    if ($scope.classgeral.includes($scope.formaltproj.classificacao_geral)){
                         //retirar valores antigos
                         angular.forEach($scope.formLimReal, function(value, index){
                             if(value.familia == user.familia){
@@ -487,7 +487,7 @@ angular
                         });
                     }
                     //adicnionar valores novos
-                    if ($scope.classgeral.includes($scope.formproj.classificacao_geral)){
+                    if ($scope.classgeral.includes($scope.formaltproj.classificacao_geral)){
                         angular.forEach($scope.formLimReal, function(value, index){
                             if(value.familia == user.familia){
                                 for(var j=0; j<value.dados.length; j++){
