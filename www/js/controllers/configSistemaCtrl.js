@@ -9,7 +9,7 @@ angular
         $scope.subtorre = {};
         $scope.formsistema = {};
         $scope.tabelasis = [];
-        $scope.formsistema.id_regiao = "";
+        $scope.formsistema.id_regiao = 0;
         var bool = true;
         var altera = 'N';
         var projsist;

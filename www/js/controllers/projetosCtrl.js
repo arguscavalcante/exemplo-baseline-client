@@ -18,13 +18,14 @@ angular
         }
 
         $scope.formproj = {};
-        $scope.formproj.projeto_id = 0;
+        // $scope.formproj.projeto_id = null;
         $scope.formproj.proposta = 'Sem Linha';
         $scope.formLimReal = {};
 
         $scope.projetos = {};
         $scope.limite = {};
         $scope.limValidacao = {};
+        $scope.classgeral = [];
 
         $scope.baseline_red = [];
 
@@ -101,8 +102,9 @@ angular
                                 if (value.dados[i].dependencia == 'S'){
                                     k = i-1;
                                     if (!angular.isUndefined(value.dados[k])){
-                                        if (value.dados[k].gasto_mes >= value.dados[k].baseline + value.dados[k].baseline*-0.01){
+                                        if (value.dados[k].gasto_mes >= value.dados[k].baseline + value.dados[k].baseline*value.dados[k].perc_baseline/-100){
                                             val_mesant = value.dados[k].baseline - value.dados[k].gasto_mes;
+                                            // console.log(val_mesant)
                                         }
                                     }
                                 } 
@@ -156,8 +158,9 @@ angular
         // Alimenta objeto com todas os Limites Reais
         LimiteReal.find().$promise.then(function(res, err){
             $scope.limite = res;
-            //console.log(res);
+            // console.log(res);
             $scope.baseline.valor = alimentaValor($scope.baseline.data, $scope.limite, user.familia[0], false);
+            // console.log($scope.baseline.valor)
             $scope.tabela = alimentaValor($scope.baseline.data, $scope.limite, user.familia[0], true);
         });
 
@@ -176,6 +179,11 @@ angular
         ClassGeral.find().$promise.then(function(res, err){         
              $scope.classificacao_geral = res;
             //console.log(res);
+            angular.forEach($scope.classificacao_geral, function(value,index){
+                if(value.baseline){
+                    $scope.classgeral.push(value.ClassGeral_id)
+                }
+            })
         });
 
 
@@ -228,7 +236,7 @@ angular
             });
             $scope.formproj.valor_total_proj = total;
             return total;
-            console.log(total);
+            // console.log(total);
         }
 
         function equal(value) {
@@ -306,28 +314,11 @@ angular
             }
 
             // console.log($scope.formproj);
-
-            angular.forEach($scope.formproj.meses, function(value, index){
-                for(var i=0; i<$scope.baseline.data.length; i++){
-                    if(value.mes==$scope.baseline.data[i]){
-                        if(value.valor>$scope.baseline.valor[i]){
-                            alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
-                            bool = false;
-                            return;
-                        }
-                    }
-                }
-            })
-
-            // Validacao nivel 2 com o Banco de dados
-            LimiteReal.find().$promise.then(function(res, err){
-                $scope.limValidacao = res;
-                //console.log(res);
-                $scope.valida_baseline.valor = alimentaValor($scope.valida_baseline.data, $scope.limValidacao, user.familia[0], false);
+            if ($scope.classgeral.includes($scope.formproj.classificacao_geral)){
                 angular.forEach($scope.formproj.meses, function(value, index){
-                    for(var i=0; i<$scope.valida_baseline.data.length; i++){
-                        if(value.mes==$scope.valida_baseline.data[i]){
-                            if(value.valor>$scope.valida_baseline.valor[i]){
+                    for(var i=0; i<$scope.baseline.data.length; i++){
+                        if(value.mes==$scope.baseline.data[i]){
+                            if(value.valor>$scope.baseline.valor[i]){
                                 alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
                                 bool = false;
                                 return;
@@ -335,6 +326,27 @@ angular
                         }
                     }
                 })
+            }
+           
+
+            // Validacao nivel 2 com o Banco de dados
+            LimiteReal.find().$promise.then(function(res, err){
+                $scope.limValidacao = res;
+                //console.log(res);
+                if ($scope.classgeral.includes($scope.formproj.classificacao_geral)){
+                    $scope.valida_baseline.valor = alimentaValor($scope.valida_baseline.data, $scope.limValidacao, user.familia[0], false);
+                    angular.forEach($scope.formproj.meses, function(value, index){
+                        for(var i=0; i<$scope.valida_baseline.data.length; i++){
+                            if(value.mes==$scope.valida_baseline.data[i]){
+                                if(value.valor>$scope.valida_baseline.valor[i]){
+                                    alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
+                                    bool = false;
+                                    return;
+                                }
+                            }
+                        }
+                    })
+                }
 
                 //criando a variavel com os valores atualizados para incluir na tabela de LimiteReal.
                 if(bool){
@@ -347,7 +359,12 @@ angular
                                     var k = j+1;
                                     var dependencia = '';
                                     if(value.dados[j].mes==$scope.formproj.meses[i].mes){
-                                        value.dados[j].gasto_mes =  value.dados[j].gasto_mes + $scope.formproj.meses[i].valor;
+                                        //Se encontrar a classificacao geral que influencia no baseline, aumenta seu valor de gasto
+                                        if ($scope.classgeral.includes($scope.formproj.classificacao_geral) ){
+                                            value.dados[j].gasto_mes =  value.dados[j].gasto_mes + $scope.formproj.meses[i].valor;
+                                        } else {
+                                            value.dados[j].gasto_mes =  value.dados[j].gasto_mes;
+                                        }
                                         if(value.dados[j].gasto_mes >= value.dados[j].baseline+value.dados[j].baseline*value.dados[j].perc_baseline/-100 && value.dados[j].dependencia != 'S'){
                                             dependencia = 'S';
                                         }else{

@@ -2,28 +2,36 @@
 
 angular
     .module('starter')
-    .controller('configLimiteRealCtrl', ['$scope', '$state', 'LimiteReal', 'Projeto',  function($scope, $state, LimiteReal, Projeto){
+    .controller('configLimiteRealCtrl', ['$scope', '$state', 'LimiteReal', function($scope, $state, LimiteReal){
         console.log('configLimiteRealCtrl')
 
         var d = new Date();
         d.setMonth(d.getMonth() -1);
         var data =[];
+        $scope.tabelalimreal = [];
         var classgeral = ["Aprovado","Pipeline Aprovado","Pipeline"]
 
         $scope.limreal = {};
-        $scope.projeto = {};
         $scope.tabelaBase = { familia: "", classgeral: []};
 
         //find, findOne, findById
         function listarLimReal(){
             LimiteReal.find().$promise.then(function(res, err){
-                $scope.limreal = res;
-                //console.log(res);
-                Projeto.find().$promise.then(function(res, err){
-                    $scope.projeto = res;
+                // console.log(res);
+                angular.forEach(res, function(value,index){
+                    for(var i=0; i<value.dados.length; i++){
+                        $scope.tabelalimreal.push(
+                            {   baseline: value.dados[i].baseline, 
+                                perc_baseline: value.dados[i].perc_baseline, 
+                                familia: value.familia, 
+                                baseline_bonus: value.dados[i].baseline_bonus, 
+                                mes: value.dados[i].mes, 
+                                gasto_mes: value.dados[i].gasto_mes
+                            });
+                    }
                 });
-            });
-            
+                console.log($scope.tabelalimreal)
+            });  
         }
 
         listarLimReal();
@@ -61,7 +69,7 @@ angular
             $scope.tabelaBase.classgeral.push({ name: value, data: atribuirDado(value, data) })
         });
 
-        console.log($scope.tabelaBase);
+        // console.log($scope.tabelaBase);
 
         function atribuirDado(tipo, data) {
             var dados = [];

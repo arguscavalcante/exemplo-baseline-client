@@ -106,6 +106,7 @@ angular
             var data;
             var data_vetor = [];
             var dados_proj = [];
+            var dados_torre = [];
             var meses_acima = "";
             var ret = true;
             var val_baseline = 0;
@@ -121,6 +122,7 @@ angular
 
              for (var i = 0; i < data_vetor.length; i++) {
                 dados_proj.push(0);
+                dados_torre.push(0);
             }
 
             angular.forEach($scope.projeto, function (value, index) {
