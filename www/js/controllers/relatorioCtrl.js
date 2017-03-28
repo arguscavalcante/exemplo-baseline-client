@@ -2,7 +2,7 @@
 
 angular
     .module('starter')
-    .controller('relatorioCtrl', ['$scope', '$state', 'LimiteGrafico', 'Projeto', 'SubTorre', 'User', 'ClassGeral', function ($scope, $state, LimiteGrafico, Projeto, SubTorre, User, ClassGeral) {
+    .controller('relatorioCtrl', ['$scope', '$state', 'LimiteGrafico', 'Projeto', 'SubTorre', 'ClassGeral', function ($scope, $state, LimiteGrafico, Projeto, SubTorre, ClassGeral) {
 
         var i;
         var d = new Date();
@@ -36,7 +36,6 @@ angular
         //d.setMonth(d.getMonth() + 1);
         $scope.formfiltro = {}; //filtro para regerar o Grafico
         $scope.subtorre = {};
-        $scope.gerentes = {};
         $scope.projetos = {};
         $scope.date = [];
         $scope.opcaoqnt = [];
@@ -70,15 +69,6 @@ angular
                 $scope.subtorre = res;
             })            
         }
-
-        //Funcao para buscar na subtorre o valor do limite do grafico
-        function buscaUsuarios(){
-            //SubTorre.find({ filter: { where: {Subtorre: '' + user.subtorre + ''}} }).$promise.then(function (res, err) {
-            User.find().$promise.then(function (res, err) {
-                $scope.gerentes = res;
-            })            
-        }
-        buscaUsuarios();
 
         //Funcao para buscar na subtorre o valor do limite do grafico
         function buscaclassgeral(){

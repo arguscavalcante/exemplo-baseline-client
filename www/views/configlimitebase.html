@@ -30,10 +30,10 @@
                         <label>Família:</label></td>
                         <select ng-model="formlimgraf.familia" class="form-control" ng-options="val for val in selectOptionFamilia() | orderBy:'toString()' " ng-change="atribuirTorre();"></select>
                         <br />
-                        <label>Valor Limite: </label>
+                        <label>Valor Baseline: </label>
                         <input type="number" ng-model="formlimgraf.valor_limite" value="" class="form-control" />
                         <br />
-                        <label>Porcentagem de Limite: </label>
+                        <label>Porcentagem de Baseline: </label>
                         <input type="number" ng-model="formlimgraf.variacao" value="" class="form-control" />
                         <br />
                         <label>Familia disponibiliza valor a Torre? </label>
@@ -55,15 +55,15 @@
                 </div>
                 <div class="col-md-5">
                     <div>
-                        <h3> Limite de Gráfico Cadastrado </h3>
+                        <h3> Baseline Cadastrado </h3>
                         <div>
                             <table class="table table-striped table-hover table-responsive">
                                 <thead>
                                     <tr>
                                         <th>Data Corte</th>
                                         <th>SubTorre</th>
-                                        <th>Valor Limite</th>
-                                        <th>Porcentagem Limite</th>
+                                        <th>Valor Baseline</th>
+                                        <th>Porcentagem Baseline</th>
                                         <th>Torre</th>
                                         <th>Variação Torre</th>
                                     </tr>

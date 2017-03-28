@@ -1,0 +1,27 @@
+[
+    {
+    "_id": "Aprovado",
+    "Descricao": "TESTE 22",
+    "loopback__model__name": "ClassGeral",
+    "ClassGeral_id": "Aprovado",
+    "Baseline": true
+    },
+    {
+    "Descricao": "TESTE 22",
+    "loopback__model__name": "ClassGeral",
+    "ClassGeral_id": "Pipeline Aprovado",
+    "Baseline": true
+    },
+    {
+    "Descricao": "TESTE 22",
+    "loopback__model__name": "ClassGeral",
+    "ClassGeral_id": "Extra-Baseline",
+    "Baseline": true
+    },
+    {
+    "Descricao": "TESTE 22",
+    "loopback__model__name": "ClassGeral",
+    "ClassGeral_id": "Pipeline",
+    "Baseline": true
+    }
+]

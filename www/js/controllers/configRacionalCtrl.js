@@ -2,8 +2,8 @@
 
 angular
     .module('starter')
-    .controller('configLimiteRealCtrl', ['$scope', '$state', 'LimiteReal', function($scope, $state, LimiteReal){
-        console.log('configLimiteRealCtrl')
+    .controller('configRacionalCtrl', ['$scope', '$state', 'LimiteReal', function($scope, $state, LimiteReal){
+        console.log('configRacionalCtrl')
 
         var d = new Date();
         d.setMonth(d.getMonth() -1);

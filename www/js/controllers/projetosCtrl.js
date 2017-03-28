@@ -137,7 +137,9 @@ angular
             // console.log($scope.formproj.meses[value].mes);
             for(var i=0; i<$scope.baseline.data.length; i++){
                 if($scope.baseline.data[i] == $scope.formproj.meses[value].mes){
-                   $scope.baseline_red[value]=$scope.baseline.valor[i];
+                    if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
+                        $scope.baseline_red[value]=$scope.baseline.valor[i];
+                    }
                 }
             }
             // return value;
@@ -184,7 +186,7 @@ angular
         });
 
         ClassGeral.find().$promise.then(function(res, err){         
-             $scope.classificacao_geral = res;
+            $scope.classificacao_geral = res;
             console.log(res);
             angular.forEach($scope.classificacao_geral, function(value,index){
                 if(value.Baseline){
@@ -235,16 +237,6 @@ angular
                 total = total + value.valor;
             });
             return total;
-        }
-
-         $scope.sumMesPage= function(){
-            var total = 0;
-            angular.forEach($scope.formproj.meses, function(value, index){
-                total = total + value.valor;
-            });
-            $scope.formproj.valor_total_proj = total;
-            return total;
-            // console.log(total);
         }
 
         function equal(value) {

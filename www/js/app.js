@@ -17,6 +17,13 @@ var app = angular.module('starter', ['ui.router', 'lbServices', 'angularUtils.di
         controller: 'loginCtrl'
         })
 
+        // BLANK - IMPORTACAO
+        .state('blank', {
+        url: '/blank',
+        templateUrl: 'views/blank.html',
+        controller: 'blankCtrl'
+        })
+    
         // CADASTRO DE PROJETOS
         .state('projetos', {
         url: '/projetos',
@@ -80,18 +87,18 @@ var app = angular.module('starter', ['ui.router', 'lbServices', 'angularUtils.di
         controller: 'configClassGeralCtrl'
         })
 
-        // LIMITE GRAFICO
-        .state('limitegraf', {
-        url: '/limitegraf',
-        templateUrl: 'views/configlimitegraf.html',
-        controller: 'configLimiteGrafCtrl'
+        // LIMITE BASELINE
+        .state('limitebase', {
+        url: '/limitebase',
+        templateUrl: 'views/configlimitebase.html',
+        controller: 'configLimiteBaseCtrl'
         })
 
-        // LIMITE REAL
-        .state('limitereal', {
-        url: '/limitereal',
-        templateUrl: 'views/configlimitereal.html',
-        controller: 'configLimiteRealCtrl'
+        // RACIONAL
+        .state('racional', {
+        url: '/racional',
+        templateUrl: 'views/configracional.html',
+        controller: 'configRacionalCtrl'
         })
 
         // USUARIO

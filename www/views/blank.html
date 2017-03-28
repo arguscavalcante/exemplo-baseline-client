@@ -1,41 +1,25 @@
 ﻿
-    <section class="menu-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="navbar-collapse collapse ">
-                        <ul id="menu-top" class="nav navbar-nav navbar-right">
-                            <li><a ui-sref="config">Configuração</a></li>
-                            <li><a ui-sref="blank" class="menu-top-active">Cadastro de Projetos</a></li>
-                            <li><a ui-sref="relatorio">Relatório</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
     <!-- MENU SECTION END-->
     <div class="content-wrapper">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
-                    <h4 class="page-head-line">Blank Page</h4>
-
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="alert alert-warning">
-                        This is blank page for which you can customize for your project. 
-                        Use this admin template 100% free to use for personal and commercial use which is crafted by 
-                        <br />
-                        <a href="http://www.designbootstrap.com/" target="_blank">DesignBootstrap.com</a> . For more free templates and snippets keep looking <a href="http://www.designbootstrap.com/" target="_blank">DesignBootstrap.com</a> . Hope you will like our work
-                  
+                <div class="col-md-12 alert alert-warning">
+                    <div class="col-md-4">
+                        <span>Projetos:</span> &nbsp;&nbsp;
+                        <button type="button" ng-click="importProj();" class="btn btn-info">Importar</button>
+                        <button type="button" ng-click="deleteProj();" class="btn btn-info">Excluir</button>
+                    </div>
+                    <div class="col-md-4">
+                        <span>Sistema:</span> &nbsp;&nbsp;
+                        <button type="button" ng-click="importProj();" class="btn btn-info">Importar</button>
+                        <button type="button" ng-click="deleteProj();" class="btn btn-info">Excluir</button>
+                    </div>
+                    <div class="col-md-4">
+                        <span>Projetos:</span> &nbsp;&nbsp;
+                        <button type="button" ng-click="importProj();" class="btn btn-info">Importar</button>
+                        <button type="button" ng-click="deleteProj();" class="btn btn-info">Excluir</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

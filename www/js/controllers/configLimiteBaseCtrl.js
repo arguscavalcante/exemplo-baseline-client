@@ -2,8 +2,8 @@
 
 angular
     .module('starter')
-    .controller('configLimiteGrafCtrl', ['$scope', '$state', 'LimiteGrafico', 'SubTorre', 'LimiteReal', 'Projeto', 'ClassGeral',  function($scope, $state, LimiteGrafico, SubTorre, LimiteReal, Projeto, ClassGeral){
-        console.log('configLimiteGrafCtrl')
+    .controller('configLimiteBaseCtrl', ['$scope', '$state', 'LimiteGrafico', 'SubTorre', 'LimiteReal', 'Projeto', 'ClassGeral',  function($scope, $state, LimiteGrafico, SubTorre, LimiteReal, Projeto, ClassGeral){
+        console.log('configLimiteBaseCtrl')
 
         var i;
         var d = new Date();

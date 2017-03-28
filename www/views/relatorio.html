@@ -41,12 +41,6 @@
                                         <option ng-repeat="id in opcaoqnt" value="{{id}}">{{id}}</option>
                                     </select>
                                 </td>
-                                <td>
-                                    <label>Gerentes Responsáveis: &nbsp;</label>
-                                    <select ng-model="formfiltro.ger_resp" class="form-control" ng-change="redesenharGraf();">
-                                        <option ng-repeat="id in gerentes" value="{{id.login_user}}">{{id.login_user}}</option>
-                                    </select>
-                                </td>
                             </tr>
                         </table>                            
                     </form>

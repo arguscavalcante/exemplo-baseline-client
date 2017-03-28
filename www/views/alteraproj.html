@@ -167,12 +167,12 @@
                                     </select> 
                                 </td>
                                 <td><label>Classificação Geral:</label></td>
-                                <td><select ng-model="formaltproj.classificacao_geral" class="form-control">
+                                <td><select ng-model="formaltproj.classificacao_geral" class="form-control" ng-change="atribuiBaseline($index)">
                                         <option ng-repeat="id in classificacao_geral" value="{{id.ClassGeral_id}}">{{id.ClassGeral_id}}</option>
                                     </select> 
                                 </td>
                                 <td><label>Valor Total:</label></td>
-                                <td> <input type="number" ng-model="formaltproj.valor_total_proj" class="form-control" ng-value="sumMesPage()" readonly/> </td>
+                                <td> <input type="number" ng-model="formaltproj.valor_total_proj" class="form-control"/> </td>
                             </tr>
                         </table>
                     </div>
