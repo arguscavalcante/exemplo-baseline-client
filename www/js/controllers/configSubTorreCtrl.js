@@ -15,7 +15,9 @@ angular
             alert('Usuário sem permissão para acessar essa página!');
             $state.go('relatorio');
         }
-         $scope.user = {};
+        
+        $scope.mostrar = {};
+        $scope.user = {};
         $scope.user = {
             gerente: sessionStorage.getItem('login'),
             perfil: sessionStorage.getItem('perfil'),

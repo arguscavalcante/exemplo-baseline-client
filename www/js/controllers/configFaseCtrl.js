@@ -16,7 +16,8 @@ angular
             $state.go('relatorio');
         }
         
-         $scope.user = {};
+        $scope.mostrar = {};
+        $scope.user = {};
         $scope.user = {
             gerente: sessionStorage.getItem('login'),
             perfil: sessionStorage.getItem('perfil'),

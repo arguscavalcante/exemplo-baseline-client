@@ -21,6 +21,7 @@ angular
         var qnt_meses = 15;
         var objChartProj = {};
         $scope.user = {};
+        $scope.mostrar = {};
         $scope.familia = [];
         $scope.opcoes = true;
         $scope.grafico = true;
@@ -49,8 +50,24 @@ angular
         $scope.user = {
             gerente: sessionStorage.getItem('login'),
             perfil: sessionStorage.getItem('perfil'),
-            familia: sessionStorage.getItem('familia').split(",")
+            familia: sessionStorage.getItem('familia').split(","),
+            nome: sessionStorage.getItem('nome')
         }
+
+        switch($scope.user.perfil) {
+            case 'Administrador':
+                $scope.mostrar.config = true;
+                $scope.mostrar.cadastproj = true;
+                $scope.mostrar.alterproj = true;
+                break;
+            case 'Gerente':
+                $scope.mostrar.cadastproj = true;
+                $scope.mostrar.alterproj = true;
+                break;
+            default:
+                alert('Não foi identificado o perfil do usuário!');
+        }
+
 
         if($scope.user.familia.length > 1){
             $scope.grafico = false; 

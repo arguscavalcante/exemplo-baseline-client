@@ -47,7 +47,8 @@ angular
         $scope.formaltproj.meses =[{mes: "", valor: 0}]
 
         var meses = 0;
-         $scope.user = {};
+        $scope.user = {};
+        $scope.mostrar = {};
         $scope.user = {
             gerente: sessionStorage.getItem('login'),
             perfil: sessionStorage.getItem('perfil'),
