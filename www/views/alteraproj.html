@@ -2,13 +2,17 @@
     <section class="menu-section">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-4">
+                   <h5 style="color:white;">Olá, {{user.nome}}<h5>
+                </div>
+                <div class="col-md-8">
                     <div class="navbar-collapse collapse ">
                         <ul id="menu-top" class="nav navbar-nav navbar-right">
-                            <li><a ui-sref="config">Configuração</a></li>
-                            <li><a ui-sref="projetos">Cadastro de Projetos</a></li>
-                            <li><a ui-sref="alteraproj" class="menu-top-active">Alteração de Projetos</a></li>
+                            <li><a ui-sref="config" ng-show="mostrar.config">Configuração</a></li>
+                            <li><a ui-sref="projetos" ng-show="mostrar.cadastproj">Cadastro de Projetos</a></li>
+                            <li><a ui-sref="alteraproj" class="menu-top-active" ng-show="mostrar.alterproj" ng-click="atualizaPag()">Alteração de Projetos</a></li>
                             <li><a ui-sref="relatorio">Relatório</a></li>
+                            <li><a ui-sref="login" class="glyphicon glyphicon-log-out"></a></li>
                         </ul>
                     </div>
                 </div>
@@ -35,26 +39,33 @@
                             <td class="col-md-3">
                                 <input type="text" ng-model="filtroResult.projeto" value="" class="form-control" placeholder="Procurar..." />
                             </td>
+                            <td class="col-md-2"><label>Descrição do Projeto:</label></td>
+                            <td class="col-md-3">
+                                <input type="text" ng-model="filtroResult.descricao" value="" class="form-control" placeholder="Procurar..." />
+                            </td>
+                        </tr>
+                        <tr>
                             <td class="col-md-2"><label>Familia:</label></td>
                             <td class="col-md-3">
                                 <select ng-model="filtroResult.familia" class="form-control" ng-options="val for val in selectOptionFamilia() | orderBy:'toString()' "></select>
                             </td>
-                        </tr>
-                        <tr>
                             <td class="col-md-2"><label>Região:</label></td>
                             <td class="col-md-3">
                                 <select ng-model="filtroResult.regiao" class="form-control">
                                     <option ng-repeat="id in regiao" value="{{id.Regiao_id}}">{{id.Regiao_id}}</option>
                                 </select>
                             </td>
+                        </tr>
+                        <tr>
                             <td class="col-md-2"><label>Sistema:</label></td>
                             <td class="col-md-3">
                                 <select ng-model="filtroResult.sistema" class="form-control" ng-options="val for val in selectOptionSistema()" ></select>
                             </td>
-                        </tr>
-                        <tr>
                             <td><button type="button" ng-click="limparFiltros();" class="btn btn-info">Limpar Filtros</button></td>
                             <td></td>
+                        </tr>
+                        <tr>
+                            <td></td><td></td>
                             <td><label>Quantidade de itens:</label></td>
                             <td class="col-md-1">
                                 <select ng-model="filtroResult.qnt_itens" class="form-control">
@@ -71,6 +82,7 @@
                         <thead>
                             <tr>
                                 <th ng-click="ordenar('id.projeto')">Projeto</th>
+                                <th ng-click="ordenar('id.descricao')">Descrição</th>
                                 <th ng-click="ordenar('id.proposta')">Proposta</th>
                                 <th ng-click="ordenar('id.classificacao_geral')">Classificação Geral</th>   
                                 <th ng-click="ordenar('id.fase')">Fase</th>                                     
@@ -80,14 +92,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr dir-paginate="id in projeto|filter:{projeto:filtroResult.projeto}|filter:{sistema:filtroResult.sistema}|filter:{familia:filtroResult.familia}|orderBy:sortKey:reverse|itemsPerPage:filtroResult.qnt_itens" ng-click="alteraProj(id)">
+                            <tr dir-paginate="id in projeto|filter:{projeto:filtroResult.projeto}|filter:{descricao:filtroResult.descricao}|filter:{sistema:filtroResult.sistema}|filter:{familia:filtroResult.familia}|orderBy:sortKey:reverse|itemsPerPage:filtroResult.qnt_itens" ng-click="alteraProj(id)">
                                 <td>{{id.projeto}}</td>
+                                <td>{{id.descricao}}</td>
                                 <td>{{id.proposta}}</td>
                                 <td>{{id.classificacao_geral}}</td>
                                 <td>{{id.fase}}</td>
                                 <td>{{id.familia}}</td>
                                 <td>{{id.sistema}}</td>
-                                <td>{{id.valor_total_proj}}</td>
+                                <td>{{id.valor_total_proj | currency}}</td>
                             </tr>
                         </tbody>
                     </table>

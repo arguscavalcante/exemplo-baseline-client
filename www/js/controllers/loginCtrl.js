@@ -38,9 +38,10 @@ app.controller('loginCtrl', ['$scope', '$state', '$rootScope', 'User', function(
                 }
                 if ( valida ){
                     // Armazena os dados na Sessão(sessionStorage)
-                    sessionStorage.setItem('nome', $scope.login.login_user);
+                    sessionStorage.setItem('login', $scope.login.login_user);
                     sessionStorage.setItem('perfil', $scope.login.perfil);
                     sessionStorage.setItem('familia', $scope.login.familia);
+                    sessionStorage.setItem('nome', $scope.login.login_nome);
                     // console.log(sessionStorage.getItem('nome'));
                     // console.log(sessionStorage.getItem('perfil'));
                     // console.log(sessionStorage.getItem('familia'));

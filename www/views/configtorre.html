@@ -2,13 +2,17 @@
     <section class="menu-section">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-4">
+                   <h5 style="color:white;">Olá, {{user.nome}}<h5>
+                </div>
+                <div class="col-md-8">
                     <div class="navbar-collapse collapse ">
                         <ul id="menu-top" class="nav navbar-nav navbar-right">
-                            <li><a ui-sref="config" class="menu-top-active">Configuração</a></li>
-                            <li><a ui-sref="projetos">Cadastro de Projetos</a></li>
-                            <li><a ui-sref="alteraproj">Alteração de Projetos</a></li>
+                            <li><a ui-sref="config" class="menu-top-active" ng-show="mostrar.config">Configuração</a></li>
+                            <li><a ui-sref="projetos" ng-show="mostrar.cadastproj">Cadastro de Projetos</a></li>
+                            <li><a ui-sref="alteraproj" ng-show="mostrar.alterproj">Alteração de Projetos</a></li>
                             <li><a ui-sref="relatorio">Relatório</a></li>
+                            <li><a ui-sref="login" class="glyphicon glyphicon-log-out"></a></li>
                         </ul>
                     </div>
                 </div>

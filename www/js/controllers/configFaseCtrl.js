@@ -5,6 +5,39 @@ angular
     .controller('configFaseCtrl', ['$scope', '$state', 'Fase', 'Projeto',  function($scope, $state, Fase, Projeto){
         console.log('configFaseCtrl')
 
+         // Controle de sessao
+        if(sessionStorage.getItem('login')==null || sessionStorage.getItem('perfil')==null || sessionStorage.getItem('familia')==null ){
+            alert('Usuário não autenticado pelo Sistema!!')
+            $state.go('login');
+        }
+        
+        if(sessionStorage.getItem('perfil')!='Administrador'){
+            alert('Usuário sem permissão para acessar essa página!');
+            $state.go('relatorio');
+        }
+        
+         $scope.user = {};
+        $scope.user = {
+            gerente: sessionStorage.getItem('login'),
+            perfil: sessionStorage.getItem('perfil'),
+            familia: sessionStorage.getItem('familia').split(","),
+            nome: sessionStorage.getItem('nome')
+        }
+
+        switch($scope.user.perfil) {
+            case 'Administrador':
+                $scope.mostrar.config = true;
+                $scope.mostrar.cadastproj = true;
+                $scope.mostrar.alterproj = true;
+                break;
+            case 'Gerente':
+                $scope.mostrar.cadastproj = true;
+                $scope.mostrar.alterproj = true;
+                break;
+            default:
+                alert('Não foi identificado o perfil do usuário!');
+        }
+        
         $scope.fase = {};
         $scope.formfase = {};
         var bool = true;

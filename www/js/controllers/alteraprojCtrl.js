@@ -2,11 +2,22 @@
 
 angular
     .module('starter')
-    .controller('alteraprojCtrl', ['$scope', '$state', 'Projeto', 'Regiao', 'LimiteReal', 'Fase', 'ClassGeral', 'User', function($scope, $state, Projeto, Regiao, LimiteReal, Fase, ClassGeral, User){
+    .controller('alteraprojCtrl', ['$scope', '$state', 'Projeto', 'Regiao', 'LimiteReal', 'Fase', 'ClassGeral', function($scope, $state, Projeto, Regiao, LimiteReal, Fase, ClassGeral){
         console.log('alteraprojCtrl')
 
-        var d = new Date();
-        $scope.projeto = {};
+         // Controle de sessao
+        if(sessionStorage.getItem('login')==null || sessionStorage.getItem('perfil')==null || sessionStorage.getItem('familia')==null ){
+            alert('Usuário não autenticado pelo Sistema!!')
+            $state.go('login');
+        }
+        
+        if(sessionStorage.getItem('perfil')=='Visitante'){
+            alert('Usuário sem permissão para acessar essa página!');
+            $state.go('relatorio');
+        }
+
+        var d = new Date(15);
+        $scope.projeto = [];
         $scope.tabela = [];
         $scope.filtroResult = {};
         $scope.formaltproj = {};
@@ -36,29 +47,56 @@ angular
         $scope.formaltproj.meses =[{mes: "", valor: 0}]
 
         var meses = 0;
-        var user = {};
-        user = {
-            familia: ['Torre I - TESTE'],
-            perfil: 'Admin'
+         $scope.user = {};
+        $scope.user = {
+            gerente: sessionStorage.getItem('login'),
+            perfil: sessionStorage.getItem('perfil'),
+            familia: sessionStorage.getItem('familia').split(","),
+            nome: sessionStorage.getItem('nome')
         }
+
+        switch($scope.user.perfil) {
+            case 'Administrador':
+                $scope.mostrar.config = true;
+                $scope.mostrar.cadastproj = true;
+                $scope.mostrar.alterproj = true;
+                break;
+            case 'Gerente':
+                $scope.mostrar.cadastproj = true;
+                $scope.mostrar.alterproj = true;
+                break;
+            default:
+                alert('Não foi identificado o perfil do usuário!');
+        }
+
         var bool = true;
 
-         // Alimenta objeto com todas as Regiões/Sistemas
-        Regiao.find().$promise.then(function(res, err){
-            $scope.regiao = res;
-            console.log(res);
-            
-            angular.forEach($scope.regiao, function(value,index){
-                for(var i=0; i<value.sistemas.length; i++){
-                    $scope.sistema.push({regiao: value.regiao, sistema: value.sistemas[i], familia: value.familia});
-                }
-            });
-        });
+         $scope.atualizaPag = function(){
+            $state.reload();
+        }
 
         // Alimenta objeto com todos os Projetos
-        Projeto.find().$promise.then(function(res, err){
-            $scope.projeto = res;
-            console.log(res);
+        Projeto.find()
+            .$promise
+                .then(function(res, err){
+                    // $scope.projeto = res;
+                    console.log(res);
+                    angular.forEach(res, function(value, index){
+                        if($scope.user.familia.includes(value.familia)){
+                            $scope.projeto.push(value);
+                        } 
+                })
+            // Alimenta objeto com todas as Regiões/Sistemas
+            Regiao.find().$promise.then(function(res, err){
+                $scope.regiao = res;
+                console.log(res);
+                
+                angular.forEach($scope.regiao, function(value,index){
+                    for(var i=0; i<value.sistemas.length; i++){
+                        $scope.sistema.push({regiao: value.regiao, sistema: value.sistemas[i], familia: value.familia});
+                    }
+                });
+            });
         });
 
         //Funcao para incluir e excluir meses
@@ -76,28 +114,20 @@ angular
 
         //FACTORY
         function alimentaData(data, qnt){
-            var date = [];
+            var vetor = [];
+            var date = new Date(data);
+            var mes;
+            var zero = '00'
             //Alimentando os valores de data
-            for(var i=0; i<qnt; i++){
-                date.push('-'+data.getMonth()+'/'+data.getFullYear())
-                data.setMonth(data.getMonth() + 1);
-            }
-            for(i=0; i<qnt; i++){
-                date[i] = date[i].replace('-0/','01/');
-                date[i] = date[i].replace('-1/','02/');
-                date[i] = date[i].replace('-2/','03/');
-                date[i] = date[i].replace('-3/','04/');
-                date[i] = date[i].replace('-4/','05/');
-                date[i] = date[i].replace('-5/','06/');
-                date[i] = date[i].replace('-6/','07/');
-                date[i] = date[i].replace('-7/','08/');
-                date[i] = date[i].replace('-8/','09/');
-                date[i] = date[i].replace('-9/','10/');
-                date[i] = date[i].replace('-10/','11/');
-                date[i] = date[i].replace('-11/','12/');
+             for (var i = 0; i < qnt; i++) {
+                mes = date.getMonth()+1;
+                mes = mes.toString();
+                mes = zero.substring(0, zero.length - mes.length) + mes
+                vetor.push( mes + '/' + date.getFullYear());
+                date.setMonth(date.getMonth() + 1);
             }
 
-            return date;
+            return vetor;
         }
 
         //Option Sistema
@@ -127,6 +157,7 @@ angular
             $scope.filtroResult.familia = "";
             $scope.filtroResult.sistema = "";
             $scope.filtroResult.projeto = "";
+            $scope.filtroResult.descricao = "";
         }
 
         $scope.ordenar = function(keyname){
@@ -136,7 +167,7 @@ angular
 
         //Option Familia
         $scope.selectOptionFamilia = function(){
-            var options = user.familia;
+            var options = $scope.user.familia;
             return options;       
         }
 
@@ -305,11 +336,11 @@ angular
 
             // console.log($scope.baseline_red)
 
-            // Alimenta objeto com todas os Gerentes
-            User.find().$promise.then(function(res, err){
-                $scope.gerentes = res;
-                //console.log(res);
-            });
+            // // Alimenta objeto com todas os Gerentes
+            // User.find().$promise.then(function(res, err){
+            //     $scope.gerentes = res;
+            //     //console.log(res);
+            // });
 
             // Alimenta objeto com todas as Fases
             Fase.find().$promise.then(function(res, err){
@@ -321,8 +352,8 @@ angular
             LimiteReal.find().$promise.then(function(res, err){
                 $scope.limite = res;
                 //console.log(res);
-                $scope.baseline.valor = alimentaValor($scope.baseline.data, $scope.limite, user.familia[0], false);
-                $scope.tabelapag = alimentaValor($scope.baseline.data, $scope.limite, user.familia[0], true);
+                $scope.baseline.valor = alimentaValor($scope.baseline.data, $scope.limite, $scope.projantigo.familia, false);
+                $scope.tabelapag = alimentaValor($scope.baseline.data, $scope.limite, $scope.projantigo.familia, true);
 
                 for(var i=0; i<$scope.baseline.data.length; i++){
                     for(var j=0; j<$scope.formaltproj.meses.length; j++){
@@ -431,7 +462,7 @@ angular
                 $scope.limValidacao = res;
                 //console.log(res);
                 if ($scope.classgeral.includes($scope.formaltproj.classificacao_geral)){
-                    $scope.valida_baseline.valor = alimentaValor($scope.valida_baseline.data, $scope.limValidacao, user.familia[0], false);
+                    $scope.valida_baseline.valor = alimentaValor($scope.valida_baseline.data, $scope.limValidacao, $scope.projantigo.familia, false);
                     angular.forEach($scope.formaltproj.meses, function(value, index){
                         for(var i=0; i<$scope.baseline.data.length; i++){
                             achei = false;
@@ -465,7 +496,7 @@ angular
                     if ($scope.classgeral.includes($scope.formaltproj.classificacao_geral)){
                         //retirar valores antigos
                         angular.forEach($scope.formLimReal, function(value, index){
-                            if(value.familia == user.familia){
+                            if(value.familia == $scope.user.familia){
                                 for(var j=0; j<value.dados.length; j++){
                                     for(var i=0; i<$scope.projantigo.meses.length; i++){
                                         var k = j+1;
@@ -489,7 +520,7 @@ angular
                     //adicnionar valores novos
                     if ($scope.classgeral.includes($scope.formaltproj.classificacao_geral)){
                         angular.forEach($scope.formLimReal, function(value, index){
-                            if(value.familia == user.familia){
+                            if(value.familia == $scope.user.familia){
                                 for(var j=0; j<value.dados.length; j++){
                                     for(var i=0; i<$scope.formaltproj.meses.length; i++){
                                         var k = j+1;
@@ -519,8 +550,9 @@ angular
                                                 {classificacao_geral: ''+ $scope.formaltproj.classificacao_geral +'', 
                                                 familia: ''+ $scope.formaltproj.familia +'', 
                                                 fase:''+ $scope.formaltproj.fase +'', 
-                                                gerente:''+ $scope.formaltproj.projeto_id +'', 
+                                                gerente:''+ $scope.formaltproj.gerente +'', 
                                                 projeto:''+ $scope.formaltproj.projeto +'', 
+                                                descricao: ''+ $scope.formaltproj.descricao +'',
                                                 proposta:''+ $scope.formaltproj.proposta +'', 
                                                 regiao: ''+ $scope.formaltproj.regiao +'', 
                                                 sistema: ''+ $scope.formaltproj.sistema +'', 
