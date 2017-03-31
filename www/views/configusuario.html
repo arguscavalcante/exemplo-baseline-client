@@ -33,13 +33,8 @@
                         <input type="text" ng-model="formusuario.login_nome" value="" class="form-control" />
                         <br />
                         <label>Perfil:&nbsp; </label>
-                        <select ng-model="formusuario.perfil">
+                        <select ng-model="formusuario.perfil" class="form-control">
                             <option ng-repeat="id in perfil.opcoes" value="{{id.nome}}">{{id.nome}}</option>
-                        </select>
-                        <br />
-                        <label>Torre:&nbsp; </label>
-                        <select ng-model="formusuario.torre">
-                            <option ng-repeat="id in torre" value="{{id.Torre}}"  >{{id.Torre}}</option>
                         </select>
                         <br />
                         <label>Familia:&nbsp; </label>
@@ -53,7 +48,7 @@
                 </div>
                 <div class="col-md-1">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-7">
                     <div>
                         <h3> Usuários Cadastrados </h3>
                         <div>
@@ -64,8 +59,9 @@
                                         <th>Senha</th>
                                         <th>Nome</th>
                                         <th>Perfil</th>
-                                        <th>Torre</th>
-                                        <th>SubTorre</th>
+                                        <th>Familia</th>
+                                        <th>Resetar Senha</th>
+                                        <th>Excluir</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -74,8 +70,9 @@
                                         <td>******</td>
                                         <td>{{id.login_nome}}</td>
                                         <td>{{id.perfil}}</td>
-                                        <td>{{id.torre}}</td>
-                                        <td>{{id.subtorre}}</td>
+                                        <td>{{id.familiacons}}</td>
+                                        <td><button type="button" ng-click="trocaSenha(id.login_user);" class="btn btn-info glyphicon glyphicon-transfer"></button></td>
+                                        <td><button type="button" ng-click="excluiUser(id.login_user);" class="btn btn-info glyphicon glyphicon-remove"></button></td>
                                     </tr>
                                 </tbody>
                             </table>

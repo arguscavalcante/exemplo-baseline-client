@@ -45,15 +45,10 @@ angular
         var altera = 'N';
 
         //find, findOne, findById
-        function listarFases(){
-            Fase.find().$promise.then(function(res, err){
-                $scope.fase = res;
-                console.log(res);
-            });
-            
-        }
-
-        listarFases();
+        Fase.find().$promise.then(function(res, err){
+            $scope.fase = res;
+            console.log(res);
+        });
 
         $scope.alteraFase = function(value){
             altera = 'S'
@@ -66,14 +61,14 @@ angular
         $scope.ValidaForm = function(){
             bool = true;
 
-            if($scope.formfase.Fase == null || $scope.formfase.Descricao == null || $scope.formfase.Fase.replace(/[\s]/g, '') == '' ||  $scope.formfase.Descricao.replace(/[\s]/g, '') == '')
+            if($scope.formfase.fase == null || $scope.formfase.descricao == null || $scope.formfase.fase.replace(/[\s]/g, '') == '' ||  $scope.formfase.descricao.replace(/[\s]/g, '') == '')
             {
                 alert('Favor, preencha todas as informações!');
                 return;
             }
             
             angular.forEach($scope.Fase,function(value,index){
-                if (angular.lowercase(value.Fase).replace(/[\s]/g, '') == angular.lowercase($scope.formfase.Fase).replace(/[\s]/g, '' && alterar!='S')){
+                if (angular.lowercase(value.fase).replace(/[\s]/g, '') == angular.lowercase($scope.formfase.fase).replace(/[\s]/g, '' && alterar!='S')){
                     alert('Esse registro já existe.');
                     bool = false;
                 }

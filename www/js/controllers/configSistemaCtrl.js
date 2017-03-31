@@ -128,8 +128,8 @@ angular
 
                angular.forEach($scope.regiao, function(value,index){
                     if(value.regiao == $scope.formsistema.regiao && value.familia == $scope.formsistema.familia){
-                        projsist = value.Sistemas[$scope.formsistema.intervalo];
-                        //console.log(value.Sistemas[$scope.formsistema.intervalo]);
+                        projsist = value.sistemas[$scope.formsistema.intervalo];
+                        //console.log(value.sistemas[$scope.formsistema.intervalo]);
                     }
                 });
                 
@@ -141,8 +141,8 @@ angular
                         }else{
                             angular.forEach($scope.regiao, function(value,index){
                                 if(value.regiao == $scope.formsistema.regiao && value.familia == $scope.formsistema.familia){
-                                    value.Sistemas[$scope.formsistema.intervalo] = $scope.formsistema.Sistema
-                                    $scope.sistemas = value.Sistemas;
+                                    value.sistemas[$scope.formsistema.intervalo] = $scope.formsistema.Sistema
+                                    $scope.sistemas = value.sistemas;
                                     console.log($scope.sistemas);
                                 }
                             });
@@ -176,7 +176,7 @@ angular
             }          
 
             if (bool){
-                Regiao.upsertWithWhere({where: {id_regiao: ""+ $scope.formsistema.id_regiao +""}}, {sistemas: $scope.sistemas}).$promise.then(function(info, err) {
+                Regiao.upsertWithWhere({where: {id_regiao: ""+ $scope.formsistema.id_regiao +""}}, {sistemas: $scope.sistemas, familia: $scope.formsistema.familia, regiao: $scope.formsistema.regiao}).$promise.then(function(info, err) {
                     $state.reload();
                 })
             }

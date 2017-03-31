@@ -44,13 +44,14 @@ angular
         $scope.perfil = {
             model: null,
             opcoes: [
-                {nome: 'Superusuario'},
+                {nome: 'Administrador'},
                 {nome: 'Gerente'},
                 {nome: 'Visitante'}
             ]
         };
 
         var bool = true;
+        var familia = "";
 
         $scope.formusuario = {};
 
@@ -62,7 +63,7 @@ angular
         $scope.selectOptionFamilia = function(){
             var options = [];
             angular.forEach($scope.subtorre, function(value,index){
-                options.push(value.Torre_id + " - " + value.subtorre);
+                options.push(value.torre_id + " - " + value.subtorre);
             })
 
             return options;       
@@ -75,15 +76,20 @@ angular
         });
 
         //Listar Usuarios
-        function listarUsuarios(){
-            User.find().$promise.then(function(res, err){
-                $scope.usuario = res;
-                console.log(res);
-            });
-            
-        }
-
-        listarUsuarios();
+        User.find()
+            .$promise
+                .then(function(res, err){
+                    $scope.usuario = res;
+                    // console.log(res);
+                    angular.forEach($scope.usuario, function(value, index){
+                        familia = ""
+                        for(var i=0; i<value.familia.length; i++){
+                            familia = familia + value.familia[i] + " , ";
+                        }
+                        familia = familia.substr(0, familia.length-3);
+                        value.familiacons = familia;
+                    });
+                });            
 
         $scope.ValidaForm = function(){
             console.log($scope.formusuario);

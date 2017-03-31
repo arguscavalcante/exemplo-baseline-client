@@ -24,10 +24,10 @@
     <div class="content-wrapper">
         <div class="container">
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <form>
                         <label>Data Corte: </label>
-                        <select ng-model="formlimgraf.Data_corte" class="form-control">
+                        <select ng-model="formlimgraf.data_corte" class="form-control">
                             <option ng-repeat="id in date" value="{{id.valor}}">{{id.texto}}</option>
                         </select> 
                         <br />
@@ -55,9 +55,9 @@
                         <br />
                     </form>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-7">
                     <div>
                         <h3> Baseline Cadastrado </h3>
                         <div>
@@ -68,16 +68,18 @@
                                         <th>SubTorre</th>
                                         <th>Valor Baseline</th>
                                         <th>Porcentagem Baseline</th>
+                                        <th>Torres Compartilham Baseline</th>
                                         <th>Torre</th>
                                         <th>Variação Torre</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="id in limgrafico">
-                                        <td>{{id.Data_corte}}</td>
+                                        <td>{{id.data_corte}}</td>
                                         <td>{{id.familia}}</td>
-                                        <td>{{id.valor_limite}}</td>
+                                        <td>{{id.valor_limite | currency}}</td>
                                         <td>{{id.variacao}}</td>
+                                        <td>{{id.utilizatorre}}</td>
                                         <td>{{id.torre}}</td>
                                         <td>{{id.variacao_torre}}</td>
                                     </tr>

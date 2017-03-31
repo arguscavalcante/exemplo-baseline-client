@@ -24,18 +24,21 @@
     <div class="content-wrapper">
         <div class="container">
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <form>
                         <label>SubTorre: </label>
-                        <input type="text" ng-model="formsubtorre.Subtorre" value="" class="form-control" />
+                        <input type="text" ng-model="formsubtorre.subtorre" value="" class="form-control" />
                         <br />
                         <label>Torre:&nbsp; </label>
-                        <select ng-model="formsubtorre.Torre_id">
-                            <option ng-repeat="id in torre" value="{{id.Torre}}">{{id.Torre}}</option>
+                        <select ng-model="formsubtorre.torre_id" class="form-control">
+                            <option ng-repeat="id in torre" value="{{id.torre}}">{{id.torre}}</option>
                         </select>
                         <br />
                         <label>Valor Máx. do Gráfico: </label>
                         <input type="text" ng-model="formsubtorre.max_grafico" value="" class="form-control" />
+                        <br />
+                        <label>Ano Máximo por Contrato: </label>
+                        <input type="text" ng-model="formsubtorre.ano_limite" value="" class="form-control" />
                         <br />
                         <br />
                         <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
@@ -44,7 +47,7 @@
                 </div>
                 <div class="col-md-2">
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <div>
                         <h3> SubTorres Cadastradas </h3>
                         <div>
@@ -54,13 +57,15 @@
                                         <th>Torre</th>
                                         <th>SubTorre</th>
                                         <th>Valor Máx. do Gráfico</th>
+                                        <th>Ano Máx. por Contrato</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="id in subtorre">
-                                        <td>{{id.Torre_id}}</td>
+                                    <tr ng-repeat="id in subtorre" ng-click="alteraSubtorre(id)">
+                                        <td>{{id.torre_id}}</td>
                                         <td>{{id.subtorre}}</td>
-                                        <td>{{id.max_grafico}}</td>
+                                        <td>{{id.max_grafico | currency}}</td>
+                                        <td>{{id.ano_limite}}</td>
                                     </tr>
                                 </tbody>
                             </table>

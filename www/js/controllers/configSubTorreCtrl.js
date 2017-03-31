@@ -43,52 +43,68 @@ angular
         $scope.subtorre = {};
         $scope.formsubtorre = {};
         var bool = true;
+        var altera = 'N';
 
         //find, findOne, findById
-        function selectOptionTorres(){
-            Torre.find().$promise.then(function(res, err){
-                $scope.torre = res;
-                //console.log(res);
-            });
-            
-        }
-
-        selectOptionTorres();
+        Torre.find().$promise.then(function(res, err){
+            $scope.torre = res;
+            // console.log(res);
+        });
 
         //find, findOne, findById
-        function listarSubTorres(){
-            SubTorre.find().$promise.then(function(res, err){
-                $scope.subtorre = res;
-                console.log(res);
-            });
-            
-        }
+        SubTorre.find().$promise.then(function(res, err){
+            $scope.subtorre = res;
+            // console.log(res);
+        });
 
-        listarSubTorres();
+        $scope.alteraSubtorre = function(value){
+            altera = 'S'
+            $scope.formsubtorre = {
+                torre_id: value.torre_id,
+                subtorre: value.subtorre,
+                max_grafico: value.max_grafico,
+                ano_limite: value.ano_limite
+            }
+
+
+        }
 
         $scope.ValidaForm = function(){
 
-            if($scope.formsubtorre.Torre_id == null || $scope.formsubtorre.subtorre == null || $scope.formsubtorre.Torre_id.replace(/[\s]/g, '') == '' ||  $scope.formsubtorre.subtorre.replace(/[\s]/g, '') == '')
+            if($scope.formsubtorre.torre_id == null || $scope.formsubtorre.subtorre == null || $scope.formsubtorre.torre_id.replace(/[\s]/g, '') == '' ||  $scope.formsubtorre.subtorre.replace(/[\s]/g, '') == '')
             {
                 alert('Favor, preencha todas as informações!');
                 return;
             }
             
             angular.forEach($scope.subtorre, function(value,index){
-                if (value.Torre_id == $scope.formsubtorre.Torre_id && angular.lowercase(value.subtorre).replace(/[\s]/g, '') == angular.lowercase($scope.formsubtorre.subtorre.replace(/[\s]/g, ''))){
+                if (value.torre_id == $scope.formsubtorre.torre_id && angular.lowercase(value.subtorre).replace(/[\s]/g, '') == angular.lowercase($scope.formsubtorre.subtorre.replace(/[\s]/g, '')) && alterar!='S'){
                     alert('Esse registro já existe.');
                     bool = false;
                 }
             })
 
+            if(altera == 'S'){ 
+                if(confirm('Você deseja alterar essa Subtorre?') == false){
+                    return;
+                }
+
+                bool = false;
+                
+                SubTorre.upsertWithWhere({where: {subtorre: ''+ $scope.formsubtorre.subtorre +''}}, {max_grafico: ''+ $scope.formsubtorre.max_grafico +'', ano_limite: ''+ $scope.formsubtorre.ano_limite +''}, function(info, err) {
+                    //console.log(info);
+                    $state.reload();
+                    return;
+                })  
+            }
+
             if (bool){
                 SubTorre.create($scope.formsubtorre, function(res, err){
                     //console.log(res);
+                    $state.reload();
                 })
             
             }
-        
-            $state.reload();
         }
 
     }]);

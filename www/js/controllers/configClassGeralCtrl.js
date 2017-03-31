@@ -50,10 +50,10 @@ angular
                 $scope.classgeral = res;
                 console.log(res);
                 angular.forEach($scope.classgeral, function(value, index){
-                    if(value.Baseline){
-                        value.BaseTabela = 'SIM';
+                    if(value.baseline){
+                        value.basetabela = 'SIM';
                     }else{
-                        value.BaseTabela = 'NÃO';
+                        value.basetabela = 'NÃO';
                     }                
                 })
             });
@@ -65,9 +65,9 @@ angular
         $scope.alteraClassGeral = function(value){
             altera = 'S'
             $scope.formclassgeral = {
-                ClassGeral_id: value.ClassGeral_id,
-                Descricao: value.Descricao,
-                Baseline: value.Baseline
+                classgeral_id: value.classgeral_id,
+                descricao: value.descricao,
+                baseline: value.baseline
             }
         }
 
@@ -76,7 +76,7 @@ angular
 
 
 
-            if($scope.formclassgeral.ClassGeral_id == null || $scope.formclassgeral.Descricao == null || $scope.formclassgeral.ClassGeral_id.replace(/[\s]/g, '') == '' ||  $scope.formclassgeral.Descricao.replace(/[\s]/g, '') == '')
+            if($scope.formclassgeral.classgeral_id == null || $scope.formclassgeral.descricao == null || $scope.formclassgeral.classgeral_id.replace(/[\s]/g, '') == '' ||  $scope.formclassgeral.descricao.replace(/[\s]/g, '') == '')
             {
                 alert('Favor, preencha todas as informações!');
                 return;
@@ -87,13 +87,13 @@ angular
                     return;
                 }
                 console.log($scope.formclassgeral);
-                Projeto.find({filter:{where: {classificacao_geral: '' + $scope.formclassgeral.ClassGeral_id + ''}}}).$promise.then(function(res, err){
+                Projeto.find({filter:{where: {classificacao_geral: '' + $scope.formclassgeral.classgeral_id + ''}}}).$promise.then(function(res, err){
                     //console.log(res);
                     if(res.length != 0){
                         if(confirm('Existem projetos cadastrados com essa Classificação geral, deseja continuar?') == false){
                             bool = false;
                         }else{
-                            ClassGeral.updateAll({where: {ClassGeral_id: ""+ $scope.formclassgeral.ClassGeral_id +""}}, {ClassGeral_id: ""+ $scope.formclassgeral.ClassGeral_id +"" , Descricao: ""+ $scope.formclassgeral.Descricao +"", Baseline: ""+ $scope.formclassgeral.Baseline +""}, function(info, err) {
+                            ClassGeral.upsertWithWhere({where: {classgeral_id: ""+ $scope.formclassgeral.classgeral_id +""}}, {descricao: ""+ $scope.formclassgeral.descricao +"", baseline: ""+ $scope.formclassgeral.baseline +""}, function(info, err) {
                                 //console.log(info);
                                 $state.reload();
                             })
@@ -104,7 +104,7 @@ angular
 
             }else{
                 angular.forEach($scope.classgeral,function(value,index){
-                    if (angular.lowercase(value.ClassGeral_id).replace(/[\s]/g, '') == angular.lowercase($scope.formclassgeral.ClassGeral_id).replace(/[\s]/g, '')){
+                    if (angular.lowercase(value.classgeral_id).replace(/[\s]/g, '') == angular.lowercase($scope.formclassgeral.classgeral_id).replace(/[\s]/g, '')){
                         alert('Esse registro já existe.');
                         bool = false;
                     }

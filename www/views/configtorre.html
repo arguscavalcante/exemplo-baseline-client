@@ -27,10 +27,10 @@
                 <div class="col-md-5">
                     <form>
                         <label>Torre: </label>
-                        <input type="text" ng-model="formtorre.Torre" value="" class="form-control" />
+                        <input type="text" ng-model="formtorre.torre" value="" class="form-control" />
                         <br />
                         <label>Descrição: </label>
-                        <input type="text" ng-model="formtorre.Descricao_Torre" value="" class="form-control" />
+                        <input type="text" ng-model="formtorre.descricao_torre" value="" class="form-control" />
                         <br />
                         <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
                         <br />
@@ -51,8 +51,8 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="id in torre">
-                                        <td>{{id.Torre}}</td>
-                                        <td>{{id.Descricao_Torre}}</td>
+                                        <td>{{id.torre}}</td>
+                                        <td>{{id.descricao_torre}}</td>
                                     </tr>
                                 </tbody>
                             </table>

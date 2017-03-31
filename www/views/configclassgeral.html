@@ -24,16 +24,16 @@
     <div class="content-wrapper">
         <div class="container">
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <form>
                         <label>Classificação Geral: </label>
-                        <input type="text" ng-model="formclassgeral.ClassGeral_id" value="" class="form-control" />
+                        <input type="text" ng-model="formclassgeral.classgeral_id" value="" class="form-control" />
                         <br />
                         <label>Descrição: </label>
-                        <input type="text" ng-model="formclassgeral.Descricao" value="" class="form-control" />
+                        <input type="text" ng-model="formclassgeral.descricao" value="" class="form-control" />
                         <br />
                         <label>Interfere no Baseline? </label>
-                        <input type="checkbox" ng-model="formclassgeral.Baseline" value="" class="form" />
+                        <input type="checkbox" ng-model="formclassgeral.baseline" value="" class="form" />
                         <br />
                         <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
                         <br />
@@ -41,7 +41,7 @@
                 </div>
                 <div class="col-md-2">
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <div>
                         <h3> Classificações Gerais Cadastradas </h3>
                         <div>
@@ -55,9 +55,9 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="id in classgeral" ng-click="alteraClassGeral(id)">
-                                        <td>{{id.ClassGeral_id}}</td>
-                                        <td>{{id.Descricao}}</td>
-                                        <td>{{id.BaseTabela}}</td>
+                                        <td>{{id.classgeral_id}}</td>
+                                        <td>{{id.descricao}}</td>
+                                        <td>{{id.basetabela}}</td>
                                     </tr>
                                 </tbody>
                             </table>

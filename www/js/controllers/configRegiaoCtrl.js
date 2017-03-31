@@ -43,21 +43,24 @@ angular
         $scope.subtorre = {};
         $scope.formregiao = {};
 
-        $scope.formregiao.id_regiao = 0;
         $scope.formregiao.sistemas = []
         var bool = true;
 
         // Alimenta com todas as Regioes
-        Regiao.find().$promise.then(function(res, err){
-            $scope.regiao = res;
-            // console.log(res);
-        });
+        Regiao.find()
+            .$promise
+                .then(function(res, err){
+                    $scope.regiao = res;
+                    // console.log(res);
+                });
 
         // Alimenta com todas as Subtorres
-        SubTorre.find().$promise.then(function(res, err){
-            $scope.subtorre = res;
-            console.log(res);
-        });
+        SubTorre.find()
+            .$promise
+                .then(function(res, err){
+                    $scope.subtorre = res;
+                    // console.log(res);
+                });
 
         //Option Familia
         $scope.selectOptionFamilia = function(){
@@ -77,7 +80,10 @@ angular
                 alert('Favor, preencha todas as informações!');
                 return;
             }
-            
+
+            $scope.formregiao.id_regiao = angular.lowercase($scope.formregiao.regiao).replace(/[\s]/g, '') + angular.lowercase($scope.formregiao.familia).replace(/[\s]/g, '');
+            // console.log($scope.formregiao.id_regiao);
+
             angular.forEach($scope.regiao,function(value,index){
                 if (angular.lowercase(value.regiao).replace(/[\s]/g, '') == angular.lowercase($scope.formregiao.regiao).replace(/[\s]/g, '') && value.familia == $scope.formregiao.familia){
                     alert('Esse registro já existe.');

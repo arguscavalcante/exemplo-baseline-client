@@ -133,7 +133,14 @@ angular
                 .$promise
                     .then(function (res, err) {
                         angular.forEach(res, function (value, index){
-                            $scope.classgeral.push(value.ClassGeral_id);
+                            if(!value.baseline){
+                                $scope.classgeral.push(value.classgeral_id);
+                            }
+                        });
+                        angular.forEach(res, function (value, index){
+                            if(value.baseline){
+                                $scope.classgeral.push(value.classgeral_id);
+                            }
                         });
                         // console.log('classificacao geral: ',  $scope.classgeral)
                     });
