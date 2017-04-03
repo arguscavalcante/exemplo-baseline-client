@@ -75,6 +75,7 @@ angular
                         .$promise
                             .then(function(res, err){
                                 $scope.limreal = res;
+                                console.log(res);
                             });
                 });
             
@@ -148,6 +149,7 @@ angular
             var data;
             var data_vetor = [];
             var dados_proj = [];
+            var dados_depend = [];
             var dados_torre = [];
             var meses_acima = "";
             var ret = true;
@@ -165,6 +167,7 @@ angular
              for (var i = 0; i < data_vetor.length; i++) {
                 dados_proj.push(0);
                 dados_torre.push(0);
+                dados_depend.push('N');
             }
             
             // Alimenta com todas as Classificacoes Gerais que interferem no baseline
@@ -190,6 +193,8 @@ angular
                                     }
                                 });
                                 console.log('Valores dos Projetos: ', dados_proj);
+
+
 
                                 val_baseline = form.valor_limite + (form.valor_limite * form.perc_baseline/100)
                                 //console.log(val_baseline);
