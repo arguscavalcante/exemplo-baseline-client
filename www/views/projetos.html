@@ -26,21 +26,31 @@
                  <div class="col-md-12">
                     <label>SELECIONE UMA FAMÍLIA: &nbsp;</label>
                     <select ng-model="user.familia" class="form-control" ng-change="atribuiFamilia();">
-                         <option ng-repeat="val in user.familia" value="{{val}}">{{val}}</option>
+                         <option ng-repeat="val in user.familias" value="{{val}}">{{val}}</option>
                     </select>
                  </div>
             </div>
             <div class="row" ng-show='cadastrar'>
                 <div class="col-md-12">
                     <h2>Baseline Disponível</h2>
-                    <table class="table table-hover">
+                    <table class="table table-hover size10">
                         <thead>
                             <tr>
-                                <td ng-repeat="date in baseline.data"> {{date}} </td>
+                                <td><b>MESES</b></td>
+                                <td ng-repeat="date in baseline.data"><b> {{date}} </b></td>
                             </tr>
                         </thead>
                         <tbody>
                              <tr>
+                                <td><b>BASELINE</b></td>
+                                <td ng-repeat="val in tabelabaseline track by $index"> {{val | currency}} </td>
+                            </tr>
+                            <tr>
+                                <td><b>GASTO</b></td>
+                                <td ng-repeat="val in tabelagasto track by $index"> {{val | currency}} </td>
+                            </tr>
+                            <tr>
+                                <td><b>DISPONÍVEL</b></td>
                                 <td ng-repeat="val in tabela track by $index"> {{val | currency}} </td>
                             </tr>
                         </tbody>
@@ -60,7 +70,11 @@
                         </tr>
                         <tr>
                             <td><label>Família:</label></td>
-                            <td><select ng-model="formproj.familia" class="form-control" ng-options="val for val in selectOptionFamilia() | orderBy:'toString()' "></select></td>
+                            <td>
+                                <select ng-model="formproj.familia" class="form-control">
+                                    <option ng-repeat="val in user.familias | orderBy:'toString()'" value="{{val}}">{{val}}</option>
+                                </select>
+                            </td>
                             <td><label>Região:</label></td>
                             <td><select ng-model="formproj.regiao" ng-options="val for val in selectOptionRegiao()" class="form-control"></select></td>
                             <td><label>Sistema:</label></td>
@@ -79,7 +93,7 @@
                             </td>
                             <td><label>Classificação Geral:</label></td>
                             <td><select ng-model="formproj.classificacao_geral" class="form-control" ng-change="atribuiBaseline2()">
-                                    <option ng-repeat="id in classificacao_geral" value="{{id.ClassGeral_id}}">{{id.ClassGeral_id}}</option>
+                                    <option ng-repeat="id in classificacao_geral" value="{{id.classgeral_id}}">{{id.classgeral_id}}</option>
                                 </select> 
                             </td>
                         </tr>

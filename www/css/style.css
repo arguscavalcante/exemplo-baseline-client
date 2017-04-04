@@ -24,6 +24,10 @@
   src: url("../fonts/Roboto-Regular.ttf") format("truetype");
 }
 
+.size10{
+    font-size: 10px;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     line-height: 30px;

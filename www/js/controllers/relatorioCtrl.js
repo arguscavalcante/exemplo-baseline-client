@@ -50,7 +50,7 @@ angular
         $scope.user = {
             gerente: sessionStorage.getItem('login'),
             perfil: sessionStorage.getItem('perfil'),
-            familia: sessionStorage.getItem('familia').split(","),
+            familias: sessionStorage.getItem('familia').split(","),
             nome: sessionStorage.getItem('nome')
         }
 
@@ -69,14 +69,14 @@ angular
         }
 
 
-        if($scope.user.familia.length > 1){
+        if($scope.user.familias.length > 1){
             $scope.grafico = false; 
             console.log($scope.user)
         } 
 
-        if($scope.user.familia.length == 1){
+        if($scope.user.familias.length == 1){
             $scope.opcoes = false; 
-            $scope.user.familia = $scope.user.familia[0];
+            $scope.user.familia = $scope.user.familias[0];
             $scope.user.subtorre = $scope.user.familia.substring($scope.user.familia.indexOf("-")+2);
             listarProjetos();
         } 
@@ -276,9 +276,9 @@ angular
             var lim = [];
             $scope.valor_proj = []; //reseta variavel
             $scope.limgraf.sort(function (a, b) {
-                if (a.Data_corte < b.Data_corte) {
+                if (a.data_corte < b.data_corte) {
                     return -1;
-                } else if (a.Data_corte > b.Data_corte) {
+                } else if (a.data_corte > b.data_corte) {
                     return 1;
                 }
                 return 0;
@@ -290,7 +290,7 @@ angular
             var indice = 0;
 
             angular.forEach($scope.limgraf, function (value, index) {
-                if (value.Data_corte < trasformParInt($scope.date[0])) {
+                if (value.data_corte < trasformParInt($scope.date[0])) {
                     valorAntigo = value.valor_limite;
                     variacao = value.variacao;
                 }
@@ -301,8 +301,8 @@ angular
             angular.forEach($scope.date, function (value, index) {
                 var found = false;
                 for (var i = 0; i < $scope.limgraf.length; i++) {
-                    //console.log('Dados: $s, $s, $s', value, $scope.limgraf[i].Data_corte, (value ==  $scope.limgraf[i].Data_corte));
-                    if (trasformParInt(value) == $scope.limgraf[i].Data_corte) {
+                    //console.log('Dados: $s, $s, $s', value, $scope.limgraf[i].data_corte, (value ==  $scope.limgraf[i].data_corte));
+                    if (trasformParInt(value) == $scope.limgraf[i].data_corte) {
                         $scope.valor_proj.push([indice, $scope.limgraf[i].valor_limite, $scope.limgraf[i].variacao]);
                         valorAntigo = $scope.limgraf[i].valor_limite;
                         variacao = $scope.limgraf[i].variacao;
@@ -333,7 +333,7 @@ angular
                             .$promise
                                 .then(function (res, err) {
                                     $scope.limgraf = res;
-
+                                    console.log('limite grafico: ', res);
                                     alimentaProjetos(qnt_meses);//alimenta os dados dos projetos
                                     alimentaLimites();//alimenta os dados dos limites
 

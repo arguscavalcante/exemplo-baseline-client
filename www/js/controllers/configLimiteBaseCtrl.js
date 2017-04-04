@@ -15,9 +15,8 @@ angular
             alert('Usuário sem permissão para acessar essa página!');
             $state.go('relatorio');
         }
-        
+
         var zero = "00"
-        var bool = true;
         $scope.mostrar = {};
         $scope.user = {};
         $scope.user = {
@@ -54,22 +53,21 @@ angular
         $scope.classgeral =[];
         $scope.limreal = {};
 
-        $scope.formlimgraf.id = 0;
-
         //find, findOne, findById
         LimiteGrafico.find()
             .$promise
                 .then(function(res, err){
                     $scope.limgrafico = res
+                    // console.log(res);
                     angular.forEach($scope.limgrafico, function(value, index){
                         if(value.torre == ''){
                             value.utilizatorre = 'SIM';
                         }else{
                             value.utilizatorre = 'NÃO';
                         }   
-                        value.data_corte = trasformVizualDate(value.Data_corte)             
+                        value.data_tab = trasformVizualDate(value.data_corte.toString())             
                     })
-                    console.log($scope.limgrafico)
+                    // console.log($scope.limgrafico)
 
                     LimiteReal.find()
                         .$promise
@@ -79,73 +77,31 @@ angular
                             });
                 });
             
-
-        function alimentaData(d, qnt){
-            console.log(d);
-            //Alimentando os valores de data
-            for(i=0; i < qnt; i++){
-                $scope.date.push({valor:d.getFullYear()+'/-'+d.getMonth(), texto:'-'+d.getMonth()+'/'+d.getFullYear()})
-                d.setMonth(d.getMonth() + 1);
-            }
-            //console.log($scope.date);
-            for(i=0; i<qnt; i++){
-                $scope.date[i].texto = $scope.date[i].texto.replace('-0/','01/');
-                $scope.date[i].texto = $scope.date[i].texto.replace('-1/','02/');
-                $scope.date[i].texto = $scope.date[i].texto.replace('-2/','03/');
-                $scope.date[i].texto = $scope.date[i].texto.replace('-3/','04/');
-                $scope.date[i].texto = $scope.date[i].texto.replace('-4/','05/');
-                $scope.date[i].texto = $scope.date[i].texto.replace('-5/','06/');
-                $scope.date[i].texto = $scope.date[i].texto.replace('-6/','07/');
-                $scope.date[i].texto = $scope.date[i].texto.replace('-7/','08/');
-                $scope.date[i].texto = $scope.date[i].texto.replace('-8/','09/');
-                $scope.date[i].texto = $scope.date[i].texto.replace('-9/','10/');
-                $scope.date[i].texto = $scope.date[i].texto.replace('-10/','11/');
-                $scope.date[i].texto = $scope.date[i].texto.replace('-11/','12/');
-
-                $scope.date[i].valor = $scope.date[i].valor.replace('/-0','01');
-                $scope.date[i].valor = $scope.date[i].valor.replace('/-11','12');
-                $scope.date[i].valor = $scope.date[i].valor.replace('/-10','11');
-                $scope.date[i].valor = $scope.date[i].valor.replace('/-1','02');
-                $scope.date[i].valor = $scope.date[i].valor.replace('/-2','03');
-                $scope.date[i].valor = $scope.date[i].valor.replace('/-3','04');
-                $scope.date[i].valor = $scope.date[i].valor.replace('/-4','05');
-                $scope.date[i].valor = $scope.date[i].valor.replace('/-5','06');
-                $scope.date[i].valor = $scope.date[i].valor.replace('/-6','07');
-                $scope.date[i].valor = $scope.date[i].valor.replace('/-7','08');
-                $scope.date[i].valor = $scope.date[i].valor.replace('/-8','09');
-                $scope.date[i].valor = $scope.date[i].valor.replace('/-9','10');
-            }
-        }
-
-        alimentaData(d, 15);
-
-        function alimentaData2(data, qnt){
+        function alimentaData(data, qnt, obj){
             var date = new Date(data)
             var vetor = [];
+            var mes;
+            var zero = '00'
             for(i=0; i<qnt; i++){
-                vetor.push('-'+date.getMonth()+'/'+date.getFullYear())
+                mes = date.getMonth()+1;
+                mes = mes.toString();
+                mes = zero.substring(0, zero.length - mes.length) + mes
+                if(obj){
+                    vetor.push( {valor:date.getFullYear()+mes, texto: mes + '/' + date.getFullYear()});
+                }else{
+                    vetor.push( mes + '/' + date.getFullYear());
+                }
                 date.setMonth(date.getMonth() + 1);
             }
-            for(i=0; i<qnt; i++){
-                vetor[i] = vetor[i].replace('-0/','01/');
-                vetor[i] = vetor[i].replace('-1/','02/');
-                vetor[i] = vetor[i].replace('-2/','03/');
-                vetor[i] = vetor[i].replace('-3/','04/');
-                vetor[i] = vetor[i].replace('-4/','05/');
-                vetor[i] = vetor[i].replace('-5/','06/');
-                vetor[i] = vetor[i].replace('-6/','07/');
-                vetor[i] = vetor[i].replace('-7/','08/');
-                vetor[i] = vetor[i].replace('-8/','09/');
-                vetor[i] = vetor[i].replace('-9/','10/');
-                vetor[i] = vetor[i].replace('-10/','11/');
-                vetor[i] = vetor[i].replace('-11/','12/');
-            }
+            // console.log(vetor);
             return vetor;
         }
+
+        $scope.date = alimentaData(d, 15, true);
         
         function criarObjLimiteReal(form){
-
-            $scope.formlimreal = {id: 0,familia: form.familia, dados:[]};
+            console.log('formulario da base:', form);
+            $scope.formlimreal = {familia: form.familia, dados:[]};
             var data;
             var data_vetor = [];
             var dados_proj = [];
@@ -154,14 +110,15 @@ angular
             var meses_acima = "";
             var ret = true;
             var val_baseline = 0;
+            var valida_val = 0;
+            var selecionado;
+            var posicao = 0;
+            var prim_dep = 'N';
 
-            for(var i=0; i< $scope.date.length; i++){
-                if($scope.date[i].valor==form.Data_corte){
-                    data = new Date(trasformParDate($scope.date[i].texto))
-                }
-            }
+            data = trasformParDate($scope.formlimgraf.data_corte);
+            // console.log('data selecionada:', data);
             // console.log(data);
-            data_vetor = alimentaData2(data, 48);
+            data_vetor = alimentaData(data, 48, false);
             console.log(data_vetor);
 
              for (var i = 0; i < data_vetor.length; i++) {
@@ -170,68 +127,112 @@ angular
                 dados_depend.push('N');
             }
             
-            // Alimenta com todas as Classificacoes Gerais que interferem no baseline
-            ClassGeral.find({ filter: { where: {baseline: true}} })
-                .$promise
-                    .then(function(res, err){
-                        // console.log(res);
-                        angular.forEach(res, function(value,index){
-                            $scope.classgeral.push(value.classgeral_id)
-                        })
-                        // console.log($scope.classgeral);
+            angular.forEach($scope.projeto, function (value, index) {
+                if ($scope.classgeral.includes(value.classificacao_geral) && value.familia == form.familia) {
+                    for (var i = 0; i < data_vetor.length; i++) {
+                        for(var j=0; j<value.meses.length; j++){
+                            if (data_vetor[i] == value.meses[j].mes) {
+                                dados_proj[i] = dados_proj[i] + value.meses[j].valor;
+                                dados_proj[i] = Math.round(dados_proj[i] * 100)/100;
+                            }
+                        }
+                    }
+                }
+            });
 
-                                angular.forEach($scope.projeto, function (value, index) {
-                                    if ($scope.classgeral.includes(value.classificacao_geral) && value.familia == form.familia) {
-                                        for (var i = 0; i < data_vetor.length; i++) {
-                                            for(var j=0; j<value.meses.length; j++){
-                                                if (data_vetor[i] == value.meses[j].mes) {
-                                                    dados_proj[i] = dados_proj[i] + value.meses[j].valor;
-                                                    dados_proj[i] = Math.round(dados_proj[i] * 100)/100;
-                                                }
-                                            }
-                                        }
-                                    }
-                                });
-                                console.log('Valores dos Projetos: ', dados_proj);
+            console.log('Valores dos Projetos: ', dados_proj);
 
+            //Acerto dos valores de dependencia para registros existentes
+            if ($scope.limreal.length > 0){
 
+                angular.forEach($scope.date, function(value, index){
+                    if (value.valor == $scope.formlimgraf.data_corte){
+                        // console.log(value.texto);
+                        selecionado = value.texto;
+                    }
+                })
 
-                                val_baseline = form.valor_limite + (form.valor_limite * form.perc_baseline/100)
-                                //console.log(val_baseline);
-                                for(var i=0; i<dados_proj.length; i++){
-                                    if(dados_proj[i]>val_baseline){
-                                        meses_acima = data_vetor[i] + ', ' + meses_acima;
-                                        ret = false;
-                                    }
-                                }
-                                
-                                if(!ret){
-                                    alert('Os meses esão com seu baseline ultrapassando o limite sugerido! \n' + meses_acima.substring(0, meses_acima.length -2));
-                                    return ret;
-                                }
-                                
-                                for(var i=0; i<data_vetor.length; i++){
-                                    $scope.formlimreal.dados.push(
-                                            {   mes: data_vetor[i], 
-                                                baseline: val_baseline,
-                                                baseline_bonus: 0,
-                                                gasto_mes: dados_proj[i], 
-                                                perc_baseline: $scope.formlimgraf.variacao,
-                                                dependencia: 'N',
-                                                torre: $scope.formlimgraf.torre,
-                                                perc_torre: $scope.formlimgraf.variacao_torre
-                                            });
-                                }
-                                return ret;
-                                
-                                console.log('limite real: ', $scope.formlimreal)
-                    });
+                angular.forEach($scope.limreal, function(value, index){
+                    if(value.familia == form.familia){
+                        for(var i=0; i<value.dados.length; i++){
+                            if(value.dados[i].mes == selecionado){
+                                posicao = i;
+                                prim_dep = value.dados[i].dependencia;
+                            }    
+                        }
+                        console.log(posicao);
+                        value.dados.splice(posicao, value.dados.length-posicao);
+                        console.log($scope.limreal);
+                    } 
+                });
+            }
 
+            //Acertando os valores de dependencia
+            val_baseline = form.valor_limite + (form.valor_limite * form.variacao/-100);
+            console.log('valor calculado de baseline: ', val_baseline);
+            for(var i=0; i<dados_proj.length; i++){
+                if(i==0){
+                    dados_depend[i] = prim_dep; // atribuindo o primeiro sinal dependendo do retorno da busca do banco
+                }
+                if(dados_proj[i] >= val_baseline && dados_depend[i] == 'N'){
+                    if(!angular.isUndefined(dados_depend[i+1])){
+                        dados_depend[i+1] = 'S';
+                    }
+                }
+            }
+            console.log('Valores de dependencias: ', dados_depend);
+
+            //Validar valores de projetos x Baseline
+            for(var i=0; i<dados_proj.length; i++){
+
+                if(dados_depend[i]=='N'){
+                    valida_val = form.valor_limite + (form.valor_limite * form.variacao/100);
+                    if(dados_proj[i]>valida_val){
+                        meses_acima = data_vetor[i] + ', ' + meses_acima;
+                        ret = false;
+                    }
+                }else{
+                    valida_val = form.valor_limite + (form.valor_limite - dados_proj[i-1]);
+                    if(dados_proj[i]>valida_val){
+                        meses_acima = data_vetor[i] + ', ' + meses_acima;
+                        ret = false;
+                    }
+                }
+            }
+            
+            if(!ret){
+                alert('Os meses esão com seu baseline ultrapassando o limite sugerido! \n' + meses_acima.substring(0, meses_acima.length -2));
+                return ret;
+            }
+
+            //incluir os dados do projeto restantes
+            angular.forEach($scope.limreal, function(value, index){
+                if(value.familia == form.familia){
+                    for(var i=0; i<value.dados.length; i++){
+                         $scope.formlimreal.dados.push(value.dados[i]);
+                    }
+                }
+            })
+            
+            for(var i=0; i<data_vetor.length; i++){
+                $scope.formlimreal.dados.push(
+                        {   mes: data_vetor[i], 
+                            baseline: form.valor_limite,
+                            baseline_bonus: 0,
+                            gasto_mes: dados_proj[i], 
+                            perc_baseline: form.variacao,
+                            dependencia: dados_depend[i],
+                            torre: form.torre,
+                            perc_torre: form.variacao_torre
+                        });
+            }
+            console.log('limite real: ', $scope.formlimreal)
+            return ret;
         }
 
         //funcao de trasnformação para data -- FACTORY
         function trasformParDate(value) {
-            return value.substring(3, value.length) + '-' + value.substring(0, 2) + '-15';
+            return value.substring(0, 4) + '-' + value.substring(4, value.length) + '-15';
         }
 
         // Alimenta com todas as Subtorres
@@ -253,14 +254,17 @@ angular
          // Alimenta com os Projetos
         Projeto.find()
             .$promise
-                .then(function(res, err){
+                .then(function(res){
                     $scope.projeto = res;
-        });
+                })
+                .catch(function(err){
+                    console.log(err);
+                    alert(err.status);
+                });
 
         //funcao de trasnformação para data para vizualizacao em tela -- FACTORY
         function trasformVizualDate(value) {
             var mes;
-            bool = true;
             mes = value.substring(5, value.length);
             return zero.substring(0, zero.length - mes.length) + mes + '/' + value.substring(0, 4);
         }
@@ -306,26 +310,40 @@ angular
             }
             console.log($scope.formlimgraf)
 
-            bool = criarObjLimiteReal($scope.formlimgraf);
+            // Alimenta com todas as Classificacoes Gerais que interferem no baseline
+            ClassGeral.find({ filter: { where: {baseline: true}} })
+                .$promise
+                    .then(function(res, err){
+                        // console.log(res);
+                        angular.forEach(res, function(value,index){
+                            $scope.classgeral.push(value.classgeral_id)
+                        })
+                        
+                        if (criarObjLimiteReal($scope.formlimgraf)){
 
-            // angular.forEach($scope.limreal, function(value, index){
-            //     if(value == $scope.formlimgraf.familia){
-            //         for(var i=0; i<value.dados.length; i++){
-            //             if(value.dados)
-            //         }
-            //     }
-            // })
-
-            
-            console.log(bool);
-            // if (bool){
-            //     LimiteGrafico.create($scope.formlimgraf, function(res, err){
-            //         //console.log(res);
-            //         LimiteReal.create($scope.formlimreal, function(res, err){
-            //             $state.reload();
-            //         })
-            //     })
-            // }
+                            $scope.formlimgraf.id = $scope.formlimgraf.data_corte + $scope.formlimgraf.familia.replace(/[\s]/g, '');
+                            console.log($scope.formlimreal.dados);
+                            LimiteGrafico.create($scope.formlimgraf, function(res, err){
+                                //console.log(res);
+                                LimiteReal.find({filter:{where: {familia: ''+ $scope.formlimreal.familia +''}}})
+                                    .$promise
+                                        .then(function(res){
+                                            if(res.length > 0){
+                                                LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formlimreal.familia +''}}, {dados: $scope.formlimreal.dados}, function(res, err){
+                                                    $state.reload();
+                                                })
+                                            } else {
+                                                LimiteReal.create($scope.formlimreal, function(res, err){
+                                                    $state.reload();
+                                                })
+                                            }
+                                        })
+                                        .catch(function(err){
+                                            alert(err.status);
+                                        });
+                            })
+                        }
+                    })
         }
 
     }]);

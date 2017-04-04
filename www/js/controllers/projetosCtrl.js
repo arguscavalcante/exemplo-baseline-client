@@ -29,7 +29,7 @@ angular
         $scope.user = {
             gerente: sessionStorage.getItem('login'),
             perfil: sessionStorage.getItem('perfil'),
-            familia: sessionStorage.getItem('familia').split(","),
+            familias: sessionStorage.getItem('familia').split(","),
             nome: sessionStorage.getItem('nome')
         }
 
@@ -47,14 +47,14 @@ angular
                 alert('Não foi identificado o perfil do usuário!');
         }
 
-        if($scope.user.familia.length > 1){
+        if($scope.user.familias.length > 1){
             $scope.cadastrar = false; 
             console.log($scope.user)
         } 
 
-        if($scope.user.familia.length == 1){
+        if($scope.user.familias.length == 1){
             $scope.opcoes = false; 
-            $scope.user.familia = $scope.user.familia[0];
+            $scope.user.familia = $scope.user.familias[0];
             $scope.user.subtorre = $scope.user.familia.substring($scope.user.familia.indexOf("-")+2);
             buscaLimiteReal();
         }
@@ -93,6 +93,8 @@ angular
         $scope.regiao = {};
         $scope.sistema = [];
         $scope.tabela = [];
+        $scope.tabelagasto = [];
+        $scope.tabelabaseline = [];
 
         //Funcao para incluir e excluir meses
         $scope.funcMes = function(valor){
@@ -186,6 +188,7 @@ angular
         $scope.atribuiBaseline = function(value){
             // console.log(value);
             // console.log($scope.formproj.meses[value].mes);
+            // console.log($scope.baseline.data);
             for(var i=0; i<$scope.baseline.data.length; i++){
                 if($scope.baseline.data[i] == $scope.formproj.meses[value].mes){
                     if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
@@ -248,6 +251,20 @@ angular
                         $scope.baseline.valor = alimentaValor($scope.baseline.data, $scope.limite, $scope.user.familia, false);
                         // console.log($scope.baseline.valor)
                         $scope.tabela = alimentaValor($scope.baseline.data, $scope.limite, $scope.user.familia, true);
+                        angular.forEach($scope.limite, function(value, index){
+                            if(value.familia == $scope.user.familia){
+                                 for(var i=0; i<value.dados.length; i++){
+                                    for(var j=0; j<$scope.baseline.data.length; j++){
+                                        if($scope.baseline.data[j]==value.dados[i].mes){
+                                            $scope.tabelagasto.push(value.dados[i].gasto_mes);
+                                            $scope.tabelabaseline.push(value.dados[i].baseline);
+                                        }
+                                    }
+                                 }
+                            }
+                        })
+                        console.log($scope.tabelagasto);
+                        console.log($scope.tabelabaseline);
                     });
         }
 
@@ -269,10 +286,10 @@ angular
             .$promise
                 .then(function(res, err){         
                     $scope.classificacao_geral = res;
-                    console.log(res);
+                    // console.log(res);
                     angular.forEach($scope.classificacao_geral, function(value,index){
-                        if(value.Baseline){
-                            $scope.classgeral.push(value.ClassGeral_id)
+                        if(value.baseline){
+                            $scope.classgeral.push(value.classgeral_id)
                         }
                     })
                     // console.log($scope.classgeral)
@@ -418,7 +435,7 @@ angular
                         $scope.limValidacao = res;
                         //console.log(res);
                         if ($scope.classgeral.includes($scope.formproj.classificacao_geral)){
-                            $scope.valida_baseline.valor = alimentaValor($scope.valida_baseline.data, $scope.limValidacao, user.familia[0], false);
+                            $scope.valida_baseline.valor = alimentaValor($scope.valida_baseline.data, $scope.limValidacao, user.familia, false);
                             angular.forEach($scope.formproj.meses, function(value, index){
                                 for(var i=0; i<$scope.valida_baseline.data.length; i++){
                                     if(value.mes==$scope.valida_baseline.data[i]){
@@ -471,14 +488,14 @@ angular
                                 // console.log(res);
                                 // console.log($scope.formproj.familia);
                                 // console.log($scope.formLimReal[0].dados);
-                                LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formproj.familia +''}}, {dados: $scope.formLimReal[0].dados}, function(info, err) {
-                                    $state.reload();
-                                })
-                                
+                                if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
+                                    LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formproj.familia +''}}, {dados: $scope.formLimReal[0].dados}, function(info, err) {
+                                        $state.reload();
+                                    })
+                                }
+                                $state.reload();                               
                             })
-
                         }
-
                     });    
            
         };

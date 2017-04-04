@@ -45,10 +45,15 @@ angular
         var altera = 'N';
 
         //find, findOne, findById
-        Fase.find().$promise.then(function(res, err){
-            $scope.fase = res;
-            console.log(res);
-        });
+        Fase.find()
+            .$promise
+                .then(function(res){
+                    $scope.fase = res;
+                    console.log(res);
+                })
+                .catch(function(err){
+                    alert(err.status);
+                });
 
         $scope.alteraFase = function(value){
             altera = 'S'
@@ -81,26 +86,30 @@ angular
 
                 bool = false;
                 
-                Projeto.find({filter:{where: {fase: '' + $scope.formfase.fase + ''}}}).$promise.then(function(res, err){
-                    //console.log(res);
-                    if(res.length != 0){
-                        if(confirm('Existem projetos cadastrados com essa Fase, deseja continuar?') == false){
-                            return;
-                        }else{
-                            Fase.upsertWithWhere({where: {fase: ''+ $scope.formfase.fase +''}}, {fase: ''+ $scope.formfase.fase +'', descricao: ''+ $scope.formfase.descricao +''}, function(info, err) {
-                                //console.log(info);
-                                $state.reload();
-                                return;
-                            })  
-                        }
-                    }
-                });
+                Projeto.find({filter:{where: {fase: '' + $scope.formfase.fase + ''}}})
+                    .$promise
+                        .then(function(res){
+                            //console.log(res);
+                            if(res.length != 0){
+                                if(confirm('Existem projetos cadastrados com essa Fase, deseja continuar?') == false){
+                                    return;
+                                }else{
+                                    Fase.upsertWithWhere({where: {fase: ''+ $scope.formfase.fase +''}}, {fase: ''+ $scope.formfase.fase +'', descricao: ''+ $scope.formfase.descricao +''}, function(info, err) {
+                                        //console.log(info);
+                                        $state.reload();
+                                        return;
+                                    })  
+                                }
+                            }
+                        })
+                        .catch(function(err){
+                            alert(err.status);
+                        });
 
             }
 
             if (bool){
                 Fase.create($scope.formfase, function(res, err){
-                    //console.log(res);
                     $state.reload();
                 })
             }
