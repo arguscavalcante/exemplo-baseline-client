@@ -17,6 +17,7 @@ angular
         }
 
         var d = new Date();
+        d.setDate(15);
         var meses = 0;
         var user = {};
         $scope.mostrar = {};

@@ -76,7 +76,7 @@
                     </table>
                 </div>
             </div>
-            <div class="row" ng-show="mostrar">
+            <div class="row" ng-show="mostrar.tabela">
                 <div class="col-md-12">
                     <table class="table table-striped table-hover table-responsive">
                         <thead>
@@ -107,28 +107,39 @@
                     <dir-pagination-controls max-size="5" boundary-links="true"></dir-pagination-controls>
                 </div>
             </div>
-            <div class="row" ng-show="mostrar_sel">
+            <div class="row" ng-show="mostrar.selecao">
                 <div class="col-md-12">
-                    <h5><b>Baseline Disponível</b></h5>
-                    <table class="table table-hover">
+                    <h2>Baseline Disponível</h2>
+                    <table class="table table-hover size10">
                         <thead>
                             <tr>
-                                <td ng-repeat="date in baseline.data"> {{date}} </td>
+                                <td><b>MESES</b></td>
+                                <td ng-repeat="date in baseline.data"><b> {{date}} </b></td>
                             </tr>
                         </thead>
                         <tbody>
                              <tr>
-                                <td ng-repeat="val in tabelapag track by $index"> {{val}} </td>
+                                <td><b>BASELINE</b></td>
+                                <td ng-repeat="val in tabelabaseline track by $index"> {{val | currency}} </td>
+                            </tr>
+                            <tr>
+                                <td><b>GASTO</b></td>
+                                <td ng-repeat="val in tabelagasto track by $index"> {{val | currency}} </td>
+                            </tr>
+                            <tr>
+                                <td><b>DISPONÍVEL</b></td>
+                                <td ng-repeat="val in tabelapag track by $index"> {{val | currency}} </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="row" ng-show="mostrar_sel">
+            <div class="row" ng-show="mostrar.selecao">
                 <div class="col-md-12">
                     <table class="table table-striped table-hover table-responsive">
                         <thead>
                             <th>Projeto</th>
+                            <th>Descrição</th>
                             <th>Proposta</th>
                             <th>Classificação Geral</th>   
                             <th>Fase</th>                                     
@@ -139,12 +150,13 @@
                         <tbody>
                             <tr ng-repeat="dados in tabela">
                                 <td>{{dados.projeto}}</td>
+                                <td>{{dados.descricao}}</td>
                                 <td>{{dados.proposta}}</td>
                                 <td>{{dados.classificacao_geral}}</td>
                                 <td>{{dados.fase}}</td>
                                 <td>{{dados.familia}}</td>
                                 <td>{{dados.sistema}}</td>
-                                <td>{{dados.valor_total_proj}}</td>
+                                <td>{{dados.valor_total_proj | currency}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -156,36 +168,40 @@
                         <table class="table table-striped">
                             <tr>
                                 <td><label>Projeto:</label></td>
-                                <td> <input type="text" ng-model="formaltproj.projeto" value="" class="form-control col-md-3" readonly/> </td>
+                                <td> <input type="text" ng-model="formaltproj.projeto" value="" class="form-control col-md-3" /> </td>
+                                <td><label>Descrição do Projeto:</label></td>
+                                <td> <input type="text" ng-model="formaltproj.descricao" value="" class="form-control col-md-3" /> </td>
                                 <td><label>Proposta:</label></td>
-                                <td> <input type="text" ng-model="formaltproj.proposta" value="" class="form-control col-md-3" /> </td>
-                                <td><label>Gerente:</label></td>
-                                <td><select ng-model="formaltproj.gerente" class="form-control">
-                                        <option ng-repeat="id in gerentes" value="{{id.login_user}}">{{id.login_user}}</option>
-                                    </select> 
-                                </td>
+                                <td> <input type="text" ng-model="formaltproj.proposta" value="" class="form-control col-md-3" /> </td>  
                             </tr>
                             <tr>
                                 <td><label>Família:</label></td>
-                                <td><select ng-model="formaltproj.familia" class="form-control" ng-options="val for val in selectOptionFamilia() | orderBy:'toString()' "></select></td>
+                                <td>
+                                    <select ng-model="formaltproj.familia" class="form-control">
+                                        <option ng-repeat="val in user.familias | orderBy:'toString()'" value="{{val}}">{{val}}</option>
+                                    </select>
+                                </td>
                                 <td><label>Região:</label></td>
                                 <td><select ng-model="formaltproj.regiao" ng-options="val for val in selectOptionRegiao()" class="form-control"></select></td>
                                 <td><label>Sistema:</label></td>
                                 <td><select ng-model="formaltproj.sistema" ng-options="val for val in selectOptionSistemaform()"  class="form-control"></select></td>
                             </tr>
                             <tr>
+                                <td><label>Gerente:</label></td>
+                                <td><select ng-model="formaltproj.gerente" class="form-control">
+                                        <option ng-repeat="id in gerentes" value="{{id.login_user}}">{{id.login_user}}</option>
+                                    </select> 
+                                </td>
                                 <td><label>Fase:</label></td>
                                 <td><select ng-model="formaltproj.fase" class="form-control">
                                         <option ng-repeat="id in fase" value="{{id.fase}}">{{id.fase}}</option>
                                     </select> 
                                 </td>
                                 <td><label>Classificação Geral:</label></td>
-                                <td><select ng-model="formaltproj.classificacao_geral" class="form-control" ng-change="atribuiBaseline($index)">
-                                        <option ng-repeat="id in classificacao_geral" value="{{id.ClassGeral_id}}">{{id.ClassGeral_id}}</option>
+                                <td><select ng-model="formaltproj.classificacao_geral" class="form-control" ng-change="atribuiBaseline2()">
+                                        <option ng-repeat="id in classificacao_geral" value="{{id.classgeral_id}}">{{id.classgeral_id}}</option>
                                     </select> 
                                 </td>
-                                <td><label>Valor Total:</label></td>
-                                <td> <input type="number" ng-model="formaltproj.valor_total_proj" class="form-control"/> </td>
                             </tr>
                         </table>
                     </div>
@@ -193,15 +209,21 @@
                 <div class="row">
                     <div class="col-md-8">
                         <table class="table table-striped">
+                            <tr>
+                                <td><label>Valor Total:</label></td>
+                                <td colspan=2> <input type="text" ng-model="formaltproj.valor_total_proj" class="form-control" format="currency" ng-disabled="baseline.todos"/> </td>
+                                <td></td>
+                                <td><span style="color:red">Disponibilidade</span></td>
+                            </tr>
                             <tr ng-repeat="meses in formaltproj.meses">    
                                 <td><label>Mes/Ano:</label></td>
-                                <td> <select ng-model="meses.mes" class="form-control" ng-change="atribuiBaseline($index)">
-                                        <option ng-repeat="id in baseline.data" value="{{id}}">{{id}}</option>
+                                <td> <select ng-model="meses.mes" class="form-control" ng-change="atribuiBaseline($index)" ng-disabled="baseline.data2[$index].desabilitar">
+                                        <option ng-repeat="id in baseline.data2" value="{{id.data}}" ng-disabled="id.desabilitar">{{id.data}}</option>
                                     </select> 
                                 </td>
                                 <td><label>Valor Mes/Ano:</label></td>
-                                <td> <input type="number" ng-model="meses.valor" class="form-control" /> </td>
-                                <td><span style="color:red">{{baseline_red[$index]}}</span></td>
+                                <td> <input type="number" ng-model="meses.valor" class="form-control" ng-disabled="baseline.data2[$index].desabilitar"/> </td>
+                                <td><span style="color:red" data-thousands="." data-decimal="," data-prefix="R$ " id="currency">{{baseline_red[$index] | currency}}</span></td>
                             </tr>   
                         </table>
                         <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>

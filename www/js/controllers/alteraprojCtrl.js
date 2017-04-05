@@ -2,7 +2,7 @@
 
 angular
     .module('starter')
-    .controller('alteraprojCtrl', ['$scope', '$state', 'Projeto', 'Regiao', 'LimiteReal', 'Fase', 'ClassGeral', function($scope, $state, Projeto, Regiao, LimiteReal, Fase, ClassGeral){
+    .controller('alteraprojCtrl', ['$scope', '$state', 'Projeto', 'Regiao', 'LimiteReal', 'User', 'Fase', 'ClassGeral', function($scope, $state, Projeto, Regiao, LimiteReal, User, Fase, ClassGeral){
         console.log('alteraprojCtrl')
 
          // Controle de sessao
@@ -16,7 +16,8 @@ angular
             $state.go('relatorio');
         }
 
-        var d = new Date(15);
+        var d = new Date();
+        d.setDate(15);
         $scope.projeto = [];
         $scope.tabela = [];
         $scope.filtroResult = {};
@@ -29,6 +30,8 @@ angular
 
         $scope.formLimReal = {};
         $scope.tabelapag = [];
+        $scope.tabelagasto = [];
+        $scope.tabelabaseline = [];
         $scope.baseline_red = [];
         var qnt_meses = 1;
 
@@ -36,11 +39,6 @@ angular
 
         $scope.baseline= {data: [], valor:[]}; 
         $scope.valida_baseline= {data: [], valor:[]}; 
-
-        $scope.buscar = true;
-        $scope.mostrar = true;
-        $scope.mostrar_sel = false;
-        $scope.alterar = false;
 
         $scope.filtroResult.qnt_itens = 5;
 
@@ -52,9 +50,13 @@ angular
         $scope.user = {
             gerente: sessionStorage.getItem('login'),
             perfil: sessionStorage.getItem('perfil'),
-            familia: sessionStorage.getItem('familia').split(","),
+            familias: sessionStorage.getItem('familia').split(","),
             nome: sessionStorage.getItem('nome')
         }
+        $scope.buscar = true;
+        $scope.mostrar.tabela = true;
+        $scope.mostrar.selecao = false;
+        $scope.alterar = false;
 
         switch($scope.user.perfil) {
             case 'Administrador':
@@ -81,16 +83,16 @@ angular
             .$promise
                 .then(function(res, err){
                     // $scope.projeto = res;
-                    console.log(res);
+                    // console.log(res);
                     angular.forEach(res, function(value, index){
-                        if($scope.user.familia.includes(value.familia)){
+                        if($scope.user.familias.includes(value.familia)){
                             $scope.projeto.push(value);
                         } 
                 })
             // Alimenta objeto com todas as Regiões/Sistemas
             Regiao.find().$promise.then(function(res, err){
                 $scope.regiao = res;
-                console.log(res);
+                // console.log(res);
                 
                 angular.forEach($scope.regiao, function(value,index){
                     for(var i=0; i<value.sistemas.length; i++){
@@ -192,7 +194,7 @@ angular
                     options.push(value.sistema);
                 }
             })
-
+            // console.log(options);
             return options;       
         }
 
@@ -216,13 +218,16 @@ angular
 
         function alimentaValor(vetor, objLimite, busca, tabela){
             var valor = [];
+            var registro = [];
             var k;
             var val_baseline = 0;
             var val_mesant = 0;
             var bool_familia = true;
             for(var i=0; i<vetor.length; i++){
-                valor.push(0)
-            }           
+                valor.push(0);
+                registro.push(false);
+            }     
+            // console.log(valor)      
 
             // console.log('limite: ', objLimite)
             angular.forEach(objLimite, function(value, index){
@@ -238,27 +243,29 @@ angular
                                     if (!angular.isUndefined(value.dados[k])){
                                         if (value.dados[k].gasto_mes >= value.dados[k].baseline + value.dados[k].baseline*value.dados[k].perc_baseline/-100){
                                             val_mesant = value.dados[k].baseline - value.dados[k].gasto_mes;
+                                            // console.log(val_mesant)
                                         }
                                     }
                                 } 
                                 if(val_mesant==0 && !tabela){
-                                   val_mesant = (value.dados[i].baseline * value.dados[i].perc_baseline/100)
-                                }
-                                // console.log(val_mesant);
-                                valor[i] = val_baseline - value.dados[i].gasto_mes + val_mesant + value.dados[i].baseline_bonus;
+                                    val_mesant = (value.dados[i].baseline * value.dados[i].perc_baseline/100);
+                                }            
+                                valor[j] = val_baseline - value.dados[i].gasto_mes + val_mesant + value.dados[i].baseline_bonus;
+                                valor[j] = Math.round(valor[j] * 100)/100
+                                registro[j] = true;
                             }
                         }
                     }
                 }
             });
-
+            // console.log(valor);
             if(bool_familia){
                 alert('A família ' + busca + ' não está parametrizada! Entre em contato com o Administrador.')
                 return -1;
             }
 
-            if(valor.includes(0)){
-                alert('Não há valores de limite real parametrizados para um ou mais meses. Favor, informar ao Administrador.');
+            if(registro.includes(false) && tabela){
+                alert('Há um ou mais meses que não possuem parametrização, favor entrar em contato com o Administrador do Sistema.');
             }
             return valor;
         }
@@ -297,6 +304,7 @@ angular
 
             $scope.tabela.push({
                 projeto: value.projeto,
+                descricao: value.descricao,
                 proposta: value.proposta,
                 classificacao_geral: value.classificacao_geral,
                 fase: value.fase,
@@ -308,6 +316,7 @@ angular
             $scope.formaltproj = {
                 projeto_id: value.projeto_id,
                 projeto: value.projeto,
+                descricao: value.descricao,
                 proposta: value.proposta,
                 gerente: value.gerente,
                 classificacao_geral: value.classificacao_geral,
@@ -323,6 +332,7 @@ angular
             $scope.projantigo = {
                 id: value.projeto_id,
                 projeto: value.projeto,
+                descricao: value.descricao,
                 proposta: value.proposta,
                 gerente: value.gerente,
                 classificacao_geral: value.classificacao_geral,
@@ -335,13 +345,14 @@ angular
                 meses: value.meses
             };
 
+            console.log($scope.projantigo);
             // console.log($scope.baseline_red)
 
             // // Alimenta objeto com todas os Gerentes
-            // User.find().$promise.then(function(res, err){
-            //     $scope.gerentes = res;
-            //     //console.log(res);
-            // });
+            User.find().$promise.then(function(res, err){
+                $scope.gerentes = res;
+                //console.log(res);
+            });
 
             // Alimenta objeto com todas as Fases
             Fase.find().$promise.then(function(res, err){
@@ -349,36 +360,69 @@ angular
                 //console.log(res);
             });
 
-            // Alimenta objeto com todas os Limites Reais
-            LimiteReal.find().$promise.then(function(res, err){
-                $scope.limite = res;
-                //console.log(res);
-                $scope.baseline.valor = alimentaValor($scope.baseline.data, $scope.limite, $scope.projantigo.familia, false);
-                $scope.tabelapag = alimentaValor($scope.baseline.data, $scope.limite, $scope.projantigo.familia, true);
+            // Alimenta a data dos SELECT
+            $scope.baseline.data2 = []
+            for(var i=0; i<$scope.projantigo.meses.length; i++){
+                if(!$scope.baseline.data.includes($scope.projantigo.meses[i].mes)){
+                    $scope.baseline.data2.push({data: $scope.projantigo.meses[i].mes, desabilitar: true});
+                } 
+            }
+            for(var i=0; i<$scope.baseline.data.length; i++){
+                $scope.baseline.data2.push({data: $scope.baseline.data[i], desabilitar: false});
+            }
 
-                for(var i=0; i<$scope.baseline.data.length; i++){
-                    for(var j=0; j<$scope.formaltproj.meses.length; j++){
-                        if($scope.baseline.data[i] == $scope.formaltproj.meses[j].mes){
-                            $scope.baseline_red.push($scope.baseline.valor[i]+ $scope.formaltproj.meses[j].valor);
+            // Verficando se todos os registros são true
+            $scope.baseline.todos = true;
+            if($scope.baseline.data2.includes(false)){
+                $scope.baseline.todos = false;
+            } 
+
+            console.log($scope.baseline.data2)
+            // Alimenta objeto com todas os Limites Reais
+            LimiteReal.find()
+                .$promise
+                    .then(function(res, err){
+                        $scope.limite = res;
+                        //console.log(res);
+                        $scope.baseline.valor = alimentaValor($scope.baseline.data, $scope.limite, $scope.projantigo.familia, false);
+                        $scope.tabelapag = alimentaValor($scope.baseline.data, $scope.limite, $scope.projantigo.familia, true);
+
+                        angular.forEach($scope.limite, function(value, index){
+                            if(value.familia == $scope.projantigo.familia){
+                                    for(var i=0; i<value.dados.length; i++){
+                                    for(var j=0; j<$scope.baseline.data.length; j++){
+                                        if($scope.baseline.data[j]==value.dados[i].mes){
+                                            $scope.tabelagasto.push(value.dados[i].gasto_mes);
+                                            $scope.tabelabaseline.push(value.dados[i].baseline);
+                                        }
+                                    }
+                                    }
+                            }
+                        })
+
+                        for(var i=0; i<$scope.baseline.data.length; i++){
+                            for(var j=0; j<$scope.formaltproj.meses.length; j++){
+                                if($scope.baseline.data[i] == $scope.formaltproj.meses[j].mes){
+                                    $scope.baseline_red.push($scope.baseline.valor[i]+ $scope.formaltproj.meses[j].valor);
+                                }
+                            }               
                         }
-                    }               
-                }
-            });
+                    });
 
             ClassGeral.find().$promise.then(function(res, err){         
                 $scope.classificacao_geral = res;
                 //console.log(res);
                  angular.forEach($scope.classificacao_geral, function(value,index){
                     if(value.Baseline){
-                        $scope.classgeral.push(value.ClassGeral_id)
+                        $scope.classgeral.push(value.classgeral_id)
                     }
                 })
             });
 
             //console.log($scope.tabela);
             $scope.buscar = false;
-            $scope.mostrar = false;
-            $scope.mostrar_sel = true;
+            $scope.mostrar.tabela = false;
+            $scope.mostrar.selecao = true;
             $scope.alterar = true;
         }
 
@@ -547,25 +591,25 @@ angular
 
                     console.log ($scope.formaltproj);
                     console.log($scope.formLimReal[0].dados);
-                    Projeto.upsertWithWhere({where: {projeto_id: ''+ $scope.formaltproj.projeto_id +''}}, 
-                                                {classificacao_geral: ''+ $scope.formaltproj.classificacao_geral +'', 
-                                                familia: ''+ $scope.formaltproj.familia +'', 
-                                                fase:''+ $scope.formaltproj.fase +'', 
-                                                gerente:''+ $scope.formaltproj.gerente +'', 
-                                                projeto:''+ $scope.formaltproj.projeto +'', 
-                                                descricao: ''+ $scope.formaltproj.descricao +'',
-                                                proposta:''+ $scope.formaltproj.proposta +'', 
-                                                regiao: ''+ $scope.formaltproj.regiao +'', 
-                                                sistema: ''+ $scope.formaltproj.sistema +'', 
-                                                valor_total_proj: ''+ $scope.formaltproj.valor_total_proj +'', 
-                                                meses: $scope.formaltproj.meses}, 
-                                            function(res, err){
-                        // console.log(res);
-                        LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formaltproj.familia +''}}, {dados: $scope.formLimReal[0].dados}, function(info, err) {
-                            // console.log(info);
-                            $state.reload();
-                        })
-                    })
+                    // Projeto.upsertWithWhere({where: {projeto_id: ''+ $scope.formaltproj.projeto_id +''}}, 
+                    //                             {classificacao_geral: ''+ $scope.formaltproj.classificacao_geral +'', 
+                    //                             familia: ''+ $scope.formaltproj.familia +'', 
+                    //                             fase:''+ $scope.formaltproj.fase +'', 
+                    //                             gerente:''+ $scope.formaltproj.gerente +'', 
+                    //                             projeto:''+ $scope.formaltproj.projeto +'', 
+                    //                             descricao: ''+ $scope.formaltproj.descricao +'',
+                    //                             proposta:''+ $scope.formaltproj.proposta +'', 
+                    //                             regiao: ''+ $scope.formaltproj.regiao +'', 
+                    //                             sistema: ''+ $scope.formaltproj.sistema +'', 
+                    //                             valor_total_proj: ''+ $scope.formaltproj.valor_total_proj +'', 
+                    //                             meses: $scope.formaltproj.meses}, 
+                    //                         function(res, err){
+                    //     // console.log(res);
+                    //     LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formaltproj.familia +''}}, {dados: $scope.formLimReal[0].dados}, function(info, err) {
+                    //         // console.log(info);
+                    //         $state.reload();
+                    //     })
+                    // })
 
                 }
             });    
