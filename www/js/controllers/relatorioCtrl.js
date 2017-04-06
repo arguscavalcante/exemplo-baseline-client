@@ -3,6 +3,7 @@
 angular
     .module('starter')
     .controller('relatorioCtrl', ['$scope', '$state', 'LimiteGrafico', 'Projeto', 'SubTorre', 'ClassGeral', function ($scope, $state, LimiteGrafico, Projeto, SubTorre, ClassGeral) {
+        console.log('relatorioCtrl')
 
         if(sessionStorage.getItem('login')==null || sessionStorage.getItem('perfil')==null || sessionStorage.getItem('familia')==null ){
             alert('Usuário não autenticado pelo Sistema!!')
@@ -20,6 +21,7 @@ angular
         var idDivgraf = 'grafproj';
         var qnt_meses = 15;
         var objChartProj = {};
+        var ano_limite;
         $scope.user = {};
         $scope.mostrar = {};
         $scope.familia = [];
@@ -45,7 +47,7 @@ angular
             nome: 'Limite Máximo', tipoLinha: 'dash', variacao: 1
             }]
 
-        console.log(sessionStorage.getItem('familia'));
+        // console.log(sessionStorage.getItem('familia'));
 
         $scope.user = {
             gerente: sessionStorage.getItem('login'),
@@ -71,7 +73,7 @@ angular
 
         if($scope.user.familias.length > 1){
             $scope.grafico = false; 
-            console.log($scope.user)
+            // console.log($scope.user)
         } 
 
         if($scope.user.familias.length == 1){
@@ -82,7 +84,7 @@ angular
         } 
 
         $scope.atribuiFamilia = function(){
-            console.log($scope.user);
+            // console.log($scope.user);
             $scope.user.subtorre = $scope.user.familia.substring($scope.user.familia.indexOf("-")+2);
             $scope.opcoes = false; 
             $scope.grafico = true;
@@ -110,9 +112,29 @@ angular
             $scope.opcaoqnt.push(i);
         }
 
+        $scope.teste = function(){
+            // var link = document.createElement("a"); 
+            var file;
+            var content;
+            var uriContent;
+            // var fileUrl;
+            // file = exportaJSON($scope.projetos, ano_limite);
+            // var blob = new Blob([file], {type: 'text/xls'}),
+            // content = exportaJSON($scope.projetos, ano_limite);
+            // var fileUrl = window.url.createObjectURL(blob);
+            // uriContent = "data:text/xls;charset=utf-8," + encodeURIComponent(content);
+            // newWindow = window.open(uriContent, 'neuesDokument');
+         
+            // link.href = fileUrl;
+            // link.style = "visibility:hidden";
+
+            // document.body.appendChild(link);
+            // link.click();
+            // document.body.removeChild(link);
+        }
+
         //Funcao para buscar na subtorre o valor do limite do grafico
         function buscaValLimiteGraf(){
-            var ano_limite;
             SubTorre.find({ filter: { where: {subtorre: '' + $scope.user.subtorre + ''}} })
                 .$promise
                     .then(function (res, err) {
@@ -187,7 +209,7 @@ angular
             for (var i = 0; i < qnt; i++) {
                 dados.push(0);
             }
-            console.log($scope.projetos);
+            // console.log($scope.projetos);
             angular.forEach($scope.projetos, function (value, index) {
                 if (gerente==null || gerente==value.gerente){
                     if (value.classificacao_geral == tipo) {
@@ -333,14 +355,14 @@ angular
                             .$promise
                                 .then(function (res, err) {
                                     $scope.limgraf = res;
-                                    console.log('limite grafico: ', res);
+                                    // console.log('limite grafico: ', res);
                                     alimentaProjetos(qnt_meses);//alimenta os dados dos projetos
                                     alimentaLimites();//alimenta os dados dos limites
 
                                     objChartProj.serie = $scope.projBase;
                                     // console.log(objChartProj.serie);
                                     //Inicializa o Grafico de Projetos
-                                    console.log(objChartProj);
+                                    // console.log(objChartProj);
                                     grafProjetos(objChartProj);
 
                                 });
@@ -382,10 +404,10 @@ angular
                     }
 
                     pesqdata = mes + "/" + ano;
-                    console.log(pesqdata);
+                    // console.log(pesqdata);
                     datasel = trasformParDate(pesqdata);
                 }
-                console.log(datasel);
+                // console.log(datasel);
 
                 if ($scope.formfiltro.qnt_meses_pos == null) {
                     qnt = 15;
@@ -426,8 +448,8 @@ angular
             var mes;
             var zero = '00'
             //Alimentando os valores de data
-            console.log(date)
-            console.log(date.getMonth())
+            // console.log(date)
+            // console.log(date.getMonth())
             for (var i = 0; i < qnt; i++) {
                 mes = date.getMonth()+1;
                 mes = mes.toString();
@@ -435,7 +457,7 @@ angular
                 vetor.push( mes + '/' + date.getFullYear());
                 date.setMonth(date.getMonth() + 1);
             }
-            console.log(vetor);
+            // console.log(vetor);
             return vetor;
         }
 
