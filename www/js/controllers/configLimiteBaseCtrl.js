@@ -106,7 +106,8 @@ angular
             var data_vetor = [];
             var dados_proj = [];
             var dados_depend = [];
-            var dados_torre = [];
+            var dados_torre_base = [];
+            var dados_torre_gasto = [];
             var meses_acima = "";
             var ret = true;
             var val_baseline = 0;
@@ -126,6 +127,7 @@ angular
                 dados_torre.push(0);
                 dados_depend.push('N');
             }
+
             
             angular.forEach($scope.projeto, function (value, index) {
                 if ($scope.classgeral.includes(value.classificacao_geral) && value.familia == form.familia) {
@@ -134,13 +136,14 @@ angular
                             if (data_vetor[i] == value.meses[j].mes) {
                                 dados_proj[i] = dados_proj[i] + value.meses[j].valor;
                                 dados_proj[i] = Math.round(dados_proj[i] * 100)/100;
+                                //dados_gasto_torre
                             }
                         }
                     }
                 }
             });
 
-            console.log('Valores dos Projetos: ', dados_proj);
+            // console.log('Valores dos Projetos: ', dados_proj);
 
             //Acerto dos valores de dependencia para registros existentes
             if ($scope.limreal.length > 0){

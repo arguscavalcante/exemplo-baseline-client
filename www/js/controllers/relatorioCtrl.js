@@ -12,6 +12,7 @@ angular
 
         var i;
         var d = new Date();
+        $scope.file='';
         d.setDate(15);
         d.setMonth(d.getMonth() - 3);
         var od = new Date();
@@ -39,6 +40,7 @@ angular
         $scope.projBase = [];
         $scope.projLimite = [];
         $scope.classgeral = [];
+        $scope.relatorio = {};
         $scope.limite = [{
             nome: 'Limite', tipoLinha: 'line', variacao: 0
             }, {
@@ -80,6 +82,8 @@ angular
             $scope.opcoes = false; 
             $scope.user.familia = $scope.user.familias[0];
             $scope.user.subtorre = $scope.user.familia.substring($scope.user.familia.indexOf("-")+2);
+            $scope.relatorio.filtro = true;
+            $scope.relatorio.download = true;
             listarProjetos();
         } 
 
@@ -88,6 +92,8 @@ angular
             $scope.user.subtorre = $scope.user.familia.substring($scope.user.familia.indexOf("-")+2);
             $scope.opcoes = false; 
             $scope.grafico = true;
+            $scope.relatorio.filtro = true;
+            $scope.relatorio.download = true;
             listarProjetos();
         }
         
@@ -112,25 +118,16 @@ angular
             $scope.opcaoqnt.push(i);
         }
 
-        $scope.teste = function(){
-            // var link = document.createElement("a"); 
-            var file;
-            var content;
-            var uriContent;
-            // var fileUrl;
-            // file = exportaJSON($scope.projetos, ano_limite);
-            // var blob = new Blob([file], {type: 'text/xls'}),
-            // content = exportaJSON($scope.projetos, ano_limite);
-            // var fileUrl = window.url.createObjectURL(blob);
-            // uriContent = "data:text/xls;charset=utf-8," + encodeURIComponent(content);
-            // newWindow = window.open(uriContent, 'neuesDokument');
-         
-            // link.href = fileUrl;
-            // link.style = "visibility:hidden";
-
-            // document.body.appendChild(link);
-            // link.click();
-            // document.body.removeChild(link);
+        $scope.downloadFile = function(){
+            var a = document.createElement("a");
+            var fileName = "MyReport_.xls";
+            var blob = new Blob(["\ufeff", $scope.file]);
+            var url = URL.createObjectURL(blob);
+            // console.log(url);
+            a.href = url;
+            a.ContentType = 'text/xls; charset=UTF-8'; 
+            a.download = fileName;
+            a.click();
         }
 
         //Funcao para buscar na subtorre o valor do limite do grafico
@@ -342,14 +339,15 @@ angular
 
         //find, findOne, findById
         function listarProjetos() {
-
+            $scope.file = '';
             $scope.date = alimentaData(d, qnt_meses);
             buscaValLimiteGraf();
 
             Projeto.find({ filter: { where: { familia: '' + $scope.user.familia + '' } } })
                 .$promise
-                    .then(function (res, err) {
+                    .then(function (res) {
                         $scope.projetos = res;
+                        $scope.relatorio.filtro = false;
                         // console.log(res);
                         LimiteGrafico.find({ filter: { where: { familia: '' + $scope.user.familia + '' } } })
                             .$promise
@@ -364,8 +362,29 @@ angular
                                     //Inicializa o Grafico de Projetos
                                     // console.log(objChartProj);
                                     grafProjetos(objChartProj);
+                                    // var promise = new Promise(function(resolve, reject) {
+                                    //     file = '';
+                                    //     resolve(exportaJSON($scope.projetos, ano_limite));
+                                    // });
 
+                                    // promise.then(function(result){
+                                    //     file = result;
+                                    //     console.log(file);
+                                    //     if(file != ''){
+                                    //         $scope.relatorio.download = false;
+                                    //     }
+                                    // });
+
+                                    // exportaJSON($scope.projetos, ano_limite, function(result){
+                                    //     file = result;
+                                    //     alert('entrei');
+                                    //     $scope.relatorio.download = false;
+                                    // })
+                                   $scope.file = exportaJSON($scope.projetos, ano_limite);
                                 });
+                    })
+                    .catch(function(err){
+                        alert('Erro ao recuperar os dados do banco!');
                     });
 
         }

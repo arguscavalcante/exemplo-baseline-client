@@ -2,7 +2,7 @@
 
 angular
     .module('starter')
-    .controller('configRacionalCtrl', ['$scope', '$state', 'LimiteReal', function($scope, $state, LimiteReal){
+    .controller('configRacionalCtrl', ['$scope', '$state', 'LimiteReal', 'Projeto', function($scope, $state, LimiteReal, Projeto){
         console.log('configRacionalCtrl')
 
          // Controle de sessao
@@ -40,7 +40,8 @@ angular
         }
         
         var d = new Date();
-        d.setMonth(d.getMonth() -1);
+        d.setDate(15);
+        d.setMonth(d.getMonth() -3);
         var data =[];
         $scope.tabelalimreal = [];
         var classgeral = ["Aprovado","Pipeline Aprovado","Pipeline"]

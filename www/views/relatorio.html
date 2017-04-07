@@ -43,19 +43,19 @@
                             <tr>
                                 <td>
                                     <label>Mês Inicio: &nbsp;</label>
-                                    <select ng-model="formfiltro.mes_inicio" class="form-control" ng-change="redesenharGraf();">
+                                    <select ng-model="formfiltro.mes_inicio" class="form-control" ng-change="redesenharGraf();" ng-disabled="relatorio.filtro">
                                         <option ng-repeat="id in opcaomeses" value="{{id.valor}}">{{id.mes}}</option>
                                     </select>
                                 </td>
                                 <td>
                                     <label>Ano Inicio: &nbsp;</label>
-                                    <select ng-model="formfiltro.ano_inicio" class="form-control" ng-change="redesenharGraf();">
+                                    <select ng-model="formfiltro.ano_inicio" class="form-control" ng-change="redesenharGraf();" ng-disabled="relatorio.filtro">
                                         <option ng-repeat="id in opcaoano" value="{{id}}">{{id}}</option>
                                     </select>
                                 </td>
                                 <td>
                                     <label>Quantidade de Meses: &nbsp;</label>
-                                    <select ng-model="formfiltro.qnt_meses_pos" class="form-control" ng-change="redesenharGraf();">
+                                    <select ng-model="formfiltro.qnt_meses_pos" class="form-control" ng-change="redesenharGraf();" ng-disabled="relatorio.filtro">
                                         <option ng-repeat="id in opcaoqnt" value="{{id}}">{{id}}</option>
                                     </select>
                                 </td>
@@ -64,9 +64,10 @@
                     </form>
                 </div>
             </div>
-            <div>
-                <button type="button" ng-click="teste();" class="btn btn-info">teste</button>
-                <a ng-href="{{ fileUrl }}" download="file.xls">download</a>
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="button" ng-click="downloadFile();" class="btn btn-info" ng-if="file!=''">Download</button>
+                </div>
             </div>
         </div>
     </div>

@@ -1,8 +1,5 @@
 //funcao para tratamento do Arquivo JSON
 function exportaJSON(arqjson, datafinal){
-    var link = document.createElement("a"); 
-    var fileName = "MyReport_";
-    var uri = 'data:text/xls;charset=utf-8,' //determinar o tipo de arquivo no download -- formatacao: utf-8/iso
     var objmeses = {};
     var date = new Date('2013-10-15');
     var mes;
@@ -44,23 +41,7 @@ function exportaJSON(arqjson, datafinal){
 
     Object.assign(tipos, JSON.parse(strdata));
 
-    // console.log(tipos)
-    // console.log(titulos)
-
-    // console.log(arqjson);
-    // console.log(jsonParaXml(arqjson, tipos, titulos));
-    // return uri + escape(jsonParaXml(arqjson, tipos, titulos));
-    console.log(jsonParaXml(arqjson, tipos, titulos))
-
-   
-
-    // link.href = uri + escape(jsonParaXml(arqjson, tipos, titulos));
-    // link.style = "visibility:hidden";
-    // link.download = fileName + ".xls";
-
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
+    return jsonParaXml(arqjson, tipos, titulos);
 }
 
 function transformArrObj(valor){
