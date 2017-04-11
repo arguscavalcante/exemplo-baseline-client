@@ -42,16 +42,16 @@ angular
         $scope.regiao = {};
         $scope.subtorre = {};
         $scope.formregiao = {};
+        var altera = 'N';
 
         $scope.formregiao.sistemas = []
-        var bool = true;
 
         // Alimenta com todas as Regioes
         Regiao.find()
             .$promise
                 .then(function(res, err){
                     $scope.regiao = res;
-                    // console.log(res);
+                    console.log(res);
                 });
 
         // Alimenta com todas as Subtorres
@@ -72,7 +72,17 @@ angular
             return options;       
         }
 
+        $scope.alteraRegiao = function(value){
+            altera = 'S'
+            $scope.formregiao = {
+                regiao: value.regiao,
+                familia: value.familia,
+                descricao: value.descricao  
+            }
+        }
+
         $scope.ValidaForm = function(){
+            var bool = true;
             // console.log($scope.formregiao);
 
             if($scope.formregiao.regiao == null || $scope.formregiao.descricao == null || $scope.formregiao.familia == null || $scope.formregiao.familia == '' || $scope.formregiao.regiao.replace(/[\s]/g, '') == '' ||  $scope.formregiao.descricao.replace(/[\s]/g, '') == '')
@@ -85,11 +95,25 @@ angular
             // console.log($scope.formregiao.id_regiao);
 
             angular.forEach($scope.regiao,function(value,index){
-                if (angular.lowercase(value.regiao).replace(/[\s]/g, '') == angular.lowercase($scope.formregiao.regiao).replace(/[\s]/g, '') && value.familia == $scope.formregiao.familia){
+                if (angular.lowercase(value.regiao).replace(/[\s]/g, '') == angular.lowercase($scope.formregiao.regiao).replace(/[\s]/g, '') && value.familia == $scope.formregiao.familia && altera!='S'){
                     alert('Esse registro já existe.');
                     bool = false;
                 }
             })
+
+            if(altera == 'S'){ 
+                bool = false;
+                if(confirm('Você deseja alterar essa Região?') == false){
+                    return;
+                }
+
+                Regiao.upsertWithWhere({where: {id_regiao: ''+ $scope.formregiao.id_regiao +''}}, {regiao: ''+ $scope.formregiao.regiao +'', descricao: ''+ $scope.formregiao.descricao +'', familia: '' + $scope.formregiao.familia + ''}, function(info, err) {
+                    //console.log(info);
+                    $state.reload();
+                    return;
+                });
+
+            }
 
             if (bool){
                 Regiao.create($scope.formregiao, function(res, err){
@@ -98,5 +122,15 @@ angular
                 })
             }
         }
+
+        $scope.deleteRegiao = function(value) {
+            console.log('delete');
+            // console.log(value);
+             if(confirm('Deseja realmente excluir a Região e os Sistemas associados a ela?') == true){
+                Regiao.destroyById({id: value}, function(err){
+                    $state.reload();
+                });
+             }
+        };
 
     }]);

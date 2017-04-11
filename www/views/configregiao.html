@@ -54,10 +54,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="id in regiao">
+                                    <tr ng-repeat="id in regiao" ng-click="alteraRegiao(id)">
                                         <td>{{id.regiao}}</td>
                                         <td>{{id.familia}}</td>
                                         <td>{{id.descricao}}</td>
+                                        <td><button type="button" ng-click="deleteRegiao(id.id_regiao);" class="btn btn-info glyphicon glyphicon-trash"></button></td>
                                     </tr>
                                 </tbody>
                             </table>

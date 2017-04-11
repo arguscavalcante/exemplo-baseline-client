@@ -53,6 +53,7 @@
                                     <tr ng-repeat="id in fase" ng-click="alteraFase(id)">
                                         <td>{{id.fase}}</td>
                                         <td>{{id.descricao}}</td>
+                                        <td><button type="button" ng-click="deleteFase(id.fase);" class="btn btn-info glyphicon glyphicon-trash"></button></td>
                                     </tr>
                                 </tbody>
                             </table>

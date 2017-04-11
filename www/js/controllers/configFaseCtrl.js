@@ -2,7 +2,7 @@
 
 angular
     .module('starter')
-    .controller('configFaseCtrl', ['$scope', '$state', 'Fase', 'Projeto',  function($scope, $state, Fase, Projeto){
+    .controller('configFaseCtrl', ['$scope', '$state', 'Fase', function($scope, $state, Fase){
         console.log('configFaseCtrl')
 
          // Controle de sessao
@@ -41,7 +41,6 @@ angular
         
         $scope.fase = {};
         $scope.formfase = {};
-        var bool = true;
         var altera = 'N';
 
         //find, findOne, findById
@@ -59,12 +58,12 @@ angular
             altera = 'S'
             $scope.formfase = {
                 fase: value.fase,
-                Descricao: value.Descricao
+                descricao: value.descricao
             }
         }
 
         $scope.ValidaForm = function(){
-            bool = true;
+            var bool = true;
 
             if($scope.formfase.fase == null || $scope.formfase.descricao == null || $scope.formfase.fase.replace(/[\s]/g, '') == '' ||  $scope.formfase.descricao.replace(/[\s]/g, '') == '')
             {
@@ -80,31 +79,16 @@ angular
             })
 
             if(altera == 'S'){ 
+                bool = false;
                 if(confirm('Você deseja alterar essa Fase?') == false){
                     return;
                 }
 
-                bool = false;
-                
-                Projeto.find({filter:{where: {fase: '' + $scope.formfase.fase + ''}}})
-                    .$promise
-                        .then(function(res){
-                            //console.log(res);
-                            if(res.length != 0){
-                                if(confirm('Existem projetos cadastrados com essa Fase, deseja continuar?') == false){
-                                    return;
-                                }else{
-                                    Fase.upsertWithWhere({where: {fase: ''+ $scope.formfase.fase +''}}, {fase: ''+ $scope.formfase.fase +'', descricao: ''+ $scope.formfase.descricao +''}, function(info, err) {
-                                        //console.log(info);
-                                        $state.reload();
-                                        return;
-                                    })  
-                                }
-                            }
-                        })
-                        .catch(function(err){
-                            alert(err.status);
-                        });
+                Fase.upsertWithWhere({where: {fase: ''+ $scope.formfase.fase +''}}, {fase: ''+ $scope.formfase.fase +'', descricao: ''+ $scope.formfase.descricao +''}, function(info, err) {
+                    //console.log(info);
+                    $state.reload();
+                    return;
+                });
 
             }
 
@@ -113,6 +97,16 @@ angular
                     $state.reload();
                 })
             }
-        }
+        };
+
+        $scope.deleteFase = function(value) {
+            console.log('delete');
+            // console.log(value);
+             if(confirm('Deseja realmente excluir a Fase?') == true){
+                Fase.destroyById({id: value}, function(err){
+                    $state.reload();
+                });
+             }
+        };
 
     }]);

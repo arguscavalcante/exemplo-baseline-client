@@ -44,9 +44,7 @@ angular
         $scope.formsistema = {};
         $scope.tabelasis = [];
         $scope.formsistema.id_regiao = 0;
-        var bool = true;
         var altera = 'N';
-        var projsist;
 
         //find, findOne, findById
         function alimentaRegiao(){
@@ -105,6 +103,7 @@ angular
         }
 
         $scope.ValidaForm = function(){
+            var bool = true;
             $scope.sistemas = [];
             console.log($scope.formsistema);
             console.log(altera);
@@ -122,41 +121,16 @@ angular
             })
 
             if(altera == 'S'){ 
-                if(confirm('Você deseja alterar esse Sistema?') == false){
-                    return;
+                if(confirm('Você deseja alterar esse Sistema?') == true){
+                    angular.forEach($scope.regiao, function(value,index){
+                        if(value.regiao == $scope.formsistema.regiao && value.familia == $scope.formsistema.familia){
+                            value.sistemas[$scope.formsistema.intervalo] = $scope.formsistema.sistema
+                            $scope.sistemas = value.sistemas;
+                            console.log($scope.sistemas);
+                        }
+                    });
                 }
 
-               angular.forEach($scope.regiao, function(value,index){
-                    if(value.regiao == $scope.formsistema.regiao && value.familia == $scope.formsistema.familia){
-                        projsist = value.sistemas[$scope.formsistema.intervalo];
-                        //console.log(value.sistemas[$scope.formsistema.intervalo]);
-                    }
-                });
-                
-                Projeto.find({filter:{where: {sistema: '' + projsist + ''}}}).$promise.then(function(res, err){
-                    //console.log(res);
-                    if(res.length != 0){
-                        if(confirm('Existem projetos cadastrados com esse Sistema, deseja continuar?') == false){
-                            bool = false;
-                        }else{
-                            angular.forEach($scope.regiao, function(value,index){
-                                if(value.regiao == $scope.formsistema.regiao && value.familia == $scope.formsistema.familia){
-                                    value.sistemas[$scope.formsistema.intervalo] = $scope.formsistema.Sistema
-                                    $scope.sistemas = value.sistemas;
-                                    console.log($scope.sistemas);
-                                }
-                            });
-                        }
-                     }else{
-                        angular.forEach($scope.regiao, function(value,index){
-                            if(value.regiao == $scope.formsistema.regiao && value.familia == $scope.formsistema.familia){
-                                value.sistemas[$scope.formsistema.intervalo] = $scope.formsistema.sistema
-                                $scope.sistemas = value.sistemas;
-                                console.log($scope.sistemas);
-                            }
-                        });
-                    }
-                });
             } else {
                 angular.forEach($scope.regiao, function(value,index){
                     if(value.regiao == $scope.formsistema.regiao && value.familia == $scope.formsistema.familia){

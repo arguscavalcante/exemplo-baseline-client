@@ -77,4 +77,14 @@ angular
             }
         }
 
+        $scope.deleteTorre = function(value) {
+            console.log('delete');
+            // console.log(value);
+             if(confirm('Deseja realmente excluir a Torre?') == true){
+                Torre.destroyById({id: value}, function(err){
+                    $state.reload();
+                });
+             }
+        };
+
     }]);

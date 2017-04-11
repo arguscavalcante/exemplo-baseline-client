@@ -53,6 +53,7 @@
                                     <tr ng-repeat="id in torre">
                                         <td>{{id.torre}}</td>
                                         <td>{{id.descricao_torre}}</td>
+                                         <td><button type="button" ng-click="deleteTorre(id.torre);" class="btn btn-info glyphicon glyphicon-trash"></button></td>
                                     </tr>
                                 </tbody>
                             </table>

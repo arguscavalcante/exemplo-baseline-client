@@ -29,7 +29,8 @@ angular
         $scope.opcoes = true;
         $scope.grafico = true;
         $scope.formfiltro = {}; //filtro para regerar o Grafico
-        $scope.subtorre = {};
+        $scope.subtorre = [];
+        $scope.subtorres = [];
         $scope.projetos = {};
         $scope.date = [];
         $scope.opcaoqnt = [];
@@ -130,52 +131,64 @@ angular
             a.click();
         }
 
+         SubTorre.find()
+            .$promise
+                .then(function (res, err) {
+                    $scope.subtorres = res;
+                
+                });
+
         //Funcao para buscar na subtorre o valor do limite do grafico
         function buscaValLimiteGraf(){
-            SubTorre.find({ filter: { where: {subtorre: '' + $scope.user.subtorre + ''}} })
-                .$promise
-                    .then(function (res, err) {
-                        if(angular.isUndefined(res)){
-                            alert('Subtorre não cadastrada no sistema, entre em contado com o administrador do sistema.');
-                            ano_limite = 2020;
-                        }else{
-                            $scope.subtorre = res;
-                            ano_limite = $scope.subtorre[0].ano_limite;
+            var achei = false;
+            if(angular.isUndefined($scope.subtorres)){
+                    alert('Subtorre não cadastrada no sistema, entre em contado com o administrador do sistema.');
+                    ano_limite = 2020;
+                }else{
+                    angular.forEach($scope.subtorres, function(value, index){
+                        if(value.subtorre == $scope.user.subtorre){
+                            achei = true;
+                            $scope.user.subtorre = value;
+                            ano_limite = value.ano_limite;
                         }
-                        $scope.opcaoano = atribuiAno(ano_limite);
-                    });          
+                    })
+                    if(!achei){
+                        alert('Subtorre não cadastrada no sistema, entre em contado com o administrador do sistema.');
+                        ano_limite = 2020;
+                    }
+                   
+                }
+                $scope.opcaoano = atribuiAno(ano_limite);
         }
+
+        
 
         //Funcao para buscar as classes o valor do limite do grafico
-        function buscaclassgeral(){
-            ClassGeral.find()
-                .$promise
-                    .then(function (res, err) {
-                        angular.forEach(res, function (value, index){
-                            if(!value.baseline){
-                                $scope.classgeral.push(value.classgeral_id);
-                            }
-                        });
-                        angular.forEach(res, function (value, index){
-                            if(value.baseline){
-                                $scope.classgeral.push(value.classgeral_id);
-                            }
-                        });
-                        // console.log('classificacao geral: ',  $scope.classgeral)
+        ClassGeral.find()
+            .$promise
+                .then(function (res, err) {
+                    angular.forEach(res, function (value, index){
+                        if(!value.baseline){
+                            $scope.classgeral.push(value.classgeral_id);
+                        }
                     });
-        }
-
-        buscaclassgeral();
+                    angular.forEach(res, function (value, index){
+                        if(value.baseline){
+                            $scope.classgeral.push(value.classgeral_id);
+                        }
+                    });
+                    // console.log('classificacao geral: ',  $scope.classgeral)
+                });
 
         //Funcao para incluir os valores dos projetos.
         function alimentaProjetos(qnt) {
             $scope.projBase = []; //reinicia variavel
             var graf_max = 0;
-            if(angular.isUndefined($scope.subtorre[0])){
+            if(angular.isUndefined($scope.subtorre)){
                 alert('Parametrização do Gráfico nao encontrada, foi definida a parametrização padrão.');
                 graf_max = 700000
             } else {
-                graf_max = $scope.subtorre[0].max_grafico;
+                graf_max = $scope.subtorre.max_grafico;
             }
 
             //inicia a variavel do Highchart

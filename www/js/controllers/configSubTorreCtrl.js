@@ -42,7 +42,6 @@ angular
         $scope.torre = {};
         $scope.subtorre = {};
         $scope.formsubtorre = {};
-        var bool = true;
         var altera = 'N';
 
         //find, findOne, findById
@@ -70,7 +69,7 @@ angular
         }
 
         $scope.ValidaForm = function(){
-
+            var bool = true;
             if($scope.formsubtorre.torre_id == null || $scope.formsubtorre.subtorre == null || $scope.formsubtorre.torre_id.replace(/[\s]/g, '') == '' ||  $scope.formsubtorre.subtorre.replace(/[\s]/g, '') == '')
             {
                 alert('Favor, preencha todas as informações!');
@@ -85,11 +84,10 @@ angular
             })
 
             if(altera == 'S'){ 
+                bool = false;
                 if(confirm('Você deseja alterar essa Subtorre?') == false){
                     return;
                 }
-
-                bool = false;
                 
                 SubTorre.upsertWithWhere({where: {subtorre: ''+ $scope.formsubtorre.subtorre +''}}, {max_grafico: ''+ $scope.formsubtorre.max_grafico +'', ano_limite: ''+ $scope.formsubtorre.ano_limite +''}, function(info, err) {
                     //console.log(info);
@@ -103,8 +101,17 @@ angular
                     //console.log(res);
                     $state.reload();
                 })
-            
             }
         }
+
+        $scope.deleteSubtorre = function(value) {
+            console.log('delete');
+            // console.log(value);
+             if(confirm('Deseja realmente excluir a SubTorre?') == true){
+                SubTorre.destroyById({id: value}, function(err){
+                    $state.reload();
+                });
+             }
+        };
 
     }]);
