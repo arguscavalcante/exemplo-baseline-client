@@ -2,7 +2,7 @@
 
 angular
     .module('starter')
-    .controller('projetosCtrl', ['$scope', '$state', 'User', 'Projeto', 'LimiteReal', 'Fase', 'Regiao', 'ClassGeral', function($scope, $state, User, Projeto, LimiteReal, Fase, Regiao, ClassGeral){
+    .controller('projetosCtrl', ['$scope', '$state', 'User', 'Projeto', 'LimiteReal', 'Fase', 'Regiao', 'ClassGeral', 'LimiteGrafico', function($scope, $state, User, Projeto, LimiteReal, Fase, Regiao, ClassGeral){
         console.log('projetosCtrl')
 
         // Controle de sessao
@@ -20,6 +20,7 @@ angular
         d.setDate(15);
         var meses = 0;
         var user = {};
+        var com_torre = false;
         $scope.mostrar = {};
         $scope.opcoes = true;
         $scope.cadastrar = true;
@@ -50,7 +51,7 @@ angular
 
         if($scope.user.familias.length > 1){
             $scope.cadastrar = false; 
-            console.log($scope.user)
+            // console.log($scope.user)
         } 
 
         if($scope.user.familias.length == 1){
@@ -61,7 +62,7 @@ angular
         }
 
         $scope.atribuiFamilia = function(){
-            console.log($scope.user);
+            // console.log($scope.user);
             $scope.user.subtorre = $scope.user.familia.substring($scope.user.familia.indexOf("-")+2);
             $scope.opcoes = false; 
             $scope.cadastrar = true;
@@ -96,6 +97,7 @@ angular
         $scope.tabela = [];
         $scope.tabelagasto = [];
         $scope.tabelabaseline = [];
+        $scope.torre_baseline = []
 
         //Funcao para incluir e excluir meses
         $scope.funcMes = function(valor){
@@ -117,8 +119,8 @@ angular
             var mes;
             var zero = '00'
             //Alimentando os valores de data
-            console.log(date)
-            console.log(date.getMonth())
+            // console.log(date)
+            // console.log(date.getMonth())
             for (var i = 0; i < qnt; i++) {
                 mes = date.getMonth()+1;
                 mes = mes.toString();
@@ -126,7 +128,7 @@ angular
                 vetor.push( mes + '/' + date.getFullYear());
                 date.setMonth(date.getMonth() + 1);
             }
-            console.log(vetor);
+            // console.log(vetor);
             return vetor;
         }
 
@@ -141,7 +143,7 @@ angular
                 valor.push(0);
                 registro.push(false);
             }     
-            console.log(valor)      
+            // console.log(valor)      
 
             // console.log('limite: ', objLimite)
             angular.forEach(objLimite, function(value, index){
@@ -172,7 +174,7 @@ angular
                 }
             });
 
-            if(bool_familia){
+            if(bool_familia && tabela){
                 alert('A família ' + busca + ' não está parametrizada! Entre em contato com o Administrador.');
                 return -1;
             }
@@ -180,6 +182,34 @@ angular
             if(registro.includes(false) && tabela){
                 alert('Há um ou mais meses que não possuem parametrização, favor entrar em contato com o Administrador do Sistema.');
             }
+
+            return valor;
+        }
+
+        function alimentaValorTorre(vetor, objLimite, busca){ //$scope.baseline.data, $scope.limite, $scope.user.familia
+            var valor = [];
+            var k;
+            var val_baseline = 0;
+            var val_gasto = 0;
+            var familia;
+            for(var i=0; i<vetor.length; i++){
+                valor.push({baseline: 0, gasto: 0});
+            }     
+            // console.log(valor)      
+
+            // console.log('limite: ', objLimite)
+            angular.forEach(objLimite, function(value, index){
+                if(value.familia.split(' - ').includes(busca.split(' - ')[0])){
+                    for(var i=0; i<value.dados.length; i++){
+                        for(var j=0; j<vetor.length; j++){
+                            if(vetor[j]==value.dados[i].mes){
+                                valor[i].baseline = value.dados[i].torre_baseline;
+                                valor[i].gasto = value.dados[i].torre_gasto;
+                            }
+                        }
+                    }
+                }
+            });
 
             return valor;
         }
@@ -248,7 +278,7 @@ angular
                 .$promise
                     .then(function(res, err){
                         $scope.limite = res;
-                        console.log(res);
+                        // console.log(res);
                         $scope.baseline.valor = alimentaValor($scope.baseline.data, $scope.limite, $scope.user.familia, false);
                         // console.log($scope.baseline.valor)
                         $scope.tabela = alimentaValor($scope.baseline.data, $scope.limite, $scope.user.familia, true);
@@ -259,14 +289,20 @@ angular
                                         if($scope.baseline.data[j]==value.dados[i].mes){
                                             $scope.tabelagasto.push(value.dados[i].gasto_mes);
                                             $scope.tabelabaseline.push(value.dados[i].baseline);
+                                            // console.log(value.dados[i].torre);
+                                            if(value.dados[i].torre!=null){
+                                                com_torre = true;
+                                                $scope.torre_baseline = alimentaValorTorre($scope.baseline.data, $scope.limite, $scope.user.familia)
+                                            }
                                         }
                                     }
                                  }
                             }
                         })
-                        console.log($scope.tabelagasto);
-                        console.log($scope.tabelabaseline);
+                        // console.log($scope.tabelagasto);
+                        // console.log($scope.tabelabaseline);
                     });
+            
         }
 
         // Alimenta objeto com todas as Regiões/Sistemas
@@ -296,7 +332,6 @@ angular
                     // console.log($scope.classgeral)
                 });
 
-
         //Option Familia
         $scope.selectOptionFamilia = function(){
             var options = $scope.user.familia;
@@ -318,10 +353,19 @@ angular
         //Option Sistema
         $scope.selectOptionSistema = function(){
             var options = [];
+            var familia = [];
             angular.forEach($scope.sistema, function(value,index){
-                if (value.regiao == $scope.formproj.regiao && value.familia == $scope.formproj.familia){
-                    options.push(value.sistema);
+                if(com_torre){
+                    familia = $scope.formproj.familia.split(' - ');
+                    if (value.regiao == $scope.formproj.regiao && value.familia.split(' - ').includes(familia[0])){
+                        options.push(value.sistema);
+                    }
+                } else {
+                    if (value.regiao == $scope.formproj.regiao && value.familia == $scope.formproj.familia){
+                        options.push(value.sistema);
+                    }
                 }
+                
             })
 
             return options;       
@@ -368,7 +412,7 @@ angular
 
         $scope.ValidaForm = function(){
             var bool = true;
-
+            retornaId();
             //Algum campo indefinido ou Nulo 
             if(angular.isUndefined($scope.formproj.proposta) || angular.isUndefined($scope.formproj.projeto) || angular.isUndefined($scope.formproj.descricao) || angular.isUndefined($scope.formproj.gerente) || angular.isUndefined($scope.formproj.familia) || angular.isUndefined($scope.formproj.sistema) || angular.isUndefined($scope.formproj.classificacao_geral) || angular.isUndefined($scope.formproj.fase))
             {
@@ -482,9 +526,9 @@ angular
                             });
                             // console.log('limiteReal: ', $scope.limValidacao);
                             // console.log('limiteReal Alterado: ', $scope.formLimReal);
-                            console.log($scope.formproj);
-                            console.log($scope.formLimReal);
-
+                            // console.log($scope.formproj);
+                            // console.log($scope.formLimReal);
+            
                             Projeto.create($scope.formproj, function(res, err){
                                 // console.log(res);
                                 // console.log($scope.formproj.familia);

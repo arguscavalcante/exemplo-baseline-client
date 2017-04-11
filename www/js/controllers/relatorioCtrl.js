@@ -362,25 +362,16 @@ angular
                                     //Inicializa o Grafico de Projetos
                                     // console.log(objChartProj);
                                     grafProjetos(objChartProj);
-                                    // var promise = new Promise(function(resolve, reject) {
-                                    //     file = '';
-                                    //     resolve(exportaJSON($scope.projetos, ano_limite));
-                                    // });
-
-                                    // promise.then(function(result){
-                                    //     file = result;
-                                    //     console.log(file);
-                                    //     if(file != ''){
-                                    //         $scope.relatorio.download = false;
-                                    //     }
-                                    // });
-
-                                    // exportaJSON($scope.projetos, ano_limite, function(result){
-                                    //     file = result;
-                                    //     alert('entrei');
-                                    //     $scope.relatorio.download = false;
-                                    // })
-                                   $scope.file = exportaJSON($scope.projetos, ano_limite);
+                                    if($scope.user.perfil == 'Administrador'){
+                                        Projeto.find()
+                                            .$promise
+                                                .then(function (res, err){
+                                                    $scope.file = exportaJSON(res, ano_limite);
+                                                });
+                                    }else{
+                                        $scope.file = exportaJSON($scope.projetos, ano_limite);
+                                    }
+                                    
                                 });
                     })
                     .catch(function(err){

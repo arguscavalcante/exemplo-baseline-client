@@ -56,6 +56,7 @@ angular
                         value.basetabela = 'NÃO';
                     }                
                 })
+                
             });
             
         }
@@ -67,20 +68,20 @@ angular
             $scope.formclassgeral = {
                 classgeral_id: value.classgeral_id,
                 descricao: value.descricao,
-                baseline: value.baseline
+                baseline: value.baseline,
+                classgeral_pai: value.classgeral_pai
             }
         }
 
         $scope.ValidaForm = function(){
             bool = true;
 
-
-
-            if($scope.formclassgeral.classgeral_id == null || $scope.formclassgeral.descricao == null || $scope.formclassgeral.classgeral_id.replace(/[\s]/g, '') == '' ||  $scope.formclassgeral.descricao.replace(/[\s]/g, '') == '')
+            if($scope.formclassgeral.classgeral_id == null || $scope.formclassgeral.classgeral_pai == null || $scope.formclassgeral.descricao == null || $scope.formclassgeral.classgeral_id.replace(/[\s]/g, '') == '' ||  $scope.formclassgeral.descricao.replace(/[\s]/g, '') == '')
             {
                 alert('Favor, preencha todas as informações!');
                 return;
             }
+            
 
             if(altera == 'S'){ 
                 if(confirm('Você deseja alterar essa Classificação Geral?') == false){

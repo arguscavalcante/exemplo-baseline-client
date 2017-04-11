@@ -2,7 +2,7 @@
 
 angular
     .module('starter')
-    .controller('configLimiteBaseCtrl', ['$scope', '$state', 'LimiteGrafico', 'SubTorre', 'LimiteReal', 'Projeto', 'ClassGeral',  function($scope, $state, LimiteGrafico, SubTorre, LimiteReal, Projeto, ClassGeral){
+    .controller('configLimiteBaseCtrl', ['$scope', '$state', 'LimiteGrafico', 'SubTorre', 'LimiteReal', 'Projeto', 'ClassGeral', 'Regiao',  function($scope, $state, LimiteGrafico, SubTorre, LimiteReal, Projeto, ClassGeral, Regiao){
         console.log('configLimiteBaseCtrl')
 
          // Controle de sessao
@@ -19,6 +19,8 @@ angular
         var zero = "00"
         $scope.mostrar = {};
         $scope.user = {};
+        $scope.familia = [];
+        $scope.sistemas = [];
         $scope.user = {
             gerente: sessionStorage.getItem('login'),
             perfil: sessionStorage.getItem('perfil'),
@@ -106,7 +108,7 @@ angular
             var data_vetor = [];
             var dados_proj = [];
             var dados_depend = [];
-            var dados_torre_base = [];
+            var torre_baseline = 0;
             var dados_torre_gasto = [];
             var meses_acima = "";
             var ret = true;
@@ -124,10 +126,12 @@ angular
 
              for (var i = 0; i < data_vetor.length; i++) {
                 dados_proj.push(0);
-                dados_torre.push(0);
                 dados_depend.push('N');
+                dados_torre_gasto.push(0); 
             }
-
+            if(form.torre!=null && form.variacao_torre!=null){
+                torre_baseline = form.valor_limite * form.variacao_torre/100;
+            }
             
             angular.forEach($scope.projeto, function (value, index) {
                 if ($scope.classgeral.includes(value.classificacao_geral) && value.familia == form.familia) {
@@ -136,7 +140,15 @@ angular
                             if (data_vetor[i] == value.meses[j].mes) {
                                 dados_proj[i] = dados_proj[i] + value.meses[j].valor;
                                 dados_proj[i] = Math.round(dados_proj[i] * 100)/100;
-                                //dados_gasto_torre
+                                //pegar os dados da torre e verificar seu Sistema verificar para retirada desse loop daqui!!!
+                                for(var k=0; k<$scope.sistemas.length; k++){
+                                    if($scope.sistemas[k].familia != value.familia && $scope.sistemas[k].torre == form.torre && $scope.sistemas[k].regiao == value.regiao){
+                                        if($scope.sistemas[k].sistemas.includes(value.sistema)){
+                                            dados_torre_gasto[i] = dados_torre_gasto[i] + value.meses[j].valor;
+                                            dados_torre_gasto[i] = Math.round(dados_torre_gasto[i] * 100)/100;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -226,7 +238,9 @@ angular
                             perc_baseline: form.variacao,
                             dependencia: dados_depend[i],
                             torre: form.torre,
-                            perc_torre: form.variacao_torre
+                            perc_torre: form.variacao_torre,
+                            torre_gasto: dados_torre_gasto[i],
+                            torre_baseline: torre_baseline
                         });
             }
             console.log('limite real: ', $scope.formlimreal)
@@ -241,6 +255,20 @@ angular
         // Alimenta com todas as Subtorres
         SubTorre.find().$promise.then(function(res, err){
             $scope.subtorre = res;
+            angular.forEach(res, function(value, index){
+                $scope.familia.push({torre: value.torre, familia: value.torre_id + " - " + value.subtorre})
+            });
+            Regiao.find()
+                .$promise
+                    .then(function(res, err){
+                        for(var i=0; i<$scope.familia.length; i++){
+                            angular.forEach(res, function(value, index){
+                                if(value.familia == $scope.familia[i].familia){
+                                    $scope.sistemas.push({familia: value.familia, torre: $scope.familia[i].torre, regiao:value.regiao, sistemas:value.sistemas})
+                                }
+                            })
+                        }
+                    });
             //console.log(res);
         });
 
@@ -324,27 +352,27 @@ angular
                         
                         if (criarObjLimiteReal($scope.formlimgraf)){
 
-                            $scope.formlimgraf.id = $scope.formlimgraf.data_corte + $scope.formlimgraf.familia.replace(/[\s]/g, '');
-                            console.log($scope.formlimreal.dados);
-                            LimiteGrafico.create($scope.formlimgraf, function(res, err){
-                                //console.log(res);
-                                LimiteReal.find({filter:{where: {familia: ''+ $scope.formlimreal.familia +''}}})
-                                    .$promise
-                                        .then(function(res){
-                                            if(res.length > 0){
-                                                LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formlimreal.familia +''}}, {dados: $scope.formlimreal.dados}, function(res, err){
-                                                    $state.reload();
-                                                })
-                                            } else {
-                                                LimiteReal.create($scope.formlimreal, function(res, err){
-                                                    $state.reload();
-                                                })
-                                            }
-                                        })
-                                        .catch(function(err){
-                                            alert(err.status);
-                                        });
-                            })
+                            // $scope.formlimgraf.id = $scope.formlimgraf.data_corte + $scope.formlimgraf.familia.replace(/[\s]/g, '');
+                            // console.log($scope.formlimreal.dados);
+                            // LimiteGrafico.create($scope.formlimgraf, function(res, err){
+                            //     //console.log(res);
+                            //     LimiteReal.find({filter:{where: {familia: ''+ $scope.formlimreal.familia +''}}})
+                            //         .$promise
+                            //             .then(function(res){
+                            //                 if(res.length > 0){
+                            //                     LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formlimreal.familia +''}}, {dados: $scope.formlimreal.dados}, function(res, err){
+                            //                         $state.reload();
+                            //                     })
+                            //                 } else {
+                            //                     LimiteReal.create($scope.formlimreal, function(res, err){
+                            //                         $state.reload();
+                            //                     })
+                            //                 }
+                            //             })
+                            //             .catch(function(err){
+                            //                 alert(err.status);
+                            //             });
+                            // })
                         }
                     })
         }

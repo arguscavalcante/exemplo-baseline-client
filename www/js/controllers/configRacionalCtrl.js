@@ -42,66 +42,57 @@ angular
         var d = new Date();
         d.setDate(15);
         d.setMonth(d.getMonth() -3);
-        var data =[];
+        $scope.date = [];
+        $scope.racional = {}
         $scope.tabelalimreal = [];
         var classgeral = ["Aprovado","Pipeline Aprovado","Pipeline"]
+        
+        $scope.racional.opcao = true;
+        $scope.racional.relatorio = false;
+        $scope.racional.busca = false;
 
         $scope.limreal = {};
         $scope.tabelaBase = { familia: "", classgeral: []};
 
         //find, findOne, findById
-        function listarLimReal(){
-            LimiteReal.find().$promise.then(function(res, err){
-                // console.log(res);
-                angular.forEach(res, function(value,index){
-                    for(var i=0; i<value.dados.length; i++){
-                        $scope.tabelalimreal.push(
-                            {   baseline: value.dados[i].baseline, 
-                                perc_baseline: value.dados[i].perc_baseline, 
-                                familia: value.familia, 
-                                baseline_bonus: value.dados[i].baseline_bonus, 
-                                mes: value.dados[i].mes, 
-                                gasto_mes: value.dados[i].gasto_mes
-                            });
-                    }
+        LimiteReal.find()
+            .$promise
+                .then(function(res, err){
+                    $scope.tabelalimreal = res;
+                    // console.log(res);
+                    console.log($scope.tabelalimreal)
+                });  
+
+        Projeto.find()
+            .$promise
+                .then(function (res, err){
+
                 });
-                console.log($scope.tabelalimreal)
-            });  
-        }
 
-        listarLimReal();
-
-        //FACTORY
-        function alimentaData(data, qnt){
-            var date = [];
+         //Acerto das datas por função -- FACTORY
+        function alimentaData(data, qnt) {
+            var vetor = [];
+            var date = new Date(data);
+            var mes;
+            var zero = '00'
             //Alimentando os valores de data
-            for(var i=0; i<qnt; i++){
-                date.push('-'+data.getMonth()+'/'+data.getFullYear())
-                data.setMonth(data.getMonth() + 1);
+            // console.log(date)
+            // console.log(date.getMonth())
+            for (var i = 0; i < qnt; i++) {
+                mes = date.getMonth()+1;
+                mes = mes.toString();
+                mes = zero.substring(0, zero.length - mes.length) + mes
+                vetor.push( mes + '/' + date.getFullYear());
+                date.setMonth(date.getMonth() + 1);
             }
-            for(var i=0; i<date.length; i++){
-                date[i] = date[i].replace('-0/','01/');
-                date[i] = date[i].replace('-1/','02/');
-                date[i] = date[i].replace('-2/','03/');
-                date[i] = date[i].replace('-3/','04/');
-                date[i] = date[i].replace('-4/','05/');
-                date[i] = date[i].replace('-5/','06/');
-                date[i] = date[i].replace('-6/','07/');
-                date[i] = date[i].replace('-7/','08/');
-                date[i] = date[i].replace('-8/','09/');
-                date[i] = date[i].replace('-9/','10/');
-                date[i] = date[i].replace('-10/','11/');
-                date[i] = date[i].replace('-11/','12/');
-            }
-
-            return date;
+            // console.log(vetor);
+            return vetor;
         }
 
-        data = alimentaData(d, 5)
-
+        $scope.date = alimentaData(d, 7);
 
         angular.forEach(classgeral, function(value, index){
-            $scope.tabelaBase.classgeral.push({ name: value, data: atribuirDado(value, data) })
+            $scope.tabelaBase.classgeral.push({ name: value, data: atribuirDado(value, $scope.date) })
         });
 
         // console.log($scope.tabelaBase);
@@ -123,8 +114,39 @@ angular
                     }
                 }
             });
+
             return dados;
         }
-        
+        $scope.tabelacriada = '<table><tr><td><b>teste</b></td></tr>'+'</table>';
 
-    }]);
+        $scope.racionalGerar = function(){
+            console.log('racionalGerar');
+            $scope.racional.opcao = false;
+            $scope.racional.relatorio = true;
+            building($scope.tabelacriada);
+        }
+
+        $scope.valorBonus = function(){
+            console.log('valorBonus');
+            $scope.racional.opcao = false;
+            $scope.racional.busca = true;
+        }
+
+        function building(data){
+            var chart = angular.element(document.getElementsByTagName('table-show'));
+            chart.attr('scope', data);
+            // $compile(chart)($scope);
+        }
+
+    }])
+
+    .directive('tableShow', function() {
+        return {
+            transclude: true,
+            template: function(attr){
+                alert(attr)
+            return attr;
+            }
+        }
+        
+    });

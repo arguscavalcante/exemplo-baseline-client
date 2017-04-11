@@ -79,19 +79,7 @@ function montarTipos(valor){
         }
     })
     campos = campos.substr(0, campos.length-1);
-    // console.log(campos.split(","));
     return campos.split(",");
-    // angular.forEach(campos.split(','), function(value, index){
-    //     if(str.includes(value)){
-    //         tipo = tipo + '"' + value + '":"String",'
-    //     } else {
-    //         tipo = tipo + '"' + value + '":"Number",'
-    //     }
-    // });
-    // tipo = tipo.substring(0,tipo.length-1);
-    // tipo = '{' + tipo + '}';
-    // // console.log(JSON.parse(tipo));
-    // return JSON.parse(tipo);
 }
 
 //funcao para emitir o cabecalho do XML no padrao XLS
@@ -158,5 +146,4 @@ function jsonParaXml(jsonObject, tipos, titulos) {
     xml += emitXmlRodape();
     return xml;  
 };
-
             

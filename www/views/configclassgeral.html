@@ -32,6 +32,12 @@
                         <label>Descrição: </label>
                         <input type="text" ng-model="formclassgeral.descricao" value="" class="form-control" />
                         <br />
+                        <label>Classificação Geral Pai: </label>
+                        <select ng-model="formclassgeral.classgeral_pai" class="form-control">
+                            <option value="0">Ele mesmo</option> 
+                            <option ng-repeat="id in classgeral" value="{{id.classgeral_id}}">{{id.classgeral_id}}</option>
+                        </select>
+                        <br />
                         <label>Interfere no Baseline? </label>
                         <input type="checkbox" ng-model="formclassgeral.baseline" value="" class="form" />
                         <br />
@@ -51,6 +57,7 @@
                                         <th>Classificação Geral</th>
                                         <th>Descrição</th>
                                         <th>Interfere no Baseline?</th>
+                                        <th>Classificação Geral Pai</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -58,6 +65,7 @@
                                         <td>{{id.classgeral_id}}</td>
                                         <td>{{id.descricao}}</td>
                                         <td>{{id.basetabela}}</td>
+                                        <td>{{id.classgeral_pai}}</td>
                                     </tr>
                                 </tbody>
                             </table>
