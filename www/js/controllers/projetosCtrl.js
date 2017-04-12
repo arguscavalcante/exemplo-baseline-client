@@ -531,20 +531,20 @@ angular
                             });
                             // console.log('limiteReal: ', $scope.limValidacao);
                             // console.log('limiteReal Alterado: ', $scope.formLimReal);
-                            console.log($scope.formproj);
+                            // console.log($scope.formproj);
                             // console.log($scope.formLimReal);
             
-                            // Projeto.create($scope.formproj, function(res, err){
-                            //     // console.log(res);
-                            //     // console.log($scope.formproj.familia);
-                            //     // console.log($scope.formLimReal[0].dados);
-                            //     if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
-                            //         LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formproj.familia +''}}, {dados: $scope.formLimReal[0].dados}, function(info, err) {
-                            //             $state.reload();
-                            //         })
-                            //     }
-                            //     $state.reload();                               
-                            // })
+                            Projeto.create($scope.formproj, function(res, err){
+                                // console.log(res);
+                                // console.log($scope.formproj.familia);
+                                // console.log($scope.formLimReal[0].dados);
+                                if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
+                                    LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formproj.familia +''}}, {dados: $scope.formLimReal[0].dados}, function(info, err) {
+                                        $state.reload();
+                                    })
+                                }
+                                $state.reload();                               
+                            })
                         }
                     });    
            

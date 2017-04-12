@@ -31,7 +31,8 @@ angular
         $scope.formfiltro = {}; //filtro para regerar o Grafico
         $scope.subtorre = [];
         $scope.subtorres = [];
-        $scope.projetos = {};
+        $scope.projetoscompleto = {};
+        $scope.projetos = [];
         $scope.date = [];
         $scope.opcaoqnt = [];
         $scope.opcaoano = [];
@@ -356,11 +357,16 @@ angular
             $scope.date = alimentaData(d, qnt_meses);
             buscaValLimiteGraf();
 
-            Projeto.find({ filter: { where: { familia: '' + $scope.user.familia + '' } } })
+            Projeto.find()
                 .$promise
                     .then(function (res) {
-                        $scope.projetos = res;
+                        $scope.projetoscompleto = res;
                         $scope.relatorio.filtro = false;
+                        angular.forEach($scope.projetocompleto, function(value, index){
+                            if(value.familia == $scope.user.familia){
+                                $scope.projetos.push(value)
+                            }
+                        })
                         // console.log(res);
                         LimiteGrafico.find({ filter: { where: { familia: '' + $scope.user.familia + '' } } })
                             .$promise
@@ -376,11 +382,7 @@ angular
                                     // console.log(objChartProj);
                                     grafProjetos(objChartProj);
                                     if($scope.user.perfil == 'Administrador'){
-                                        Projeto.find()
-                                            .$promise
-                                                .then(function (res, err){
-                                                    $scope.file = exportaJSON(res, ano_limite);
-                                                });
+                                        $scope.file = exportaJSON($scope.projetoscompleto, ano_limite);
                                     }else{
                                         $scope.file = exportaJSON($scope.projetos, ano_limite);
                                     }
