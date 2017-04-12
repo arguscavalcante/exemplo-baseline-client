@@ -299,24 +299,31 @@ angular
             return zero.substring(0, zero.length - mes.length) + mes + '/' + value.substring(0, 4);
         }
 
+        function acertaValor(value){
+            value = value.replace(/[\.|\R|\$]/g, '');
+            return value.replace(',', '.');  
+        }
+
         $scope.atribuirTorre = function(){
             $scope.formlimgraf.torre = $scope.formlimgraf.familia.substring(0, $scope.formlimgraf.familia.indexOf("-")-1);
         }
 
         $scope.ValidaForm = function(){
-            console.log($scope.formlimgraf)
+            console.log($scope.formlimgraf);
+            console.log($scope.baseline);
 
-            if($scope.formlimgraf.data_corte == null || $scope.formlimgraf.familia == null || $scope.formlimgraf.valor_limite == null || $scope.formlimgraf.variacao == null )
+            if($scope.formlimgraf.data_corte == null || $scope.formlimgraf.familia == null || $scope.baseline == null || $scope.formlimgraf.variacao == null || $scope.baseline == 0 )
             {
                 alert('Favor, preencha todas as informações!');
                 return;
             }
-            if($scope.baseline == '' || $scope.baseline <= 0 )
+
+            $scope.formlimgraf.valor_limite = Number(acertaValor($scope.baseline));
+
+            if($scope.formlimgraf.valor_limite == '' || $scope.formlimgraf.valor_limite <= 0 )
             {
                 alert('O valor do Baseline deve ser maior que zero!');
                 return;
-            }else{
-                $scope.formlimgraf.valor_limite = $scope.baseline/100;
             }
 
             if($scope.formlimgraf.variacao == '' || $scope.formlimgraf.variacao < 0 )
@@ -409,10 +416,9 @@ angular
             scope: {},
             link: function (scope, elem, attrs, ctrl, ngModel) {
                 if (!ctrl) return;
-                if (!ngModel) return; // do nothing if no ng-model
+                // if (!ngModel) return; // do nothing if no ng-model
 
                 ctrl.$parsers.unshift(function (viewValue) {
-                    console.log(viewValue);
                     var plainNumber;
                     var finalNumber; 
                     var numberString;
@@ -465,17 +471,17 @@ angular
                         thousandsFormatted = thousandsFormatted.substring(1, thousandsFormatted.length);
                     }
 
-                    // Specify how UI should be updated
-                    ngModel.$render = function() {
-                        element.html(ngModel.$viewValue || '');
-                    };
-                    read();
+                    // // Specify how UI should be updated
+                    // ngModel.$render = function() {
+                    //     element.html(ngModel.$viewValue || '');
+                    // };
+                    // read();
 
-                    // Write data to the model
-                    function read() {
-                        ngModel.$setViewValue(elem.val(symbol + thousandsFormatted + centsSeparator + decimalString));
-                    }
-                    // elem.val(symbol + thousandsFormatted + centsSeparator + decimalString);
+                    // // Write data to the model
+                    // function read() {
+                    //     ngModel.$setViewValue(elem.val(symbol + thousandsFormatted + centsSeparator + decimalString));
+                    // }
+                    elem.val(symbol + thousandsFormatted + centsSeparator + decimalString);
                     // valor = symbol + thousandsFormatted + centsSeparator + decimalString
                     return symbol + thousandsFormatted + centsSeparator + decimalString;
                 });

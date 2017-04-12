@@ -383,7 +383,7 @@ angular
         function sumMes(obj){
             var total = 0;
             angular.forEach(obj, function(value, index){
-                total = total + value.valor/100;
+                total = total + Number(acertaValor(value.valor));
             });
             return total;
         }
@@ -415,8 +415,18 @@ angular
             return false;
         }
 
+        function acertaValor(value){
+            if(value.indexOf("$")==-1){
+                return value;
+            }else{
+                value = value.replace(/[\.|\R|\$]/g, '');
+                return value.replace(',', '.'); 
+            }
+        }
+
         $scope.ValidaForm = function(){
             var bool = true;
+            console.log($scope.formproj);
             retornaId();
             //Algum campo indefinido ou Nulo 
             if(angular.isUndefined($scope.formproj.proposta) || angular.isUndefined($scope.formproj.projeto) || angular.isUndefined($scope.formproj.descricao) || angular.isUndefined($scope.formproj.gerente) || angular.isUndefined($scope.formproj.familia) || angular.isUndefined($scope.formproj.sistema) || angular.isUndefined($scope.formproj.classificacao_geral) || angular.isUndefined($scope.formproj.fase))
@@ -442,7 +452,7 @@ angular
             // console.log($scope.formproj.meses);
             // console.log(sumMes($scope.formproj.meses));
             // console.log($scope.formproj.valor_total_proj);
-            if(sumMes($scope.formproj.meses)!=$scope.formproj.valor_total_proj){
+            if(sumMes($scope.formproj.meses)!=Number(acertaValor($scope.formproj.valor_total_proj))){
                 alert('O valor total do projeto é diferente do somatório dos valores informados nos meses!');
                 return;
             }
@@ -467,7 +477,7 @@ angular
                 angular.forEach($scope.formproj.meses, function(value, index){
                     for(var i=0; i<$scope.baseline.data.length; i++){
                         if(value.mes==$scope.baseline.data[i]){
-                            if(value.valor/100 >$scope.baseline.valor[i]){
+                            if(Number(acertaValor(value.valor)) >$scope.baseline.valor[i]){
                                 alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
                                 bool = false;
                                 return;
@@ -489,7 +499,7 @@ angular
                             angular.forEach($scope.formproj.meses, function(value, index){
                                 for(var i=0; i<$scope.valida_baseline.data.length; i++){
                                     if(value.mes==$scope.valida_baseline.data[i]){
-                                        if(value.valor/100 >$scope.valida_baseline.valor[i]){
+                                        if(Number(acertaValor(value.valor)) >$scope.valida_baseline.valor[i]){
                                             alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
                                             bool = false;
                                             return;
@@ -512,7 +522,7 @@ angular
                                             if(value.dados[j].mes==$scope.formproj.meses[i].mes){
                                                 //Se encontrar a classificacao geral que influencia no baseline, aumenta seu valor de gasto
                                                 if ($scope.classgeral.includes($scope.formproj.classificacao_geral) ){
-                                                    value.dados[j].gasto_mes =  value.dados[j].gasto_mes + $scope.formproj.meses[i].valor/100;
+                                                    value.dados[j].gasto_mes =  value.dados[j].gasto_mes + Number(acertaValor($scope.formproj.meses[i].valor));
                                                 } else {
                                                     value.dados[j].gasto_mes =  value.dados[j].gasto_mes;
                                                 }
@@ -531,12 +541,13 @@ angular
                             });
                             console.log('limiteReal: ', $scope.limValidacao);
                             console.log('limiteReal Alterado: ', $scope.formLimReal);
+                            //Acerto dos valores para numeric
+                            $scope.formproj.valor_total_proj = Number(acertaValor($scope.formproj.valor_total_proj));
+                            angular.forEach($scope.formproj.meses, function(value, index){
+                                value.valor = Number(acertaValor(value.valor));
+                            })
                             console.log($scope.formproj);
                             console.log($scope.formLimReal);
-            
-                            angular.forEach($scope.formproj.meses, function(value, index){
-                                value.valor = value.valor/100;
-                            })
 
                             // Projeto.create($scope.formproj, function(res, err){
                             //     // console.log(res);
@@ -563,7 +574,6 @@ angular
             scope: {},
             link: function (scope, elem, attrs, ctrl, ngModel) {
                 if (!ctrl) return;
-                if (!ngModel) return; // do nothing if no ng-model
 
                 ctrl.$parsers.unshift(function (viewValue) {
   
@@ -619,18 +629,8 @@ angular
                         thousandsFormatted = thousandsFormatted.substring(1, thousandsFormatted.length);
                     }
 
-                    // Specify how UI should be updated
-                    ngModel.$render = function() {
-                        element.html(ngModel.$viewValue || '');
-                    };
-                    read();
+                    elem.val(symbol + thousandsFormatted + centsSeparator + decimalString);
 
-                    // Write data to the model
-                    function read() {
-                        ngModel.$setViewValue(elem.val(symbol + thousandsFormatted + centsSeparator + decimalString));
-                    }
-                    // elem.val(symbol + thousandsFormatted + centsSeparator + decimalString);
-                    // valor = symbol + thousandsFormatted + centsSeparator + decimalString
                     return symbol + thousandsFormatted + centsSeparator + decimalString;
                 });
 
