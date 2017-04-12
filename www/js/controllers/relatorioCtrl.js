@@ -362,9 +362,9 @@ angular
                     .then(function (res) {
                         $scope.projetoscompleto = res;
                         $scope.relatorio.filtro = false;
-                        angular.forEach($scope.projetocompleto, function(value, index){
+                        angular.forEach($scope.projetoscompleto, function(value, index){
                             if(value.familia == $scope.user.familia){
-                                $scope.projetos.push(value)
+                                $scope.projetos.push(value);
                             }
                         })
                         // console.log(res);
