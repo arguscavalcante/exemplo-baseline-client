@@ -38,7 +38,7 @@
                         </select>
                         <br />
                         <label>Familia:&nbsp; </label>
-                        <select ng-model="formusuario.subtorre" ng-options="val for val in selectOptionFamilia()" multiple class="form-control"></select>
+                        <select ng-model="formusuario.familia" ng-options="val for val in selectOptionFamilia()" multiple class="form-control"></select>
                         <br />
                         
                         <br />
@@ -72,7 +72,7 @@
                                         <td>{{id.perfil}}</td>
                                         <td>{{id.familiacons}}</td>
                                         <td><button type="button" ng-click="trocaSenha(id.login_user);" class="btn btn-info glyphicon glyphicon-transfer"></button></td>
-                                        <td><button type="button" ng-click="excluiUser(id.login_user);" class="btn btn-info glyphicon glyphicon-remove"></button></td>
+                                        <td><button type="button" ng-click="excluiUser(id.login_user);" class="btn btn-info glyphicon glyphicon-trash"></button></td>
                                     </tr>
                                 </tbody>
                             </table>

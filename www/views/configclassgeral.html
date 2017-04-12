@@ -29,11 +29,10 @@
                         <label>Classificação Geral: </label>
                         <input type="text" ng-model="formclassgeral.classgeral_id" value="" class="form-control" />
                         <br />
-                        <label>Descrição: </label>
-                        <input type="text" ng-model="formclassgeral.descricao" value="" class="form-control" />
+                        <label>Classificação Consolidada? </label>
+                        <input type="checkbox" ng-model="consolidado" value="" class="form" />
                         <br />
-                        <label>Classificação Geral Pai: </label>
-                        <select ng-model="formclassgeral.classgeral_pai" class="form-control">
+                        <select ng-model="formclassgeral.classgeral_pai" class="form-control" ng-show="consolidado">
                             <option value="0">Ele mesmo</option> 
                             <option ng-repeat="id in classgeral" value="{{id.classgeral_id}}">{{id.classgeral_id}}</option>
                         </select>
@@ -66,6 +65,7 @@
                                         <td>{{id.descricao}}</td>
                                         <td>{{id.basetabela}}</td>
                                         <td>{{id.classgeral_pai}}</td>
+                                        <td><button type="button" ng-click="deleteClassGeral(id.classgeral_id);" class="btn btn-info glyphicon glyphicon-trash"></button></td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -24,6 +24,7 @@ angular
             familia: sessionStorage.getItem('familia').split(","),
             nome: sessionStorage.getItem('nome')
         }
+        $scope.consolidado = false;
 
         switch($scope.user.perfil) {
             case 'Administrador':
@@ -71,6 +72,7 @@ angular
                 baseline: value.baseline,
                 classgeral_pai: value.classgeral_pai
             }
+            $scope.consolidado = !angular.isUndefined(value.classgeral_pai)
         }
 
         $scope.ValidaForm = function(){
@@ -119,5 +121,15 @@ angular
                 })
             }
         }
+
+        $scope.deleteClassGeral = function(value) {
+            console.log('delete');
+            // console.log(value);
+             if(confirm('Deseja realmente excluir a Classificação Geral?') == true){
+                ClassGeral.destroyById({id: value}, function(err){
+                    $state.reload();
+                });
+             }
+        };
 
     }]);

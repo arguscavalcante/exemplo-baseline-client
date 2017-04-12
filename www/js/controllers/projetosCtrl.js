@@ -266,7 +266,11 @@ angular
             Projeto.find({filter:{where: {gerente: '' + user.nome + ''}}})
                 .$promise
                     .then(function(res, err){
-                        $scope.formproj.projeto_id = user.nome + res.length+1;
+                        if(res[0]==null){
+                            $scope.formproj.projeto_id = user.nome + 1
+                        } else {
+                            $scope.formproj.projeto_id = user.nome + res.length+1;
+                        }
                         //console.log(res);
                     });
         }
@@ -334,9 +338,10 @@ angular
 
         //Option Familia
         $scope.selectOptionFamilia = function(){
-            var options = $scope.user.familia;
-            return options;       
-        }
+            var options = []
+            options.push($scope.user.familia);
+            return options;     
+        }        
 
         //Option Regiao
         $scope.selectOptionRegiao = function(){
@@ -526,20 +531,20 @@ angular
                             });
                             // console.log('limiteReal: ', $scope.limValidacao);
                             // console.log('limiteReal Alterado: ', $scope.formLimReal);
-                            // console.log($scope.formproj);
+                            console.log($scope.formproj);
                             // console.log($scope.formLimReal);
             
-                            Projeto.create($scope.formproj, function(res, err){
-                                // console.log(res);
-                                // console.log($scope.formproj.familia);
-                                // console.log($scope.formLimReal[0].dados);
-                                if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
-                                    LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formproj.familia +''}}, {dados: $scope.formLimReal[0].dados}, function(info, err) {
-                                        $state.reload();
-                                    })
-                                }
-                                $state.reload();                               
-                            })
+                            // Projeto.create($scope.formproj, function(res, err){
+                            //     // console.log(res);
+                            //     // console.log($scope.formproj.familia);
+                            //     // console.log($scope.formLimReal[0].dados);
+                            //     if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
+                            //         LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formproj.familia +''}}, {dados: $scope.formLimReal[0].dados}, function(info, err) {
+                            //             $state.reload();
+                            //         })
+                            //     }
+                            //     $state.reload();                               
+                            // })
                         }
                     });    
            

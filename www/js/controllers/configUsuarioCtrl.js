@@ -123,4 +123,26 @@ angular
             $state.reload();
         }
 
+        $scope.trocaSenha = function(value) {
+            console.log('trocarSenha');
+            // console.log(value);
+             if(confirm('Deseja trocar a senha desse usuário?') == true){
+                User.upsertWithWhere({where: {id: value}}, {login_pass:'Trocar123'}, function(info, err) {
+                    //console.log(info);
+                    $state.reload();
+                    return;
+                });
+             }
+        };
+
+        $scope.excluiUser = function(value) {
+            console.log('delete');
+            // console.log(value);
+             if(confirm('Deseja realmente excluir esse usuário?') == true){
+                User.destroyById({id: value}, function(err){
+                    $state.reload();
+                });
+             }
+        };
+
     }]);

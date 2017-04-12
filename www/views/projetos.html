@@ -71,8 +71,7 @@
                         <tr>
                             <td><label>Família:</label></td>
                             <td>
-                                <select ng-model="formproj.familia" class="form-control">
-                                    <option ng-repeat="val in user.familias | orderBy:'toString()'" value="{{val}}">{{val}}</option>
+                                <select ng-model="formproj.familia" class="form-control" ng-options="val for val in selectOptionFamilia()">
                                 </select>
                             </td>
                             <td><label>Região:</label></td>
