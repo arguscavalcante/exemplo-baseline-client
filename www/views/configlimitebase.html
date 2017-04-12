@@ -35,7 +35,7 @@
                         <select ng-model="formlimgraf.familia" class="form-control" ng-options="val for val in selectOptionFamilia() | orderBy:'toString()' " ng-change="atribuirTorre();"></select>
                         <br />
                         <label>Valor Baseline: </label>
-                        <input type="number" ng-model="formlimgraf.valor_limite" value="" class="form-control" />
+                        <input type="text" ng-model="baseline" class="form-control" monetario/>
                         <br />
                         <label>Porcentagem de Baseline: </label>
                         <input type="number" ng-model="formlimgraf.variacao" value="" class="form-control" />
@@ -82,6 +82,7 @@
                                         <td>{{id.utilizatorre}}</td>
                                         <td>{{id.torre}}</td>
                                         <td>{{id.variacao_torre}}</td>
+                                        <td><button type="button" ng-click="deleteBaseline(id);" class="btn btn-info glyphicon glyphicon-trash"></button></td>
                                     </tr>
                                 </tbody>
                             </table>

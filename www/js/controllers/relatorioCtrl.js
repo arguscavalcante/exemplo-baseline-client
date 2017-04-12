@@ -367,27 +367,28 @@ angular
                                 $scope.projetos.push(value);
                             }
                         })
-                        // console.log(res);
-                        LimiteGrafico.find({ filter: { where: { familia: '' + $scope.user.familia + '' } } })
-                            .$promise
-                                .then(function (res, err) {
-                                    $scope.limgraf = res;
-                                    // console.log('limite grafico: ', res);
-                                    alimentaProjetos(qnt_meses);//alimenta os dados dos projetos
-                                    alimentaLimites();//alimenta os dados dos limites
 
-                                    objChartProj.serie = $scope.projBase;
-                                    // console.log(objChartProj.serie);
-                                    //Inicializa o Grafico de Projetos
-                                    // console.log(objChartProj);
-                                    grafProjetos(objChartProj);
-                                    if($scope.user.perfil == 'Administrador'){
-                                        $scope.file = exportaJSON($scope.projetoscompleto, ano_limite);
-                                    }else{
-                                        $scope.file = exportaJSON($scope.projetos, ano_limite);
-                                    }
-                                    
-                                });
+                            // console.log(res);
+                            LimiteGrafico.find({ filter: { where: { familia: '' + $scope.user.familia + '' } } })
+                                .$promise
+                                    .then(function (res, err) {
+                                        $scope.limgraf = res;
+                                        // console.log('limite grafico: ', res);
+                                        alimentaProjetos(qnt_meses);//alimenta os dados dos projetos
+                                        alimentaLimites();//alimenta os dados dos limites
+
+                                        objChartProj.serie = $scope.projBase;
+                                        // console.log(objChartProj.serie);
+                                        //Inicializa o Grafico de Projetos
+                                        // console.log(objChartProj);
+                                        grafProjetos(objChartProj);
+                                        if($scope.user.perfil == 'Administrador'){
+                                            $scope.file = exportaJSON($scope.projetoscompleto, ano_limite);
+                                        }else{
+                                            $scope.file = exportaJSON($scope.projetos, ano_limite);
+                                        }
+                                        
+                                    });
                     })
                     .catch(function(err){
                         alert('Erro ao recuperar os dados do banco!');

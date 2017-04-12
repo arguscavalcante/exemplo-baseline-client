@@ -383,7 +383,7 @@ angular
         function sumMes(obj){
             var total = 0;
             angular.forEach(obj, function(value, index){
-                total = total + value.valor;
+                total = total + value.valor/100;
             });
             return total;
         }
@@ -467,7 +467,7 @@ angular
                 angular.forEach($scope.formproj.meses, function(value, index){
                     for(var i=0; i<$scope.baseline.data.length; i++){
                         if(value.mes==$scope.baseline.data[i]){
-                            if(value.valor>$scope.baseline.valor[i]){
+                            if(value.valor/100 >$scope.baseline.valor[i]){
                                 alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
                                 bool = false;
                                 return;
@@ -489,7 +489,7 @@ angular
                             angular.forEach($scope.formproj.meses, function(value, index){
                                 for(var i=0; i<$scope.valida_baseline.data.length; i++){
                                     if(value.mes==$scope.valida_baseline.data[i]){
-                                        if(value.valor>$scope.valida_baseline.valor[i]){
+                                        if(value.valor/100 >$scope.valida_baseline.valor[i]){
                                             alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
                                             bool = false;
                                             return;
@@ -512,7 +512,7 @@ angular
                                             if(value.dados[j].mes==$scope.formproj.meses[i].mes){
                                                 //Se encontrar a classificacao geral que influencia no baseline, aumenta seu valor de gasto
                                                 if ($scope.classgeral.includes($scope.formproj.classificacao_geral) ){
-                                                    value.dados[j].gasto_mes =  value.dados[j].gasto_mes + $scope.formproj.meses[i].valor;
+                                                    value.dados[j].gasto_mes =  value.dados[j].gasto_mes + $scope.formproj.meses[i].valor/100;
                                                 } else {
                                                     value.dados[j].gasto_mes =  value.dados[j].gasto_mes;
                                                 }
@@ -529,22 +529,26 @@ angular
                                     }
                                 }
                             });
-                            // console.log('limiteReal: ', $scope.limValidacao);
-                            // console.log('limiteReal Alterado: ', $scope.formLimReal);
-                            // console.log($scope.formproj);
-                            // console.log($scope.formLimReal);
+                            console.log('limiteReal: ', $scope.limValidacao);
+                            console.log('limiteReal Alterado: ', $scope.formLimReal);
+                            console.log($scope.formproj);
+                            console.log($scope.formLimReal);
             
-                            Projeto.create($scope.formproj, function(res, err){
-                                // console.log(res);
-                                // console.log($scope.formproj.familia);
-                                // console.log($scope.formLimReal[0].dados);
-                                if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
-                                    LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formproj.familia +''}}, {dados: $scope.formLimReal[0].dados}, function(info, err) {
-                                        $state.reload();
-                                    })
-                                }
-                                $state.reload();                               
+                            angular.forEach($scope.formproj.meses, function(value, index){
+                                value.valor = value.valor/100;
                             })
+
+                            // Projeto.create($scope.formproj, function(res, err){
+                            //     // console.log(res);
+                            //     // console.log($scope.formproj.familia);
+                            //     // console.log($scope.formLimReal[0].dados);
+                            //     if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
+                            //         LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formproj.familia +''}}, {dados: $scope.formLimReal[0].dados}, function(info, err) {
+                            //             $state.reload();
+                            //         })
+                            //     }
+                            //     $state.reload();                               
+                            // })
                         }
                     });    
            
@@ -552,20 +556,85 @@ angular
         
     }])
 
-    .directive('format', ['$filter', function ($filter) {
+    .directive("monetarioproj",  ['$filter', function($filter) {
         return {
+            restrict : "A",
             require: '?ngModel',
-            link: function (scope, elem, attrs, ctrl) {
+            scope: {},
+            link: function (scope, elem, attrs, ctrl, ngModel) {
                 if (!ctrl) return;
+                if (!ngModel) return; // do nothing if no ng-model
 
-                ctrl.$formatters.unshift(function (a) {
-                    return $filter(attrs.format)(ctrl.$modelValue)
+                ctrl.$parsers.unshift(function (viewValue) {
+  
+                    var plainNumber;
+                    var finalNumber; 
+                    var numberString;
+                    var decimalString;
+                    var integerString;
+                    var char;
+
+                    var leftZero = '000';
+                    var contThousand = 0;
+                    var thousandsFormatted = '';
+                    var centsSeparator = ','
+                    var thousandsSeparator = '.';
+                    var symbol = 'R$ ';
+
+                    //PARTE 1 - Limpesa dos dos dados de formatação e retirada dos caracteres inválidos
+                    plainNumber = viewValue.replace(/[\.|\,|\R|\$]/g, '');
+                    plainNumber = plainNumber.trim();
+                    // console.log(plainNumber);
+                    finalNumber = parseInt(plainNumber);
+
+                    //PARTE 2 - Tratamento para inclusão do filtro
+                    numberString = finalNumber.toString()
+                    // console.log (numberString.length);
+                    
+                    if(numberString.length<3){
+                        numberString = leftZero.substring(0, leftZero.length - numberString.length) + numberString
+                    }
+
+                    //PARTE 3 - Inclusão do filtro
+                    integerString = numberString.substring(0, numberString.length-2); // Separando o valor inteiro para ser tratado pelo milhar
+                    decimalString = numberString.substring(integerString.length, numberString.length);
+
+                    if(integerString.length>3){
+                        //for para milhar
+                        // console.log(integerString);
+                        for(var i=integerString.length; i>0; i--){
+                            char = integerString.substr(i-1,1);
+                            contThousand++;
+                            if(contThousand%3==0){
+                                char = thousandsSeparator + char;
+                            }
+                            thousandsFormatted = char + thousandsFormatted;
+                            // console.log(thousandsFormatted);
+                        }
+                    }else{
+                        thousandsFormatted = integerString;
+                    }
+
+                    if(thousandsFormatted.substr(0,1)==thousandsSeparator){
+                        thousandsFormatted = thousandsFormatted.substring(1, thousandsFormatted.length);
+                    }
+
+                    // Specify how UI should be updated
+                    ngModel.$render = function() {
+                        element.html(ngModel.$viewValue || '');
+                    };
+                    read();
+
+                    // Write data to the model
+                    function read() {
+                        ngModel.$setViewValue(elem.val(symbol + thousandsFormatted + centsSeparator + decimalString));
+                    }
+                    // elem.val(symbol + thousandsFormatted + centsSeparator + decimalString);
+                    // valor = symbol + thousandsFormatted + centsSeparator + decimalString
+                    return symbol + thousandsFormatted + centsSeparator + decimalString;
                 });
 
-                elem.bind('blur', function(event) {
-                    var plainNumber = elem.val().replace(/[^\d|\-+|\,+]/g, '');
-                    elem.val($filter(attrs.format)(plainNumber));
-                });
+                
             }
         };
     }]);

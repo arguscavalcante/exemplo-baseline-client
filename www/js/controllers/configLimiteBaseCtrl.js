@@ -2,7 +2,7 @@
 
 angular
     .module('starter')
-    .controller('configLimiteBaseCtrl', ['$scope', '$state', 'LimiteGrafico', 'SubTorre', 'LimiteReal', 'Projeto', 'ClassGeral', 'Regiao',  function($scope, $state, LimiteGrafico, SubTorre, LimiteReal, Projeto, ClassGeral, Regiao){
+    .controller('configLimiteBaseCtrl', ['$scope', '$state', '$filter', 'LimiteGrafico', 'SubTorre', 'LimiteReal', 'Projeto', 'ClassGeral', 'Regiao',  function($scope, $state, $filter, LimiteGrafico, SubTorre, LimiteReal, Projeto, ClassGeral, Regiao){
         console.log('configLimiteBaseCtrl')
 
          // Controle de sessao
@@ -21,6 +21,7 @@ angular
         $scope.user = {};
         $scope.familia = [];
         $scope.sistemas = [];
+        $scope.baseline = 0
         $scope.user = {
             gerente: sessionStorage.getItem('login'),
             perfil: sessionStorage.getItem('perfil'),
@@ -54,6 +55,8 @@ angular
         $scope.projeto = {};
         $scope.classgeral =[];
         $scope.limreal = {};
+
+        $scope.formlimgraf.valor_limite = 0;
 
         //find, findOne, findById
         LimiteGrafico.find()
@@ -282,15 +285,11 @@ angular
             return options;       
         }
 
-         // Alimenta com os Projetos
+        // Alimenta com os Projetos
         Projeto.find()
             .$promise
-                .then(function(res){
+                .then(function(res, err){
                     $scope.projeto = res;
-                })
-                .catch(function(err){
-                    console.log(err);
-                    alert(err.status);
                 });
 
         //funcao de trasnformação para data para vizualizacao em tela -- FACTORY
@@ -305,17 +304,21 @@ angular
         }
 
         $scope.ValidaForm = function(){
+            console.log($scope.formlimgraf)
 
             if($scope.formlimgraf.data_corte == null || $scope.formlimgraf.familia == null || $scope.formlimgraf.valor_limite == null || $scope.formlimgraf.variacao == null )
             {
                 alert('Favor, preencha todas as informações!');
                 return;
             }
-            if($scope.formlimgraf.valor_limite == '' || $scope.formlimgraf.valor_limite <= 0 )
+            if($scope.baseline == '' || $scope.baseline <= 0 )
             {
-                alert('O valor do Limite deve ser maior que zero!');
+                alert('O valor do Baseline deve ser maior que zero!');
                 return;
+            }else{
+                $scope.formlimgraf.valor_limite = $scope.baseline/100;
             }
+
             if($scope.formlimgraf.variacao == '' || $scope.formlimgraf.variacao < 0 )
             {
                 alert('O valor mímino da variação é zero!');
@@ -352,29 +355,132 @@ angular
                         
                         if (criarObjLimiteReal($scope.formlimgraf)){
 
-                            // $scope.formlimgraf.id = $scope.formlimgraf.data_corte + $scope.formlimgraf.familia.replace(/[\s]/g, '');
-                            // console.log($scope.formlimreal.dados);
-                            // LimiteGrafico.create($scope.formlimgraf, function(res, err){
-                            //     //console.log(res);
-                            //     LimiteReal.find({filter:{where: {familia: ''+ $scope.formlimreal.familia +''}}})
-                            //         .$promise
-                            //             .then(function(res){
-                            //                 if(res.length > 0){
-                            //                     LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formlimreal.familia +''}}, {dados: $scope.formlimreal.dados}, function(res, err){
-                            //                         $state.reload();
-                            //                     })
-                            //                 } else {
-                            //                     LimiteReal.create($scope.formlimreal, function(res, err){
-                            //                         $state.reload();
-                            //                     })
-                            //                 }
-                            //             })
-                            //             .catch(function(err){
-                            //                 alert(err.status);
-                            //             });
-                            // })
+                            $scope.formlimgraf.id = $scope.formlimgraf.data_corte + $scope.formlimgraf.familia.replace(/[\s]/g, '');
+                            console.log($scope.formlimreal.dados);
+                            LimiteGrafico.create($scope.formlimgraf, function(res, err){
+                                //console.log(res);
+                                LimiteReal.find({filter:{where: {familia: ''+ $scope.formlimreal.familia +''}}})
+                                    .$promise
+                                        .then(function(res){
+                                            if(res.length > 0){
+                                                LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formlimreal.familia +''}}, {dados: $scope.formlimreal.dados}, function(res, err){
+                                                    $state.reload();
+                                                })
+                                            } else {
+                                                LimiteReal.create($scope.formlimreal, function(res, err){
+                                                    $state.reload();
+                                                })
+                                            }
+                                        })
+                                        .catch(function(err){
+                                            alert(err.status);
+                                        });
+                            })
                         }
                     })
         }
+               
+        $scope.deleteBaseline = function(value) {
+            console.log('delete');
 
+            var mesAno=[];
+            var validaData = new Date();
+            validaData.setDate(15);
+
+            mesAno = alimentaData(validaData, 1, true);
+
+            if(parseInt(mesAno[0].valor)>value.data_corte){
+                alert('O registro não pode ser excluido por ser menor que o mes atual!')
+            }else{
+                if(confirm('Deseja realmente excluir o Baseline?') == true){
+                    LimiteGrafico.destroyById({id: value.id}, function(err){
+                        $state.reload();
+                    });
+                }
+            }
+        };
+
+    }])
+
+    .directive("monetario",  ['$filter', function($filter) {
+        return {
+            restrict : "A",
+            require: '?ngModel',
+            scope: {},
+            link: function (scope, elem, attrs, ctrl, ngModel) {
+                if (!ctrl) return;
+                if (!ngModel) return; // do nothing if no ng-model
+
+                ctrl.$parsers.unshift(function (viewValue) {
+                    console.log(viewValue);
+                    var plainNumber;
+                    var finalNumber; 
+                    var numberString;
+                    var decimalString;
+                    var integerString;
+                    var char;
+
+                    var leftZero = '000';
+                    var contThousand = 0;
+                    var thousandsFormatted = '';
+                    var centsSeparator = ','
+                    var thousandsSeparator = '.';
+                    var symbol = 'R$ ';
+
+                    //PARTE 1 - Limpesa dos dos dados de formatação e retirada dos caracteres inválidos
+                    plainNumber = viewValue.replace(/[\.|\,|\R|\$]/g, '');
+                    plainNumber = plainNumber.trim();
+                    // console.log(plainNumber);
+                    finalNumber = parseInt(plainNumber);
+
+                    //PARTE 2 - Tratamento para inclusão do filtro
+                    numberString = finalNumber.toString()
+                    // console.log (numberString.length);
+                    
+                    if(numberString.length<3){
+                        numberString = leftZero.substring(0, leftZero.length - numberString.length) + numberString
+                    }
+
+                    //PARTE 3 - Inclusão do filtro
+                    integerString = numberString.substring(0, numberString.length-2); // Separando o valor inteiro para ser tratado pelo milhar
+                    decimalString = numberString.substring(integerString.length, numberString.length);
+
+                    if(integerString.length>3){
+                        //for para milhar
+                        // console.log(integerString);
+                        for(var i=integerString.length; i>0; i--){
+                            char = integerString.substr(i-1,1);
+                            contThousand++;
+                            if(contThousand%3==0){
+                                char = thousandsSeparator + char;
+                            }
+                            thousandsFormatted = char + thousandsFormatted;
+                            // console.log(thousandsFormatted);
+                        }
+                    }else{
+                        thousandsFormatted = integerString;
+                    }
+
+                    if(thousandsFormatted.substr(0,1)==thousandsSeparator){
+                        thousandsFormatted = thousandsFormatted.substring(1, thousandsFormatted.length);
+                    }
+
+                    // Specify how UI should be updated
+                    ngModel.$render = function() {
+                        element.html(ngModel.$viewValue || '');
+                    };
+                    read();
+
+                    // Write data to the model
+                    function read() {
+                        ngModel.$setViewValue(elem.val(symbol + thousandsFormatted + centsSeparator + decimalString));
+                    }
+                    // elem.val(symbol + thousandsFormatted + centsSeparator + decimalString);
+                    // valor = symbol + thousandsFormatted + centsSeparator + decimalString
+                    return symbol + thousandsFormatted + centsSeparator + decimalString;
+                });
+
+                
+            }
+        };
     }]);
