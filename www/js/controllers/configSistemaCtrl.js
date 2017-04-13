@@ -168,13 +168,14 @@ angular
                 }
             });
 
+            // console.log(obj);
             $scope.reposicao.id_regiao = obj.id_regiao;
             $scope.reposicao.descricao = obj.descricao;
-            $scope.resposicao.regiao = obj.regiao;
+            $scope.reposicao.regiao = obj.regiao;
             $scope.reposicao.familia = obj.familia;
             $scope.reposicao.sistemas = vetor.splice(obj.intervalo, 1);
 
-            console.log(reposicao)
+            // console.log($scope.reposicao)
 
             if(confirm('Deseja realmente excluir o Sistema?') == true){
                  Regiao.destroyById({id: obj.id_regiao}, function(err){ 
