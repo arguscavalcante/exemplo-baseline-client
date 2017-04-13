@@ -168,22 +168,24 @@ angular
                 }
             });
 
+            console.log(vetor.splice(obj.intervalo, 1));
+
             // console.log(obj);
             $scope.reposicao.id_regiao = obj.id_regiao;
             $scope.reposicao.descricao = obj.descricao;
             $scope.reposicao.regiao = obj.regiao;
             $scope.reposicao.familia = obj.familia;
-            $scope.reposicao.sistemas = vetor.splice(obj.intervalo, 1);
+            // $scope.reposicao.sistemas = vetor.splice(obj.intervalo, 1);
 
-            // console.log($scope.reposicao)
+            console.log($scope.reposicao)
 
             if(confirm('Deseja realmente excluir o Sistema?') == true){
-                 Regiao.destroyById({id: obj.id_regiao}, function(err){ 
-                    Regiao.create($scope.reposicao, function(res, err){
-                        // console.log(res);
-                        $state.reload();
-                    })
-                });
+                //  Regiao.destroyById({id: obj.id_regiao}, function(err){ 
+                //     Regiao.create($scope.reposicao, function(res, err){
+                //         // console.log(res);
+                //         $state.reload();
+                //     })
+                // });
 
             }
             
