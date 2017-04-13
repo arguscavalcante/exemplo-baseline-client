@@ -122,13 +122,20 @@ angular
 
         $scope.downloadFile = function(){
             var a = document.createElement("a");
-            var fileName = "MyReport_.xls";
+            var fileName 
             var blob = new Blob(["\ufeff", $scope.file]);
             var url = URL.createObjectURL(blob);
+
+            if($scope.user.perfil == 'Administrador'){
+                fileName = "Dashboard Controle Baseline - IBM_.xls";
+            }else{
+                fileName = $scope.user.familia + "_.xls";
+            }
             // console.log(url);
             a.href = url;
             a.ContentType = 'text/xls; charset=UTF-8'; 
             a.download = fileName;
+            document.body.appendChild(a);
             a.click();
         }
 

@@ -158,7 +158,7 @@ angular
         $scope.deleteSistema = function(obj) {
             console.log('delete');
             console.log(obj);
-            var reposicao = {};
+            $scope.reposicao = {};
             var vetor = [];
             // fruits.splice(2, 1);
             angular.forEach($scope.regiao, function(value,index){
@@ -168,17 +168,17 @@ angular
                 }
             });
 
-            reposicao.id_regiao = obj.id_regiao;
-            reposicao.descricao = obj.descricao;
-            resposicao.regiao = obj.regiao;
-            reposicao.familia = obj.familia;
-            reposicao.sistemas = vetor.splice(obj.intervalo, 1);
+            $scope.reposicao.id_regiao = obj.id_regiao;
+            $scope.reposicao.descricao = obj.descricao;
+            $scope.resposicao.regiao = obj.regiao;
+            $scope.reposicao.familia = obj.familia;
+            $scope.reposicao.sistemas = vetor.splice(obj.intervalo, 1);
 
             console.log(reposicao)
 
             if(confirm('Deseja realmente excluir o Sistema?') == true){
                  Regiao.destroyById({id: obj.id_regiao}, function(err){ 
-                    Regiao.create(reposicao, function(res, err){
+                    Regiao.create($scope.reposicao, function(res, err){
                         // console.log(res);
                         $state.reload();
                     })
