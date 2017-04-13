@@ -97,7 +97,7 @@ angular
         $scope.tabela = [];
         $scope.tabelagasto = [];
         $scope.tabelabaseline = [];
-        $scope.torre_baseline = []
+        $scope.torre_baseline = [];
 
         //Funcao para incluir e excluir meses
         $scope.funcMes = function(valor){
@@ -263,13 +263,13 @@ angular
 
         function retornaId(){
             // Alimenta objeto com todos as Projeto
-            Projeto.find({filter:{where: {gerente: '' + user.nome + ''}}})
+            Projeto.find({filter:{where: {gerente: '' + $scope.user.gerente + ''}}})
                 .$promise
                     .then(function(res, err){
                         if(res[0]==null){
-                            $scope.formproj.projeto_id = user.nome + 1
+                            $scope.formproj.projeto_id = $scope.user.gerente + 1
                         } else {
-                            $scope.formproj.projeto_id = user.nome + res.length+1;
+                            $scope.formproj.projeto_id = $scope.user.gerente + res.length+1;
                         }
                         //console.log(res);
                     });
@@ -495,7 +495,7 @@ angular
                         $scope.limValidacao = res;
                         //console.log(res);
                         if ($scope.classgeral.includes($scope.formproj.classificacao_geral)){
-                            $scope.valida_baseline.valor = alimentaValor($scope.valida_baseline.data, $scope.limValidacao, user.familia, false);
+                            $scope.valida_baseline.valor = alimentaValor($scope.valida_baseline.data, $scope.limValidacao, $scope.user.familia, false);
                             angular.forEach($scope.formproj.meses, function(value, index){
                                 for(var i=0; i<$scope.valida_baseline.data.length; i++){
                                     if(value.mes==$scope.valida_baseline.data[i]){
@@ -508,13 +508,13 @@ angular
                                 }
                             })
                         }
-
+                        
                         //criando a variavel com os valores atualizados para incluir na tabela de LimiteReal.
                         if(bool){
-                            $scope.formLimReal.dados = {};
+                            $scope.formLimReal = {};
                             $scope.formLimReal = $scope.limValidacao;
                             angular.forEach($scope.formLimReal, function(value, index){
-                                if(value.familia == user.familia){
+                                if(value.familia == $scope.user.familia){
                                     for(var j=0; j<value.dados.length; j++){
                                         for(var i=0; i<$scope.formproj.meses.length; i++){
                                             var k = j+1;
@@ -539,27 +539,27 @@ angular
                                     }
                                 }
                             });
-                            console.log('limiteReal: ', $scope.limValidacao);
-                            console.log('limiteReal Alterado: ', $scope.formLimReal);
+                            // console.log('limiteReal: ', $scope.limValidacao);
+                            // console.log('limiteReal Alterado: ', $scope.formLimReal);
                             //Acerto dos valores para numeric
                             $scope.formproj.valor_total_proj = Number(acertaValor($scope.formproj.valor_total_proj));
                             angular.forEach($scope.formproj.meses, function(value, index){
                                 value.valor = Number(acertaValor(value.valor));
-                            })
-                            console.log($scope.formproj);
-                            console.log($scope.formLimReal);
+                            });
+                            // console.log($scope.formproj);
+                            // console.log($scope.formLimReal);
 
-                            // Projeto.create($scope.formproj, function(res, err){
-                            //     // console.log(res);
-                            //     // console.log($scope.formproj.familia);
-                            //     // console.log($scope.formLimReal[0].dados);
-                            //     if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
-                            //         LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formproj.familia +''}}, {dados: $scope.formLimReal[0].dados}, function(info, err) {
-                            //             $state.reload();
-                            //         })
-                            //     }
-                            //     $state.reload();                               
-                            // })
+                            Projeto.create($scope.formproj, function(res, err){
+                                // console.log(res);
+                                // console.log($scope.formproj.familia);
+                                // console.log($scope.formLimReal[0].dados);
+                                if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
+                                    LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formproj.familia +''}}, {dados: $scope.formLimReal[0].dados}, function(info, err) {
+                                        $state.reload();
+                                    })
+                                }
+                                $state.reload();                               
+                            })
                         }
                     });    
            

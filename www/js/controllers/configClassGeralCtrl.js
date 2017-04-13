@@ -68,7 +68,6 @@ angular
             altera = 'S'
             $scope.formclassgeral = {
                 classgeral_id: value.classgeral_id,
-                descricao: value.descricao,
                 baseline: value.baseline,
                 classgeral_pai: value.classgeral_pai
             }
@@ -77,8 +76,8 @@ angular
 
         $scope.ValidaForm = function(){
             bool = true;
-
-            if($scope.formclassgeral.classgeral_id == null || $scope.formclassgeral.classgeral_pai == null || $scope.formclassgeral.descricao == null || $scope.formclassgeral.classgeral_id.replace(/[\s]/g, '') == '' ||  $scope.formclassgeral.descricao.replace(/[\s]/g, '') == '')
+   
+            if($scope.formclassgeral.classgeral_id == null || $scope.formclassgeral.classgeral_id.replace(/[\s]/g, '') == '')
             {
                 alert('Favor, preencha todas as informações!');
                 return;
@@ -86,24 +85,15 @@ angular
             
 
             if(altera == 'S'){ 
+                bool = false;
                 if(confirm('Você deseja alterar essa Classificação Geral?') == false){
                     return;
                 }
                 console.log($scope.formclassgeral);
-                Projeto.find({filter:{where: {classificacao_geral: '' + $scope.formclassgeral.classgeral_id + ''}}}).$promise.then(function(res, err){
-                    //console.log(res);
-                    if(res.length != 0){
-                        if(confirm('Existem projetos cadastrados com essa Classificação geral, deseja continuar?') == false){
-                            bool = false;
-                        }else{
-                            ClassGeral.upsertWithWhere({where: {classgeral_id: ""+ $scope.formclassgeral.classgeral_id +""}}, {descricao: ""+ $scope.formclassgeral.descricao +"", baseline: ""+ $scope.formclassgeral.baseline +""}, function(info, err) {
-                                //console.log(info);
-                                $state.reload();
-                            })
-                            bool = false;
-                        }
-                    }
-                });
+                ClassGeral.upsertWithWhere({where: {classgeral_id: ""+ $scope.formclassgeral.classgeral_id +""}}, {classgeral_id: ""+ $scope.formclassgeral.classgeral_id +"", classgeral_pai: ""+ $scope.formclassgeral.classgeral_pai +"", baseline: ""+ $scope.formclassgeral.baseline +""}, function(info, err) {
+                    //console.log(info);
+                    $state.reload();
+                })
 
             }else{
                 angular.forEach($scope.classgeral,function(value,index){
@@ -120,7 +110,7 @@ angular
                     $state.reload();
                 })
             }
-        }
+        };
 
         $scope.deleteClassGeral = function(value) {
             console.log('delete');

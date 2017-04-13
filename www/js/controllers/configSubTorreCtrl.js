@@ -57,7 +57,7 @@ angular
         });
 
         $scope.alteraSubtorre = function(value){
-            altera = 'S'
+            altera = 'S';
             $scope.formsubtorre = {
                 torre_id: value.torre_id,
                 subtorre: value.subtorre,
@@ -77,12 +77,13 @@ angular
             }
             
             angular.forEach($scope.subtorre, function(value,index){
-                if (value.torre_id == $scope.formsubtorre.torre_id && angular.lowercase(value.subtorre).replace(/[\s]/g, '') == angular.lowercase($scope.formsubtorre.subtorre.replace(/[\s]/g, '')) && alterar!='S'){
+                if (value.torre_id == $scope.formsubtorre.torre_id && angular.lowercase(value.subtorre).replace(/[\s]/g, '') == angular.lowercase($scope.formsubtorre.subtorre.replace(/[\s]/g, '')) && altera!='S'){
                     alert('Esse registro já existe.');
                     bool = false;
                 }
             })
 
+            $scope.formsubtorre.max_grafico = acertaValor($scope.formsubtorre.max_grafico);
             if(altera == 'S'){ 
                 bool = false;
                 if(confirm('Você deseja alterar essa Subtorre?') == false){
@@ -114,4 +115,95 @@ angular
              }
         };
 
+        function acertaValor(value){
+            if(value.indexOf("$")==-1){
+                return value;
+            }else{
+                value = value.replace(/[\.|\R|\$]/g, '');
+                return value.replace(',', '.'); 
+            }
+        }
+
+    }])
+
+    .directive("monetariosub",  ['$filter', function($filter) {
+        return {
+            restrict : "A",
+            require: '?ngModel',
+            scope: {},
+            link: function (scope, elem, attrs, ctrl, ngModel) {
+                if (!ctrl) return;
+                // if (!ngModel) return; // do nothing if no ng-model
+
+                ctrl.$parsers.unshift(function (viewValue) {
+                    var plainNumber;
+                    var finalNumber; 
+                    var numberString;
+                    var decimalString;
+                    var integerString;
+                    var char;
+
+                    var leftZero = '000';
+                    var contThousand = 0;
+                    var thousandsFormatted = '';
+                    var centsSeparator = ','
+                    var thousandsSeparator = '.';
+                    var symbol = 'R$ ';
+
+                    //PARTE 1 - Limpesa dos dos dados de formatação e retirada dos caracteres inválidos
+                    plainNumber = viewValue.replace(/[\.|\,|\R|\$]/g, '');
+                    plainNumber = plainNumber.trim();
+                    // console.log(plainNumber);
+                    finalNumber = parseInt(plainNumber);
+
+                    //PARTE 2 - Tratamento para inclusão do filtro
+                    numberString = finalNumber.toString()
+                    // console.log (numberString.length);
+                    
+                    if(numberString.length<3){
+                        numberString = leftZero.substring(0, leftZero.length - numberString.length) + numberString
+                    }
+
+                    //PARTE 3 - Inclusão do filtro
+                    integerString = numberString.substring(0, numberString.length-2); // Separando o valor inteiro para ser tratado pelo milhar
+                    decimalString = numberString.substring(integerString.length, numberString.length);
+
+                    if(integerString.length>3){
+                        //for para milhar
+                        // console.log(integerString);
+                        for(var i=integerString.length; i>0; i--){
+                            char = integerString.substr(i-1,1);
+                            contThousand++;
+                            if(contThousand%3==0){
+                                char = thousandsSeparator + char;
+                            }
+                            thousandsFormatted = char + thousandsFormatted;
+                            // console.log(thousandsFormatted);
+                        }
+                    }else{
+                        thousandsFormatted = integerString;
+                    }
+
+                    if(thousandsFormatted.substr(0,1)==thousandsSeparator){
+                        thousandsFormatted = thousandsFormatted.substring(1, thousandsFormatted.length);
+                    }
+
+                    // // Specify how UI should be updated
+                    // ngModel.$render = function() {
+                    //     element.html(ngModel.$viewValue || '');
+                    // };
+                    // read();
+
+                    // // Write data to the model
+                    // function read() {
+                    //     ngModel.$setViewValue(elem.val(symbol + thousandsFormatted + centsSeparator + decimalString));
+                    // }
+                    elem.val(symbol + thousandsFormatted + centsSeparator + decimalString);
+                    // valor = symbol + thousandsFormatted + centsSeparator + decimalString
+                    return symbol + thousandsFormatted + centsSeparator + decimalString;
+                });
+
+                
+            }
+        };
     }]);

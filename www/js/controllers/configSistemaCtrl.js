@@ -54,7 +54,7 @@ angular
                 
                 angular.forEach($scope.regiao, function(value,index){
                     for(var i=0; i<value.sistemas.length; i++){
-                        $scope.tabelasis.push({id_regiao:value.id_regiao, regiao: value.regiao, familia: value.familia, sistema: value.sistemas[i], intervalo: i});
+                        $scope.tabelasis.push({id_regiao:value.id_regiao, regiao: value.regiao, familia: value.familia, sistema: value.sistemas[i], descricao: value.descricao, intervalo: i});
                     }
                 });
                 console.log($scope.tabelasis);
@@ -158,24 +158,32 @@ angular
         $scope.deleteSistema = function(obj) {
             console.log('delete');
             console.log(obj);
+            var reposicao = {};
             var vetor = [];
             // fruits.splice(2, 1);
             angular.forEach($scope.regiao, function(value,index){
                 if(value.id_regiao == obj.id_regiao){
                     vetor = value.sistemas;
+                    console.log(value.sistemas);
                 }
             });
 
-            vetor.splice(obj.intervalo, 1);
-            console.log(vetor)
+            reposicao.id_regiao = obj.id_regiao;
+            reposicao.descricao = obj.descricao;
+            resposicao.regiao = obj.regiao;
+            reposicao.familia = obj.familia;
+            reposicao.sistemas = vetor.splice(obj.intervalo, 1);
+
+            console.log(reposicao)
 
             if(confirm('Deseja realmente excluir o Sistema?') == true){
-                Regiao.upsertWithWhere({where: {id_regiao: ""+ obj.id_regiao +""}}, {sistemas: vetor})
-                    .$promise
-                        .then(function(info, err) {
-                            console.log(info);
-                            $state.reload();
-                        });
+                 Regiao.destroyById({id: obj.id_regiao}, function(err){ 
+                    Regiao.create(reposicao, function(res, err){
+                        // console.log(res);
+                        $state.reload();
+                    })
+                });
+
             }
             
         };
