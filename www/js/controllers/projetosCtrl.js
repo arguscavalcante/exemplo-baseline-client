@@ -478,11 +478,14 @@ angular
         };
 
         function validaValores(){
+            var k;
+            var dependencia;
+
             LimiteReal.find()
                 .$promise
                     .then(function(res, err){
                         $scope.formLimReal = res;
-                        
+
                         //console.log(res);
                         if ($scope.classgeral.includes($scope.formproj.classificacao_geral)){
                             $scope.valida_baseline.valor = alimentaValor($scope.valida_baseline.data, res, $scope.user.familia, false);
@@ -491,8 +494,8 @@ angular
                                 if(value.familia == $scope.user.familia){
                                     for(var j=0; j<value.dados.length; j++){
                                         for(var i=0; i<$scope.formproj.meses.length; i++){
-                                            var k = j+1;
-                                            var dependencia = '';
+                                            k = j+1;
+                                            dependencia = '';
                                             if(value.dados[j].mes==$scope.formproj.meses[i].mes){
                                                 //Se encontrar a classificacao geral que influencia no baseline, aumenta seu valor de gasto
                                                 if ($scope.classgeral.includes($scope.formproj.classificacao_geral) ){
@@ -500,7 +503,8 @@ angular
                                                 } else {
                                                     value.dados[j].gasto_mes =  value.dados[j].gasto_mes;
                                                 }
-                                                if(value.dados[j].gasto_mes >= value.dados[j].baseline+value.dados[j].baseline*value.dados[j].perc_baseline/-100 && value.dados[j].dependencia != 'S'){
+                                                //acerta flag de dependencia do mes seguinte
+                                                if(value.dados[j].gasto_mes >= value.dados[j].baseline+value.dados[j].baseline*value.dados[j].perc_baseline/-100 && value.dados[j].gasto_mes != value.dados[j].baseline && value.dados[j].dependencia != 'S'){
                                                     dependencia = 'S';
                                                 }else{
                                                     dependencia = 'N';
@@ -514,37 +518,83 @@ angular
                                 }
                             });
 
-                            console.log($scope.formLimReal);
-                            angular.forEach($scope.formproj.meses, function(value, index){
-                                for(var i=0; i<$scope.valida_baseline.data.length; i++){
-                                    if(value.mes==$scope.valida_baseline.data[i]){
-                                        // if(value.) EDSON
-                                        if(Number(acertaValor(value.valor)) >$scope.valida_baseline.valor[i]){
-                                            alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
-                                            bool = false;
-                                            return;
+                            console.log('resultado dentro da funcao: ', $scope.formLimReal);
+                            //validando se os valores alterados estão conforme regra de baseline
+                            angular.forEach($scope.formLimReal, function(value, index){
+                                if(value.familia==$scope.user.familia){
+                                    for(var j=0; j<value.dados.length; j++){
+                                        //acertar os valores de dependencia
+                                        if(value.dados[j].dependencia=='S'){
+                                            k=j+1;
+                                            if(!angular.isUndefined(value.dados[k])){
+                                                if(value.dados[k].dependencia == 'S'){
+                                                    value.dados[k].dependencia = 'N';
+                                                }
+                                            }
+                                        }
+                                    // }
+
+                                    // for(var j=0; j<value.dados.length; j++){
+                                        //verificando o valor
+                                        for(var i=0; i<$scope.formproj.meses.length; i++){
+                                            if(value.dados[j].mes==$scope.formproj.meses[i].mes){
+                                                console.log(value.dados[j].mes);
+                                                if(value.dados[j].dependencia == 'S'){
+                                                    k=j-1;
+                                                    if(value.dados[j].gasto_mes>(value.dados[j].baseline + (value.dados[k].baseline - value.dados[k].gasto_mes))){
+                                                        alert('O valor imposto no mes' + value.dados[j].mes + ' é maior que o Baseline, por causa de sua dependencia com o mes seguinte.');
+                                                        return false;
+                                                    }
+                                                }else{
+                                                    if(value.dados[j].gasto_mes>value.dados[j].baseline+(value.dados[j].baseline*value.dados[j].perc_baseline/100)){
+                                                        alert('O valor imposto no mes ' + value.dados[j].mes + ' é maior que o Baseline.');
+                                                        return false;
+                                                    }
+                                                    k=j+1;
+                                                    if(value.dados[k].dependencia == 'S'){
+                                                        if(value.dados[k].gasto_mes>(value.dados[k].baseline + (value.dados[j].baseline - value.dados[j].gasto_mes))){
+                                                            alert('O valor imposto no mes ' + value.dados[j].mes + ' é maior que o Baseline, por causa de sua dependencia com o mes seguinte.');
+                                                            return false;
+                                                        }
+                                                    }
+                                                }
+
+                                            }
                                         }
                                     }
                                 }
-                            })
+                            });
+                            console.log('valores: ' ,$scope.baseline);
+
+                            // angular.forEach($scope.formproj.meses, function(value, index){
+                            //     for(var i=0; i<$scope.valida_baseline.data.length; i++){
+                            //         if(value.mes==$scope.valida_baseline.data[i]){
+                            //             // if(value.) EDSON
+                            //             if(Number(acertaValor(value.valor)) >$scope.valida_baseline.valor[i]){
+                            //                 alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
+                            //                 bool = false;
+                            //                 return;
+                            //             }
+                            //         }
+                            //     }
+                            // })
                         }
 
-                        
-                        
+                        // if ($scope.classgeral.includes($scope.formproj.classificacao_geral)){
+                        //     angular.forEach($scope.formLimReal.meses, function(value, index){
+                        //         for(var i=0; i<$scope.baseline.data.length; i++){
+                        //             if(value.mes==$scope.baseline.data[i]){
+                        //                 if(Number(acertaValor(value.valor)) >$scope.baseline.valor[i]){
+                        //                     alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
+                        //                     bool = false;
+                        //                     return;
+                        //                 }
+                        //             }
+                        //         }
+                        //     })
+                        // }
 
-                        if ($scope.classgeral.includes($scope.formproj.classificacao_geral)){
-                            angular.forEach($scope.formLimReal.meses, function(value, index){
-                                for(var i=0; i<$scope.baseline.data.length; i++){
-                                    if(value.mes==$scope.baseline.data[i]){
-                                        if(Number(acertaValor(value.valor)) >$scope.baseline.valor[i]){
-                                            alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
-                                            bool = false;
-                                            return;
-                                        }
-                                    }
-                                }
-                            })
-                        }
+                        return false;
                     });
         }
         
