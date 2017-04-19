@@ -369,7 +369,7 @@ angular
 
             Projeto.find()
                 .$promise
-                    .then(function (res) {
+                    .then(function (res, err) {
                         $scope.projetoscompleto = res;
                         $scope.relatorio.filtro = false;
                         angular.forEach($scope.projetoscompleto, function(value, index){
@@ -400,9 +400,6 @@ angular
                                         
                                     });
                     })
-                    .catch(function(err){
-                        alert('Erro ao recuperar os dados do banco!');
-                    });
 
         }
 
