@@ -63,8 +63,9 @@ angular
             $scope.formsubtorre = {
                 torre_id: value.torre_id,
                 subtorre: value.subtorre,
-                max_grafico: value.max_grafico,
-                ano_limite: value.ano_limite
+                max_grafico: currencyValue(value.max_grafico),
+                ano_limite: value.ano_limite,
+                id: value.subtorre,
             }
 
 
@@ -97,10 +98,13 @@ angular
                     return;
                 }
                 
-                SubTorre.upsertWithWhere({where: {subtorre: ''+ $scope.formsubtorre.subtorre +''}}, {max_grafico: ''+ $scope.formsubtorre.max_grafico +'', ano_limite: ''+ $scope.formsubtorre.ano_limite +''}, function(info, err) {
+                SubTorre.upsertWithWhere({where: {subtorre: ''+ $scope.formsubtorre.subtorre +''}}, {torre_id: ''+ $scope.formsubtorre.torre_id +'', subtorre: ''+ $scope.formsubtorre.subtorre +'', max_grafico: ''+ $scope.formsubtorre.max_grafico +'', ano_limite: ''+ $scope.formsubtorre.ano_limite +''}, function(info, err) {
                     //console.log(info);
-                    $state.reload();
-                    return;
+                    SubTorre.destroyById({id: $scope.formsubtorre.id}, function(err){
+                        $state.reload();
+                        return;
+                    });
+                    
                 })  
             }
 
@@ -110,6 +114,60 @@ angular
                     $state.reload();
                 })
             }
+        }
+
+        function currencyValue(valor){
+            var numberString;
+            var decimalString;
+            var integerString;
+            var char;
+            var leftZero = '000';
+            var contThousand = 0;
+            var thousandsFormatted = '';
+            var centsSeparator = ','
+            var thousandsSeparator = '.';
+            var symbol = 'R$ ';
+
+            //PARTE 1 - Limpesa dos dos dados de formatação e retirada dos caracteres inválidos
+            // console.log(plainNumber);
+            if(valor.toString().indexOf(".")==-1){
+                numberString = valor.toString() + '00'
+            } else {
+                numberString = valor.toString().replace('.','')
+            }
+
+            //PARTE 2 - Tratamento para inclusão do filtro
+            console.log (numberString);
+            
+            if(numberString.length<3){
+                numberString = leftZero.substring(0, leftZero.length - numberString.length) + numberString
+            }
+
+            //PARTE 3 - Inclusão do filtro
+            integerString = numberString.substring(0, numberString.length-2); // Separando o valor inteiro para ser tratado pelo milhar
+            decimalString = numberString.substring(integerString.length, numberString.length);
+
+            if(integerString.length>3){
+                //for para milhar
+                // console.log(integerString);
+                for(var i=integerString.length; i>0; i--){
+                    char = integerString.substr(i-1,1);
+                    contThousand++;
+                    if(contThousand%3==0){
+                        char = thousandsSeparator + char;
+                    }
+                    thousandsFormatted = char + thousandsFormatted;
+                    // console.log(thousandsFormatted);
+                }
+            }else{
+                thousandsFormatted = integerString;
+            }
+
+            if(thousandsFormatted.substr(0,1)==thousandsSeparator){
+                thousandsFormatted = thousandsFormatted.substring(1, thousandsFormatted.length);
+            }
+
+            return symbol + thousandsFormatted + centsSeparator + decimalString;
         }
 
         $scope.deleteSubtorre = function(value) {

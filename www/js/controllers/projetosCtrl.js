@@ -404,48 +404,48 @@ angular
             console.log($scope.formproj);
             retornaId();
             //Algum campo indefinido ou Nulo 
-            // if(angular.isUndefined($scope.formproj.proposta) || angular.isUndefined($scope.formproj.projeto) || angular.isUndefined($scope.formproj.descricao) || angular.isUndefined($scope.formproj.gerente) || angular.isUndefined($scope.formproj.familia) || angular.isUndefined($scope.formproj.sistema) || angular.isUndefined($scope.formproj.classificacao_geral) || angular.isUndefined($scope.formproj.fase))
-            // {
-            //     alert('Favor, preencha todas as informações!');
-            //     return;
-            // }
+            if(angular.isUndefined($scope.formproj.proposta) || angular.isUndefined($scope.formproj.projeto) || angular.isUndefined($scope.formproj.descricao) || angular.isUndefined($scope.formproj.gerente) || angular.isUndefined($scope.formproj.familia) || angular.isUndefined($scope.formproj.sistema) || angular.isUndefined($scope.formproj.classificacao_geral) || angular.isUndefined($scope.formproj.fase))
+            {
+                alert('Favor, preencha todas as informações!');
+                return;
+            }
 
-            // //Campo vazio com espaço em branco
-            // if($scope.formproj.fase == '' || $scope.formproj.familia == '' || $scope.formproj.sistema == '' || $scope.formproj.gerente == '' || $scope.formproj.classificacao_geral == '' || $scope.formproj.proposta.replace(/[\s]/g, '') == '' || $scope.formproj.projeto.replace(/[\s]/g, '') == '' || $scope.formproj.descricao.replace(/[\s]/g, '') == '' || $scope.formproj.valor_total_proj == '' )
-            // {
-            //     alert('Favor, preencha todas as informações!');
-            //     return;
-            // }
+            //Campo vazio com espaço em branco
+            if($scope.formproj.fase == '' || $scope.formproj.familia == '' || $scope.formproj.sistema == '' || $scope.formproj.gerente == '' || $scope.formproj.classificacao_geral == '' || $scope.formproj.proposta.replace(/[\s]/g, '') == '' || $scope.formproj.projeto.replace(/[\s]/g, '') == '' || $scope.formproj.descricao.replace(/[\s]/g, '') == '' || $scope.formproj.valor_total_proj == '' )
+            {
+                alert('Favor, preencha todas as informações!');
+                return;
+            }
 
-            // //Verificar valor vazio de meses.
-            // if($scope.formproj.meses.length == 0)
-            // {
-            //     alert('Favor, inclua a distribuição dos valores por mes!');
-            //     return;
-            // }
+            //Verificar valor vazio de meses.
+            if($scope.formproj.meses.length == 0)
+            {
+                alert('Favor, inclua a distribuição dos valores por mes!');
+                return;
+            }
 
-            // // console.log($scope.formproj.meses);
-            // // console.log(sumMes($scope.formproj.meses));
-            // // console.log($scope.formproj.valor_total_proj);
-            // if(sumMes($scope.formproj.meses)!=Number(acertaValor($scope.formproj.valor_total_proj))){
-            //     alert('O valor total do projeto é diferente do somatório dos valores informados nos meses!');
-            //     return;
-            // }
+            // console.log($scope.formproj.meses);
+            // console.log(sumMes($scope.formproj.meses));
+            // console.log($scope.formproj.valor_total_proj);
+            if(sumMes($scope.formproj.meses)!=Number(acertaValor($scope.formproj.valor_total_proj))){
+                alert('O valor total do projeto é diferente do somatório dos valores informados nos meses!');
+                return;
+            }
 
-            // if(verificaNulo($scope.formproj.meses)){
-            //     alert('Informe um valor maior que zero para realizar a inclusão.');
-            //     return;
-            // }
+            if(verificaNulo($scope.formproj.meses)){
+                alert('Informe um valor maior que zero para realizar a inclusão.');
+                return;
+            }
 
-            // if(verificaNulo($scope.formproj.meses)){
-            //     alert('Selecione um mes para realizar a inclusão.');
-            //     return;
-            // }
+            if(verificaNulo($scope.formproj.meses)){
+                alert('Selecione um mes para realizar a inclusão.');
+                return;
+            }
 
-            // if(equal($scope.formproj.meses)){
-            //      alert('Foram informados meses que se repetem, favor olhar os dados informados!');
-            //     return;
-            // }
+            if(equal($scope.formproj.meses)){
+                 alert('Foram informados meses que se repetem, favor olhar os dados informados!');
+                return;
+            }
             console.log($scope.baseline);       
 
             // Validacao nivel 2 com o Banco de dados
@@ -462,17 +462,17 @@ angular
                 // console.log($scope.formproj);
                 // console.log($scope.formLimReal);
 
-                // Projeto.create($scope.formproj, function(res, err){
-                //     // console.log(res);
-                //     // console.log($scope.formproj.familia);
-                //     // console.log($scope.formLimReal[0].dados);
-                //     if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
-                //         LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formproj.familia +''}}, {dados: $scope.formLimReal[0].dados}, function(info, err) {
-                //             $state.reload();
-                //         })
-                //     }
-                //     $state.reload();                               
-                // })
+                Projeto.create($scope.formproj, function(res, err){
+                    // console.log(res);
+                    // console.log($scope.formproj.familia);
+                    // console.log($scope.formLimReal[0].dados);
+                    if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
+                        LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formproj.familia +''}}, {dados: $scope.formLimReal[0].dados}, function(info, err) {
+                            $state.reload();
+                        })
+                    }
+                    $state.reload();                               
+                })
             }
            
         };
@@ -515,6 +515,7 @@ angular
                                                 }
                                             }   
                                         }
+                                        value.dados[j].dependencia = 'N';
                                     }
                                 }
                             });
@@ -525,24 +526,18 @@ angular
                                 if(value.familia==$scope.user.familia){
                                     for(var j=0; j<value.dados.length; j++){
                                         //acertar os valores de dependencia
-                                        if(value.dados[j].dependencia=='S'){
-                                            k=j+1;
-                                            if(!angular.isUndefined(value.dados[k])){
-                                                if(value.dados[k].dependencia == 'S'){
-                                                    value.dados[k].dependencia = 'N';
-                                                }
-                                            }
-                                        } else {
-                                            if(value.dados[j].gasto_mes >= value.dados[j].baseline+value.dados[j].baseline*value.dados[j].perc_baseline/-100 && value.dados[j].gasto_mes != value.dados[j].baseline){
-                                                dependencia = 'S';
-                                            }else{
-                                                dependencia = 'N';
-                                            }
-                                            if(!angular.isUndefined(value.dados[k])){
-                                                value.dados[k].dependencia = dependencia;
-                                            }       
-                                        }                                       
-
+                                        k=j+1;
+                                        if(value.dados[j].gasto_mes >= value.dados[j].baseline+value.dados[j].baseline*value.dados[j].perc_baseline/-100 && value.dados[j].gasto_mes != value.dados[j].baseline && value.dados[j].dependencia != 'S'){
+                                            dependencia = 'S';
+                                        }else{
+                                            dependencia = 'N';
+                                        }
+                                        if(!angular.isUndefined(value.dados[k])){
+                                            value.dados[k].dependencia = dependencia;
+                                        }       
+                                    }          
+                                                                     
+                                    for(var j=0; j<value.dados.length; j++){
                                         for(var i=0; i<$scope.formproj.meses.length; i++){
                                             if(value.dados[j].mes==$scope.formproj.meses[i].mes){
                                                 console.log(value.dados[j].mes);
@@ -565,7 +560,7 @@ angular
                                                         }
                                                     }
                                                 }
-                                                if ($scope.classgeral.includes($scope.formproj.classificacao_geral) ){
+                                                if (com_torre){
                                                      if(value.dados[j].torre_gasto > value.dados[j].torre_baseline){
                                                         alert('O valor imposto no mes ' + value.dados[j].mes + ' é maior que o disponivel pela torre.');
                                                         return false;
