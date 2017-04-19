@@ -70,6 +70,10 @@ angular
                 $scope.mostrar.cadastproj = true;
                 $scope.mostrar.alterproj = true;
                 break;
+            case 'Visitante':
+                $scope.mostrar.cadastproj = false;
+                $scope.mostrar.alterproj = false;
+                break;
             default:
                 alert('Não foi identificado o perfil do usuário!');
         }
@@ -86,6 +90,7 @@ angular
             $scope.user.subtorre = $scope.user.familia.substring($scope.user.familia.indexOf("-")+2);
             $scope.relatorio.filtro = true;
             $scope.relatorio.download = true;
+            console.log($scope.user);
             listarProjetos();
         } 
 
@@ -139,34 +144,32 @@ angular
             a.click();
         }
 
-         SubTorre.find()
-            .$promise
-                .then(function (res, err) {
-                    $scope.subtorres = res;
-                
-                });
-
         //Funcao para buscar na subtorre o valor do limite do grafico
         function buscaValLimiteGraf(){
             var achei = false;
-            if(angular.isUndefined($scope.subtorres)){
-                    alert('Subtorre não cadastrada no sistema, entre em contado com o administrador do sistema.');
-                    ano_limite = 2020;
-                }else{
-                    angular.forEach($scope.subtorres, function(value, index){
-                        if(value.subtorre == $scope.user.subtorre){
-                            achei = true;
-                            $scope.user.subtorre = value;
-                            ano_limite = value.ano_limite;
-                        }
-                    })
-                    if(!achei){
-                        alert('Subtorre não cadastrada no sistema, entre em contado com o administrador do sistema.');
-                        ano_limite = 2020;
-                    }
-                   
-                }
-                $scope.opcaoano = atribuiAno(ano_limite);
+            SubTorre.find()
+            .$promise
+                .then(function (res, err) {
+                    $scope.subtorres = res;                
+                        if(angular.isUndefined($scope.subtorres)){
+                                alert('Subtorre não cadastrada no sistema, entre em contado com o administrador do sistema.');
+                                ano_limite = 2020;
+                            }else{
+                                angular.forEach($scope.subtorres, function(value, index){
+                                    if(value.subtorre == $scope.user.subtorre){
+                                        achei = true;
+                                        $scope.user.subtorre = value;
+                                        ano_limite = value.ano_limite;
+                                    }
+                                })
+                                if(!achei){
+                                    alert('Subtorre não cadastrada no sistema, entre em contado com o administrador do sistema.');
+                                    ano_limite = 2020;
+                                }
+                            
+                            }
+                            $scope.opcaoano = atribuiAno(ano_limite);
+                        });
         }
 
         

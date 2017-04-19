@@ -43,6 +43,7 @@ angular
         $scope.subtorre = {};
         $scope.formsistema = {};
         $scope.tabelasis = [];
+        $scope.alteradesabilita = false;
         $scope.formsistema.id_regiao = 0;
         var altera = 'N';
 
@@ -100,6 +101,7 @@ angular
                 sistema: value.sistema,
                 intervalo: value.intervalo
             }
+            $scope.alteradesabilita = true;
         }
 
         $scope.ValidaForm = function(){
@@ -168,25 +170,28 @@ angular
                 }
             });
 
-            console.log(vetor.splice(obj.intervalo, 1));
+            // console.log(vetor.splice(obj.intervalo, 1));
 
             // console.log(obj);
             $scope.reposicao.id_regiao = obj.id_regiao;
             $scope.reposicao.descricao = obj.descricao;
             $scope.reposicao.regiao = obj.regiao;
             $scope.reposicao.familia = obj.familia;
-            // $scope.reposicao.sistemas = vetor.splice(obj.intervalo, 1);
+            if(vetor.length > 1){
+                $scope.reposicao.sistemas = vetor.splice(obj.intervalo-1, 1);
+            }else{ 
+                $scope.reposicao.sistemas = [];
+            }
 
             console.log($scope.reposicao)
 
             if(confirm('Deseja realmente excluir o Sistema?') == true){
-                //  Regiao.destroyById({id: obj.id_regiao}, function(err){ 
-                //     Regiao.create($scope.reposicao, function(res, err){
-                //         // console.log(res);
-                //         $state.reload();
-                //     })
-                // });
-
+                 Regiao.destroyById({id: obj.id_regiao}, function(err){ 
+                    Regiao.create($scope.reposicao, function(res, err){
+                        // console.log(res);
+                        $state.reload();
+                    })
+                });
             }
             
         };

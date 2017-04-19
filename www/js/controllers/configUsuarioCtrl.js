@@ -52,6 +52,7 @@ angular
 
         var bool = true;
         var familia = "";
+        var altera = 'N';
 
         $scope.formusuario = {};
 
@@ -67,6 +68,17 @@ angular
             })
 
             return options;       
+        }
+
+        $scope.alteraUsuario = function(value){
+            altera = 'S'
+            $scope.formusuario = {
+                login_pass: value.login_pass,
+                login_user: value.login_user,
+                login_nome: value.login_nome,
+                perfil: value.perfil,
+                familia: value.familia
+            }
         }
 
         // Alimenta com todas as Subtorres
@@ -113,6 +125,21 @@ angular
                 }
             })
 
+            if(altera == 'S'){ 
+                bool = false;
+                if(confirm('Você deseja alterar esse Usuario?') == false){
+                    return;
+                }
+
+                User.upsertWithWhere({where: {login_user: ''+ $scope.formusuario.login_user +''}}, {fase: ''+ $scope.formusuario.fase +'', descricao: ''+ $scope.formusuario.descricao +''}, function(info, err) {
+                    //console.log(info);
+                    User.destroyById({login_user: $scope.formusuario.login_user}, function(err){
+                        $state.reload();
+                        return;
+                    });   
+                });
+            }
+
             if (bool){
                 User.create($scope.formusuario, function(res, err){
                     console.log(res);
@@ -133,7 +160,7 @@ angular
                     return;
                 });
              }
-        };
+        }
 
         $scope.excluiUser = function(value) {
             console.log('delete');
@@ -143,6 +170,6 @@ angular
                     $state.reload();
                 });
              }
-        };
+        }
 
     }]);

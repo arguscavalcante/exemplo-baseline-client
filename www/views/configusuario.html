@@ -65,7 +65,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="id in usuario">
+                                    <tr ng-repeat="id in usuario" ng-click="alteraUsuario(id)">
                                         <td>{{id.login_user}}</td>
                                         <td>******</td>
                                         <td>{{id.login_nome}}</td>
