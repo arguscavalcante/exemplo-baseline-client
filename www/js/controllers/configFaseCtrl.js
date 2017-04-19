@@ -58,7 +58,8 @@ angular
             altera = 'S'
             $scope.formfase = {
                 fase: value.fase,
-                descricao: value.descricao
+                descricao: value.descricao,
+                id: value.fase
             }
         }
 
@@ -86,8 +87,10 @@ angular
 
                 Fase.upsertWithWhere({where: {fase: ''+ $scope.formfase.fase +''}}, {fase: ''+ $scope.formfase.fase +'', descricao: ''+ $scope.formfase.descricao +''}, function(info, err) {
                     //console.log(info);
-                    $state.reload();
-                    return;
+                    Fase.destroyById({id: $scope.formfase.id}, function(err){
+                        $state.reload();
+                        return;
+                    });   
                 });
 
             }
