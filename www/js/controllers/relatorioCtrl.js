@@ -2,7 +2,7 @@
 
 angular
     .module('starter')
-    .controller('relatorioCtrl', ['$scope', '$state', 'LimiteGrafico', 'Projeto', 'SubTorre', 'ClassGeral', function ($scope, $state, LimiteGrafico, Projeto, SubTorre, ClassGeral) {
+    .controller('relatorioCtrl', ['$scope', '$state', '$timeout', 'LimiteGrafico', 'Projeto', 'SubTorre', 'ClassGeral', function ($scope, $state, $timeout, LimiteGrafico, Projeto, SubTorre, ClassGeral) {
         console.log('relatorioCtrl')
 
         if(sessionStorage.getItem('login')==null || sessionStorage.getItem('perfil')==null || sessionStorage.getItem('familia')==null ){
@@ -91,18 +91,20 @@ angular
             $scope.relatorio.filtro = true;
             $scope.relatorio.download = true;
             console.log($scope.user);
-            Projeto.find()
-                .$promise
-                    .then(function (res, err) {
-                        $scope.projetoscompleto = res;
-                        $scope.relatorio.filtro = false;
-                        angular.forEach($scope.projetoscompleto, function(value, index){
-                            if(value.familia == $scope.user.familia){
-                                $scope.projetos.push(value);
-                            }
+            $timeout(function(){
+                Projeto.find()
+                    .$promise
+                        .then(function (res, err) {
+                            $scope.projetoscompleto = res;
+                            $scope.relatorio.filtro = false;
+                            angular.forEach($scope.projetoscompleto, function(value, index){
+                                if(value.familia == $scope.user.familia){
+                                    $scope.projetos.push(value);
+                                }
+                            })
+                            listarProjetos();
                         })
-                        listarProjetos();
-                    })
+            }, 1000);
         } 
 
         $scope.atribuiFamilia = function(){
