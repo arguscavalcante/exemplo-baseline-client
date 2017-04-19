@@ -255,6 +255,14 @@ angular
             return value.substring(0, 4) + '-' + value.substring(4, value.length) + '-15';
         }
 
+        
+        // Alimenta com os Projetos
+        Projeto.find()
+            .$promise
+                .then(function(res, err){
+                    $scope.projeto = res;
+                });
+
         // Alimenta com todas as Subtorres
         SubTorre.find().$promise.then(function(res, err){
             $scope.subtorre = res;
@@ -332,19 +340,12 @@ angular
                 }
             })
 
-            // Alimenta com os Projetos
-            Projeto.find()
-                .$promise
-                    .then(function(res, err){
-                        $scope.projeto = res;
-                    });
-
             //console.log($scope.disptorre);
             if($scope.disptorre){
-                 if($scope.formlimgraf.variacao_torre == null || $scope.formlimgraf.variacao_torre < 0){
+                if($scope.formlimgraf.variacao_torre == null || $scope.formlimgraf.variacao_torre < 0){
                     alert('O valor mímino da variação da Torre é zero!');
                     return;
-                 }
+                }
             } else {
                 $scope.formlimgraf.torre = null;
                 $scope.formlimgraf.variacao_torre = null;
