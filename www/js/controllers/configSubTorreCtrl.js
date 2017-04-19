@@ -100,10 +100,15 @@ angular
                 
                 SubTorre.upsertWithWhere({where: {subtorre: ''+ $scope.formsubtorre.subtorre +''}}, {torre_id: ''+ $scope.formsubtorre.torre_id +'', subtorre: ''+ $scope.formsubtorre.subtorre +'', max_grafico: ''+ $scope.formsubtorre.max_grafico +'', ano_limite: ''+ $scope.formsubtorre.ano_limite +''}, function(info, err) {
                     //console.log(info);
-                    SubTorre.destroyById({id: $scope.formsubtorre.id}, function(err){
+                    if($scope.formsubtorre.id != $scope.formsubtorre.subtorre){
+                        SubTorre.destroyById({id: $scope.formsubtorre.id}, function(err){
+                            $state.reload();
+                            return;
+                        });
+                    } else {
                         $state.reload();
                         return;
-                    });
+                    }
                     
                 })  
             }

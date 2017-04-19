@@ -87,10 +87,15 @@ angular
 
                 Fase.upsertWithWhere({where: {fase: ''+ $scope.formfase.fase +''}}, {fase: ''+ $scope.formfase.fase +'', descricao: ''+ $scope.formfase.descricao +''}, function(info, err) {
                     //console.log(info);
-                    Fase.destroyById({id: $scope.formfase.id}, function(err){
+                     if($scope.formsubtorre.id != $scope.formsubtorre.subtorre){
+                        Fase.destroyById({id: $scope.formfase.id}, function(err){
+                            $state.reload();
+                            return;
+                        });
+                    } else {
                         $state.reload();
                         return;
-                    });   
+                    } 
                 });
 
             }

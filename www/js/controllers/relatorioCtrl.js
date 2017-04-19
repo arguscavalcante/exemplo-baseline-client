@@ -234,7 +234,6 @@ angular
             for (var i = 0; i < qnt; i++) {
                 dados.push(0);
             }
-            console.log('Entrei');
             // console.log($scope.projetos);
             angular.forEach($scope.projetos, function (value, index) {
                 if (gerente==null || gerente==value.gerente){
