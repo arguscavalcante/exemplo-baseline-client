@@ -21,7 +21,7 @@ angular
         $scope.user = {};
         $scope.familia = [];
         $scope.sistemas = [];
-        $scope.baseline = 0
+        $scope.baseline = 'R$ 0,00';
         $scope.user = {
             gerente: sessionStorage.getItem('login'),
             perfil: sessionStorage.getItem('perfil'),
@@ -285,13 +285,6 @@ angular
             return options;       
         }
 
-        // Alimenta com os Projetos
-        Projeto.find()
-            .$promise
-                .then(function(res, err){
-                    $scope.projeto = res;
-                });
-
         //funcao de trasnformação para data para vizualizacao em tela -- FACTORY
         function trasformVizualDate(value) {
             var mes;
@@ -338,6 +331,13 @@ angular
                     bool = false;
                 }
             })
+
+            // Alimenta com os Projetos
+            Projeto.find()
+                .$promise
+                    .then(function(res, err){
+                        $scope.projeto = res;
+                    });
 
             //console.log($scope.disptorre);
             if($scope.disptorre){
@@ -425,7 +425,6 @@ angular
                     var decimalString;
                     var integerString;
                     var char;
-
                     var leftZero = '000';
                     var contThousand = 0;
                     var thousandsFormatted = '';
@@ -471,18 +470,8 @@ angular
                         thousandsFormatted = thousandsFormatted.substring(1, thousandsFormatted.length);
                     }
 
-                    // // Specify how UI should be updated
-                    // ngModel.$render = function() {
-                    //     element.html(ngModel.$viewValue || '');
-                    // };
-                    // read();
-
-                    // // Write data to the model
-                    // function read() {
-                    //     ngModel.$setViewValue(elem.val(symbol + thousandsFormatted + centsSeparator + decimalString));
-                    // }
                     elem.val(symbol + thousandsFormatted + centsSeparator + decimalString);
-                    // valor = symbol + thousandsFormatted + centsSeparator + decimalString
+
                     return symbol + thousandsFormatted + centsSeparator + decimalString;
                 });
 

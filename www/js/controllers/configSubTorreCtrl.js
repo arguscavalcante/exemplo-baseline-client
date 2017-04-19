@@ -70,7 +70,7 @@ angular
 
         $scope.ValidaForm = function(){
             var bool = true;
-            if($scope.formsubtorre.torre_id == null || $scope.formsubtorre.subtorre == null || $scope.formsubtorre.torre_id.replace(/[\s]/g, '') == '' ||  $scope.formsubtorre.subtorre.replace(/[\s]/g, '') == '')
+            if($scope.formsubtorre.torre_id == null || $scope.formsubtorre.subtorre == null || $scope.formsubtorre.torre_id.replace(/[\s]/g, '') == '' ||  $scope.formsubtorre.subtorre.replace(/[\s]/g, '') == '' || $scope.formsubtorre.max_grafico == '0' || $scope.formsubtorre.max_grafico == 'R$ 0,00' || $scope.formsubtorre.ano_limite.replace(/[\s]/g, '') == '')
             {
                 alert('Favor, preencha todas as informações!');
                 return;

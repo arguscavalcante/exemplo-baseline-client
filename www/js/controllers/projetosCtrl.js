@@ -82,8 +82,8 @@ angular
         $scope.formLimReal = {};
         $scope.classgeral = [];
 
-        $scope.formproj.meses =[{mes: "", valor: 0}]
-
+        $scope.formproj.meses =[{mes: "", valor: 'R$ 0,00'}]
+        $scope.formproj.valor_total_proj = 'R$ 0,00'
         $scope.baseline= {data: [], valor:[]}; 
         $scope.valida_baseline= {data: [], valor:[]}; 
 
@@ -104,7 +104,7 @@ angular
                 $scope.formproj.meses.splice($scope.formproj.meses.length-1, 1);
             } else {
                 if($scope.formproj.meses.length<num){
-                    $scope.formproj.meses.push({mes: "", valor:0});
+                    $scope.formproj.meses.push({mes: "", valor:'R$ 0,00'});
                 }
             }
         }
@@ -452,7 +452,7 @@ angular
             
                         
             //criando a variavel com os valores atualizados para incluir na tabela de LimiteReal.
-            if(validaValores() && bool){
+            if(validaValores() && bool ){
                 console.log('limiteReal Alterado: ', $scope.formLimReal);
                 //Acerto dos valores para numeric
                 $scope.formproj.valor_total_proj = Number(acertaValor($scope.formproj.valor_total_proj));
@@ -532,10 +532,7 @@ angular
                                                 }
                                             }
                                         }
-                                    // }
 
-                                    // for(var j=0; j<value.dados.length; j++){
-                                        //verificando o valor
                                         for(var i=0; i<$scope.formproj.meses.length; i++){
                                             if(value.dados[j].mes==$scope.formproj.meses[i].mes){
                                                 console.log(value.dados[j].mes);
@@ -566,38 +563,12 @@ angular
                             });
                             console.log('valores: ' ,$scope.baseline);
 
-                            // angular.forEach($scope.formproj.meses, function(value, index){
-                            //     for(var i=0; i<$scope.valida_baseline.data.length; i++){
-                            //         if(value.mes==$scope.valida_baseline.data[i]){
-                            //             // if(value.) EDSON
-                            //             if(Number(acertaValor(value.valor)) >$scope.valida_baseline.valor[i]){
-                            //                 alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
-                            //                 bool = false;
-                            //                 return;
-                            //             }
-                            //         }
-                            //     }
-                            // })
                         }
-
-                        // if ($scope.classgeral.includes($scope.formproj.classificacao_geral)){
-                        //     angular.forEach($scope.formLimReal.meses, function(value, index){
-                        //         for(var i=0; i<$scope.baseline.data.length; i++){
-                        //             if(value.mes==$scope.baseline.data[i]){
-                        //                 if(Number(acertaValor(value.valor)) >$scope.baseline.valor[i]){
-                        //                     alert('O valor imposto no mes ' + value.mes + ' é maior que o Baseline!');
-                        //                     bool = false;
-                        //                     return;
-                        //                 }
-                        //             }
-                        //         }
-                        //     })
-                        // }
 
                         return false;
                     });
         }
-        
+               
         
     }])
 
