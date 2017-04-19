@@ -77,7 +77,8 @@ angular
             $scope.formregiao = {
                 regiao: value.regiao,
                 familia: value.familia,
-                descricao: value.descricao  
+                descricao: value.descricao,
+                id_regiao: value.id_regiao
             }
         }
 
@@ -91,7 +92,10 @@ angular
                 return;
             }
 
-            $scope.formregiao.id_regiao = angular.lowercase($scope.formregiao.regiao).replace(/[\s]/g, '') + angular.lowercase($scope.formregiao.familia).replace(/[\s]/g, '');
+            if($scope.formregiao.id_regiao == null){
+                $scope.formregiao.id_regiao = angular.lowercase($scope.formregiao.regiao).replace(/[\s]/g, '') + angular.lowercase($scope.formregiao.familia).replace(/[\s]/g, '');
+            }
+            
             // console.log($scope.formregiao.id_regiao);
 
             angular.forEach($scope.regiao,function(value,index){

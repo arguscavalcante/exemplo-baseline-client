@@ -480,6 +480,13 @@ angular
         function validaValores(){
             var k;
             var dependencia;
+            var sistemas_out = [];
+
+            angular.forEach($scope.sistema, function(value, index){
+                if(value.familia != $scope.formproj.familia && value.regiao == $scope.formproj.regiao){
+                    sistemas_out.push(value.sistema);
+                }
+            })
 
             LimiteReal.find()
                 .$promise
@@ -500,17 +507,11 @@ angular
                                                 //Se encontrar a classificacao geral que influencia no baseline, aumenta seu valor de gasto
                                                 if ($scope.classgeral.includes($scope.formproj.classificacao_geral) ){
                                                     value.dados[j].gasto_mes =  value.dados[j].gasto_mes + Number(acertaValor($scope.formproj.meses[i].valor));
+                                                    if (sistemas_out.includes($scope.formproj.sistema)){
+                                                        value.dados[j].torre_gasto = Number(acertaValor($scope.formproj.meses[i].valor));
+                                                    }
                                                 } else {
                                                     value.dados[j].gasto_mes =  value.dados[j].gasto_mes;
-                                                }
-                                                //acerta flag de dependencia do mes seguinte
-                                                if(value.dados[j].gasto_mes >= value.dados[j].baseline+value.dados[j].baseline*value.dados[j].perc_baseline/-100 && value.dados[j].gasto_mes != value.dados[j].baseline && value.dados[j].dependencia != 'S'){
-                                                    dependencia = 'S';
-                                                }else{
-                                                    dependencia = 'N';
-                                                }
-                                                if(!angular.isUndefined(value.dados[k])){
-                                                    value.dados[k].dependencia = dependencia;
                                                 }
                                             }   
                                         }
@@ -531,7 +532,16 @@ angular
                                                     value.dados[k].dependencia = 'N';
                                                 }
                                             }
-                                        }
+                                        } else {
+                                            if(value.dados[j].gasto_mes >= value.dados[j].baseline+value.dados[j].baseline*value.dados[j].perc_baseline/-100 && value.dados[j].gasto_mes != value.dados[j].baseline){
+                                                dependencia = 'S';
+                                            }else{
+                                                dependencia = 'N';
+                                            }
+                                            if(!angular.isUndefined(value.dados[k])){
+                                                value.dados[k].dependencia = dependencia;
+                                            }       
+                                        }                                       
 
                                         for(var i=0; i<$scope.formproj.meses.length; i++){
                                             if(value.dados[j].mes==$scope.formproj.meses[i].mes){
@@ -553,6 +563,12 @@ angular
                                                             alert('O valor imposto no mes ' + value.dados[j].mes + ' é maior que o Baseline, por causa de sua dependencia com o mes seguinte.');
                                                             return false;
                                                         }
+                                                    }
+                                                }
+                                                if ($scope.classgeral.includes($scope.formproj.classificacao_geral) ){
+                                                     if(value.dados[j].torre_gasto > value.dados[j].torre_baseline){
+                                                        alert('O valor imposto no mes ' + value.dados[j].mes + ' é maior que o disponivel pela torre.');
+                                                        return false;
                                                     }
                                                 }
 

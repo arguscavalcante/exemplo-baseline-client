@@ -43,6 +43,8 @@ angular
         $scope.subtorre = {};
         $scope.formsubtorre = {};
         var altera = 'N';
+        var d = new Date();
+        d.setDate(15);
 
         //find, findOne, findById
         Torre.find().$promise.then(function(res, err){
@@ -70,9 +72,14 @@ angular
 
         $scope.ValidaForm = function(){
             var bool = true;
-            if($scope.formsubtorre.torre_id == null || $scope.formsubtorre.subtorre == null || $scope.formsubtorre.torre_id.replace(/[\s]/g, '') == '' ||  $scope.formsubtorre.subtorre.replace(/[\s]/g, '') == '' || $scope.formsubtorre.max_grafico == '0' || $scope.formsubtorre.max_grafico == 'R$ 0,00' || $scope.formsubtorre.ano_limite.replace(/[\s]/g, '') == '')
+            if($scope.formsubtorre.torre_id == null || $scope.formsubtorre.subtorre == null || $scope.formsubtorre.torre_id.replace(/[\s]/g, '') == '' ||  $scope.formsubtorre.subtorre.replace(/[\s]/g, '') == '' || $scope.formsubtorre.max_grafico == '0' || $scope.formsubtorre.max_grafico == 'R$ 0,00' || $scope.formsubtorre.max_grafico == null || $scope.formsubtorre.max_grafico.replace(/[\s]/g, '') == '' || $scope.formsubtorre.ano_limite == null)
             {
                 alert('Favor, preencha todas as informações!');
+                return;
+            }
+
+            if($scope.formsubtorre.ano_limite<d.getFullYear()){
+                alert('O ano informado é menor que o ano atual!');
                 return;
             }
             
