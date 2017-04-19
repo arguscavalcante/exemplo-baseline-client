@@ -91,7 +91,18 @@ angular
             $scope.relatorio.filtro = true;
             $scope.relatorio.download = true;
             console.log($scope.user);
-            listarProjetos();
+            Projeto.find()
+                .$promise
+                    .then(function (res, err) {
+                        $scope.projetoscompleto = res;
+                        $scope.relatorio.filtro = false;
+                        angular.forEach($scope.projetoscompleto, function(value, index){
+                            if(value.familia == $scope.user.familia){
+                                $scope.projetos.push(value);
+                            }
+                        })
+                        listarProjetos();
+                    })
         } 
 
         $scope.atribuiFamilia = function(){
@@ -101,7 +112,18 @@ angular
             $scope.grafico = true;
             $scope.relatorio.filtro = true;
             $scope.relatorio.download = true;
-            listarProjetos();
+            Projeto.find()
+                .$promise
+                    .then(function (res, err) {
+                        $scope.projetoscompleto = res;
+                        $scope.relatorio.filtro = false;
+                        angular.forEach($scope.projetoscompleto, function(value, index){
+                            if(value.familia == $scope.user.familia){
+                                $scope.projetos.push(value);
+                            }
+                        })
+                        listarProjetos();
+                    });
         }
         
         $scope.atualizaPag = function(){
@@ -148,48 +170,30 @@ angular
         function buscaValLimiteGraf(){
             var achei = false;
             SubTorre.find()
-            .$promise
-                .then(function (res, err) {
-                    $scope.subtorres = res;                
-                        if(angular.isUndefined($scope.subtorres)){
-                                alert('Subtorre não cadastrada no sistema, entre em contado com o administrador do sistema.');
-                                ano_limite = 2020;
-                            }else{
-                                angular.forEach($scope.subtorres, function(value, index){
-                                    if(value.subtorre == $scope.user.subtorre){
-                                        achei = true;
-                                        $scope.user.subtorre = value;
-                                        ano_limite = value.ano_limite;
-                                    }
-                                })
-                                if(!achei){
+                .$promise
+                    .then(function (res, err) {
+                        $scope.subtorres = res;                
+                            if(angular.isUndefined($scope.subtorres)){
                                     alert('Subtorre não cadastrada no sistema, entre em contado com o administrador do sistema.');
                                     ano_limite = 2020;
+                                }else{
+                                    angular.forEach($scope.subtorres, function(value, index){
+                                        if(value.subtorre == $scope.user.subtorre){
+                                            achei = true;
+                                            $scope.user.subtorre = value;
+                                            ano_limite = value.ano_limite;
+                                        }
+                                    })
+
+                                    if(!achei){
+                                        alert('Subtorre não cadastrada no sistema, entre em contado com o administrador do sistema.');
+                                        ano_limite = 2020;
+                                    }                                    
+                                
                                 }
-                            
-                            }
-                            $scope.opcaoano = atribuiAno(ano_limite);
-                        });
+                                $scope.opcaoano = atribuiAno(ano_limite);
+                            });
         }
-
-        
-
-        //Funcao para buscar as classes o valor do limite do grafico
-        ClassGeral.find()
-            .$promise
-                .then(function (res, err) {
-                    angular.forEach(res, function (value, index){
-                        if(!value.baseline){
-                            $scope.classgeral.push(value.classgeral_id);
-                        }
-                    });
-                    angular.forEach(res, function (value, index){
-                        if(value.baseline){
-                            $scope.classgeral.push(value.classgeral_id);
-                        }
-                    });
-                    // console.log('classificacao geral: ',  $scope.classgeral)
-                });
 
         //Funcao para incluir os valores dos projetos.
         function alimentaProjetos(qnt) {
@@ -230,6 +234,7 @@ angular
             for (var i = 0; i < qnt; i++) {
                 dados.push(0);
             }
+            console.log('Entrei');
             // console.log($scope.projetos);
             angular.forEach($scope.projetos, function (value, index) {
                 if (gerente==null || gerente==value.gerente){
@@ -367,39 +372,42 @@ angular
             $scope.date = alimentaData(d, qnt_meses);
             buscaValLimiteGraf();
 
-            Projeto.find()
+            // console.log(res);
+            //Funcao para buscar as classes o valor do limite do grafico
+            ClassGeral.find()
                 .$promise
                     .then(function (res, err) {
-                        $scope.projetoscompleto = res;
-                        $scope.relatorio.filtro = false;
-                        angular.forEach($scope.projetoscompleto, function(value, index){
-                            if(value.familia == $scope.user.familia){
-                                $scope.projetos.push(value);
+                        angular.forEach(res, function (value, index){
+                            if(!value.baseline){
+                                $scope.classgeral.push(value.classgeral_id);
                             }
-                        })
+                        });
+                        angular.forEach(res, function (value, index){
+                            if(value.baseline){
+                                $scope.classgeral.push(value.classgeral_id);
+                            }
+                        });
+                        // console.log('classificacao geral: ',  $scope.classgeral)
+                        LimiteGrafico.find({ filter: { where: { familia: '' + $scope.user.familia + '' } } })
+                            .$promise
+                                .then(function (res, err) {
+                                    $scope.limgraf = res;
+                                    // console.log('limite grafico: ', res);
+                                    alimentaProjetos(qnt_meses);//alimenta os dados dos projetos
+                                    alimentaLimites();//alimenta os dados dos limites
 
-                            // console.log(res);
-                            LimiteGrafico.find({ filter: { where: { familia: '' + $scope.user.familia + '' } } })
-                                .$promise
-                                    .then(function (res, err) {
-                                        $scope.limgraf = res;
-                                        // console.log('limite grafico: ', res);
-                                        alimentaProjetos(qnt_meses);//alimenta os dados dos projetos
-                                        alimentaLimites();//alimenta os dados dos limites
-
-                                        objChartProj.serie = $scope.projBase;
-                                        // console.log(objChartProj.serie);
-                                        //Inicializa o Grafico de Projetos
-                                        // console.log(objChartProj);
-                                        grafProjetos(objChartProj);
-                                        if($scope.user.perfil == 'Administrador'){
-                                            $scope.file = exportaJSON($scope.projetoscompleto, ano_limite);
-                                        }else{
-                                            $scope.file = exportaJSON($scope.projetos, ano_limite);
-                                        }
-                                        
-                                    });
-                    })
+                                    objChartProj.serie = $scope.projBase;
+                                    // console.log(objChartProj.serie);
+                                    //Inicializa o Grafico de Projetos
+                                    console.log(objChartProj);
+                                    grafProjetos(objChartProj);
+                                    if($scope.user.perfil == 'Administrador'){
+                                        $scope.file = exportaJSON($scope.projetoscompleto, ano_limite);
+                                    }else{
+                                        $scope.file = exportaJSON($scope.projetos, ano_limite);
+                                    }
+                        });
+                    });
 
         }
 
@@ -455,9 +463,6 @@ angular
 
                 objChartProj.serie = $scope.projBase;
                 // console.log(objChartProj.serie);
-
-                //Inicializa o Grafico de Projetos
-                grafProjetos(objChartProj);
 
                 //Inicializa o Grafico de Projetos
                 grafProjetos(objChartProj);
