@@ -550,7 +550,7 @@ angular
                                     }
                                 }
                             });
-                            console.log('limiteReal Alterado: ', $scope.formLimReal);
+                            // console.log('limiteReal Alterado: ', $scope.formLimReal);
                             //Acerto dos valores para numeric
                             $scope.formproj.valor_total_proj = Number(acertaValor($scope.formproj.valor_total_proj));
                             angular.forEach($scope.formproj.meses, function(value, index){
