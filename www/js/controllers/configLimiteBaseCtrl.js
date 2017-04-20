@@ -55,7 +55,7 @@ angular
         $scope.projeto = {};
         $scope.classgeral =[];
         $scope.limreal = {};
-        $scope.salvar_hab = true;
+        $scope.hab_salvar = false;
 
         $scope.formlimgraf.valor_limite = 0;
 
@@ -256,17 +256,6 @@ angular
             return value.substring(0, 4) + '-' + value.substring(4, value.length) + '-15';
         }
 
-        
-        // Alimenta com os Projetos
-        Projeto.find()
-            .$promise
-                .then(function(res, err){
-                    $scope.projeto = res;
-                    if ($scope.projeto != null){
-                        $scope.salvar_hab = false;
-                    }
-                });
-
         // Alimenta com todas as Subtorres
         SubTorre.find().$promise.then(function(res, err){
             $scope.subtorre = res;
@@ -283,6 +272,13 @@ angular
                                 }
                             })
                         }
+                        // Alimenta com os Projetos
+                        Projeto.find()
+                            .$promise
+                                .then(function(res, err){
+                                    $scope.projeto = res;
+                                    $scope.hab_salvar = true;
+                                });
                     });
             //console.log(res);
         });
