@@ -2,7 +2,7 @@
 
 angular
     .module('starter')
-    .controller('configLimiteBaseCtrl', ['$scope', '$state', '$filter', 'LimiteGrafico', 'SubTorre', 'LimiteReal', 'Projeto', 'ClassGeral', 'Regiao',  function($scope, $state, $filter, LimiteGrafico, SubTorre, LimiteReal, Projeto, ClassGeral, Regiao){
+    .controller('configLimiteBaseCtrl', ['$scope', '$state', '$filter', '$timeout', 'LimiteGrafico', 'SubTorre', 'LimiteReal', 'Projeto', 'ClassGeral', 'Regiao',  function($scope, $state, $filter, $timeout, LimiteGrafico, SubTorre, LimiteReal, Projeto, ClassGeral, Regiao){
         console.log('configLimiteBaseCtrl')
 
          // Controle de sessao
@@ -272,13 +272,15 @@ angular
                                 }
                             })
                         }
-                        // Alimenta com os Projetos
-                        Projeto.find()
-                            .$promise
-                                .then(function(res, err){
-                                    $scope.projeto = res;
-                                    $scope.hab_salvar = true;
-                                });
+                        $timeout(function(){
+                            // Alimenta com os Projetos
+                            Projeto.find()
+                                .$promise
+                                    .then(function(res, err){
+                                        $scope.projeto = res;
+                                        $scope.hab_salvar = true;
+                                    });
+                        }, 1000);
                     });
             //console.log(res);
         });
