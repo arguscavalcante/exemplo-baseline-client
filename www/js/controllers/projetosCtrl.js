@@ -144,7 +144,7 @@ angular
             }     
             // console.log(valor)      
 
-            console.log('limite: ', objLimite)
+            // console.log('limite: ', objLimite)
             angular.forEach(objLimite, function(value, index){
                 if(value.familia == busca){
                     bool_familia = false;
@@ -401,7 +401,7 @@ angular
 
         $scope.ValidaForm = function(){
             var bool = true;
-            console.log($scope.formproj);
+            // console.log($scope.formproj);
             retornaId();
             //Algum campo indefinido ou Nulo 
             if(angular.isUndefined($scope.formproj.proposta) || angular.isUndefined($scope.formproj.projeto) || angular.isUndefined($scope.formproj.descricao) || angular.isUndefined($scope.formproj.gerente) || angular.isUndefined($scope.formproj.familia) || angular.isUndefined($scope.formproj.sistema) || angular.isUndefined($scope.formproj.classificacao_geral) || angular.isUndefined($scope.formproj.fase))
@@ -446,33 +446,12 @@ angular
                  alert('Foram informados meses que se repetem, favor olhar os dados informados!');
                 return;
             }
-            console.log($scope.baseline);       
+            // console.log('teste: ', $scope.baseline);       
 
             // Validacao nivel 2 com o Banco de dados
-            
-                        
-            //criando a variavel com os valores atualizados para incluir na tabela de LimiteReal.
-            if(validaValores() && bool ){
-                console.log('limiteReal Alterado: ', $scope.formLimReal);
-                //Acerto dos valores para numeric
-                $scope.formproj.valor_total_proj = Number(acertaValor($scope.formproj.valor_total_proj));
-                angular.forEach($scope.formproj.meses, function(value, index){
-                    value.valor = Number(acertaValor(value.valor));
-                });
-                // console.log($scope.formproj);
-                // console.log($scope.formLimReal);
 
-                Projeto.create($scope.formproj, function(res, err){
-                    // console.log(res);
-                    // console.log($scope.formproj.familia);
-                    // console.log($scope.formLimReal[0].dados);
-                    if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
-                        LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formproj.familia +''}}, {dados: $scope.formLimReal[0].dados}, function(info, err) {
-                            $state.reload();
-                        })
-                    }
-                    $state.reload();                               
-                })
+            if(bool){    
+                validaValores(); 
             }
            
         };
@@ -481,7 +460,7 @@ angular
             var k;
             var dependencia;
             var sistemas_out = [];
-
+            
             angular.forEach($scope.sistema, function(value, index){
                 if(value.familia != $scope.formproj.familia && value.regiao == $scope.formproj.regiao){
                     sistemas_out.push(value.sistema);
@@ -492,11 +471,10 @@ angular
                 .$promise
                     .then(function(res, err){
                         $scope.formLimReal = res;
-
                         //console.log(res);
                         if ($scope.classgeral.includes($scope.formproj.classificacao_geral)){
                             $scope.valida_baseline.valor = alimentaValor($scope.valida_baseline.data, res, $scope.user.familia, false);
-                            console.log($scope.valida_baseline);
+                            // console.log($scope.valida_baseline);
                             angular.forEach($scope.formLimReal, function(value, index){
                                 if(value.familia == $scope.user.familia){
                                     for(var j=0; j<value.dados.length; j++){
@@ -520,7 +498,7 @@ angular
                                 }
                             });
 
-                            console.log('resultado dentro da funcao: ', $scope.formLimReal);
+                            // console.log('resultado dentro da funcao: ', $scope.formLimReal);
                             //validando se os valores alterados estão conforme regra de baseline
                             angular.forEach($scope.formLimReal, function(value, index){
                                 if(value.familia==$scope.user.familia){
@@ -572,11 +550,56 @@ angular
                                     }
                                 }
                             });
-                            console.log('valores: ' ,$scope.baseline);
+                            console.log('limiteReal Alterado: ', $scope.formLimReal);
+                            //Acerto dos valores para numeric
+                            $scope.formproj.valor_total_proj = Number(acertaValor($scope.formproj.valor_total_proj));
+                            angular.forEach($scope.formproj.meses, function(value, index){
+                                value.valor = Number(acertaValor(value.valor));
+                            });
+                            console.log($scope.formproj);
+                            console.log($scope.formLimReal);
 
+                            Projeto.create($scope.formproj, function(res, err){
+                                // console.log(res);
+                                // console.log($scope.formproj.familia);
+                                // console.log($scope.formLimReal[0].dados);
+                                if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
+                                    angular.forEach($scope.formLimReal, function(value, index){
+                                        if(value.familia==$scope.user.familia){
+                                            LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.user.familia +''}}, {dados: value.dados}, function(info, err) {
+                                                $state.reload();
+                                            })
+                                        }
+                                    });
+                                }
+                                $state.reload();                               
+                            })
+                        } else {
+                            console.log('limiteReal Alterado: ', $scope.formLimReal);
+                            //Acerto dos valores para numeric
+                            $scope.formproj.valor_total_proj = Number(acertaValor($scope.formproj.valor_total_proj));
+                            angular.forEach($scope.formproj.meses, function(value, index){
+                                value.valor = Number(acertaValor(value.valor));
+                            });
+                            console.log($scope.formproj);
+                            console.log($scope.formLimReal);
+
+                            Projeto.create($scope.formproj, function(res, err){
+                                // console.log(res);
+                                // console.log($scope.formproj.familia);
+                                // console.log($scope.formLimReal[0].dados);
+                                if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
+                                     angular.forEach($scope.formLimReal, function(value, index){
+                                        if(value.familia==$scope.user.familia){
+                                            LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.user.familia +''}}, {dados: value.dados}, function(info, err) {
+                                                $state.reload();
+                                            })
+                                        }
+                                    });
+                                }
+                                $state.reload();                               
+                            })
                         }
-
-                        return false;
                     });
         }
                
