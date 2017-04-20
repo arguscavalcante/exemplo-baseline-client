@@ -82,7 +82,8 @@ angular
         $scope.formLimReal = {};
         $scope.classgeral = [];
 
-        $scope.formproj.meses =[{mes: "", valor: 'R$ 0,00'}]
+        $scope.formproj.meses = [];
+        $scope.formproj.meses.push({mes: "", valor: 'R$ 0,00'});
         $scope.formproj.valor_total_proj = 'R$ 0,00'
         $scope.baseline= {data: [], valor:[]}; 
         $scope.valida_baseline= {data: [], valor:[]}; 
@@ -108,6 +109,8 @@ angular
                 }
             }
         }
+
+        retornaId();
 
         //FACTORY
         function alimentaData(data, qnt) {
@@ -239,10 +242,10 @@ angular
             Projeto.find({filter:{where: {gerente: '' + $scope.user.gerente + ''}}})
                 .$promise
                     .then(function(res, err){
-                        if(res[0]==null){
-                            $scope.formproj.projeto_id = $scope.user.gerente + 1
+                        if(res.length == 0){
+                            $scope.formproj.projeto_id = $scope.user.gerente + '1'
                         } else {
-                            $scope.formproj.projeto_id = $scope.user.gerente + res.length+1;
+                            $scope.formproj.projeto_id = $scope.user.gerente + String(res.length+1);
                         }
                         //console.log(res);
                     });
@@ -402,7 +405,7 @@ angular
         $scope.ValidaForm = function(){
             var bool = true;
             // console.log($scope.formproj);
-            retornaId();
+            
             //Algum campo indefinido ou Nulo 
             if(angular.isUndefined($scope.formproj.proposta) || angular.isUndefined($scope.formproj.projeto) || angular.isUndefined($scope.formproj.descricao) || angular.isUndefined($scope.formproj.gerente) || angular.isUndefined($scope.formproj.familia) || angular.isUndefined($scope.formproj.sistema) || angular.isUndefined($scope.formproj.classificacao_geral) || angular.isUndefined($scope.formproj.fase))
             {
