@@ -362,6 +362,7 @@ angular
             var total = 0;
             angular.forEach(obj, function(value, index){
                 total = total + Number(acertaValor(value.valor));
+                total = Math.round(total * 100)/100
             });
             return total;
         }
@@ -406,7 +407,7 @@ angular
             var bool = true;
             // console.log($scope.formproj);
             
-            //Algum campo indefinido ou Nulo 
+            // Algum campo indefinido ou Nulo 
             if(angular.isUndefined($scope.formproj.proposta) || angular.isUndefined($scope.formproj.projeto) || angular.isUndefined($scope.formproj.descricao) || angular.isUndefined($scope.formproj.gerente) || angular.isUndefined($scope.formproj.familia) || angular.isUndefined($scope.formproj.sistema) || angular.isUndefined($scope.formproj.classificacao_geral) || angular.isUndefined($scope.formproj.fase))
             {
                 alert('Favor, preencha todas as informações!');
@@ -429,7 +430,7 @@ angular
 
             // console.log($scope.formproj.meses);
             // console.log(sumMes($scope.formproj.meses));
-            // console.log($scope.formproj.valor_total_proj);
+            // console.log(Number(acertaValor($scope.formproj.valor_total_proj)));
             if(sumMes($scope.formproj.meses)!=Number(acertaValor($scope.formproj.valor_total_proj))){
                 alert('O valor total do projeto é diferente do somatório dos valores informados nos meses!');
                 return;
@@ -463,6 +464,7 @@ angular
             var k;
             var dependencia;
             var sistemas_out = [];
+            var bool_apr;
             
             angular.forEach($scope.sistema, function(value, index){
                 if(value.familia != $scope.formproj.familia && value.regiao == $scope.formproj.regiao){
@@ -520,31 +522,36 @@ angular
                                                                      
                                     for(var j=0; j<value.dados.length; j++){
                                         for(var i=0; i<$scope.formproj.meses.length; i++){
+                                            bool_apr = true;
                                             if(value.dados[j].mes==$scope.formproj.meses[i].mes){
                                                 console.log(value.dados[j].mes);
                                                 if(value.dados[j].dependencia == 'S'){
                                                     k=j-1;
                                                     if(value.dados[j].gasto_mes>(value.dados[j].baseline + (value.dados[k].baseline - value.dados[k].gasto_mes))){
                                                         alert('O valor imposto no mes' + value.dados[j].mes + ' é maior que o Baseline, por causa de sua dependencia com o mes seguinte.');
-                                                        return false;
+                                                        bool_apr = false;
+                                                        return;
                                                     }
                                                 }else{
                                                     if(value.dados[j].gasto_mes>value.dados[j].baseline+(value.dados[j].baseline*value.dados[j].perc_baseline/100)){
                                                         alert('O valor imposto no mes ' + value.dados[j].mes + ' é maior que o Baseline.');
-                                                        return false;
+                                                        bool_apr = false;
+                                                        return;
                                                     }
                                                     k=j+1;
                                                     if(value.dados[k].dependencia == 'S'){
                                                         if(value.dados[k].gasto_mes>(value.dados[k].baseline + (value.dados[j].baseline - value.dados[j].gasto_mes))){
                                                             alert('O valor imposto no mes ' + value.dados[j].mes + ' é maior que o Baseline, por causa de sua dependencia com o mes seguinte.');
-                                                            return false;
+                                                            bool_apr = false;
+                                                            return;
                                                         }
                                                     }
                                                 }
                                                 if (com_torre){
                                                      if(value.dados[j].torre_gasto > value.dados[j].torre_baseline){
                                                         alert('O valor imposto no mes ' + value.dados[j].mes + ' é maior que o disponivel pela torre.');
-                                                        return false;
+                                                        bool_apr = false;
+                                                        return;
                                                     }
                                                 }
 
@@ -553,30 +560,34 @@ angular
                                     }
                                 }
                             });
-                            // console.log('limiteReal Alterado: ', $scope.formLimReal);
-                            //Acerto dos valores para numeric
-                            $scope.formproj.valor_total_proj = Number(acertaValor($scope.formproj.valor_total_proj));
-                            angular.forEach($scope.formproj.meses, function(value, index){
-                                value.valor = Number(acertaValor(value.valor));
-                            });
-                            console.log($scope.formproj);
-                            console.log($scope.formLimReal);
+                            
+                            if(bool_apr){
+                                // console.log('limiteReal Alterado: ', $scope.formLimReal);
+                                //Acerto dos valores para numeric
+                                $scope.formproj.valor_total_proj = Number(acertaValor($scope.formproj.valor_total_proj));
+                                angular.forEach($scope.formproj.meses, function(value, index){
+                                    value.valor = Number(acertaValor(value.valor));
+                                });
+                                console.log($scope.formproj);
+                                console.log($scope.formLimReal);
+                                // console.log('passei');
 
-                            Projeto.create($scope.formproj, function(res, err){
-                                // console.log(res);
-                                // console.log($scope.formproj.familia);
-                                // console.log($scope.formLimReal[0].dados);
-                                if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
-                                    angular.forEach($scope.formLimReal, function(value, index){
-                                        if(value.familia==$scope.user.familia){
-                                            LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.user.familia +''}}, {dados: value.dados}, function(info, err) {
-                                                $state.reload();
-                                            })
-                                        }
-                                    });
-                                }
-                                $state.reload();                               
-                            })
+                                Projeto.create($scope.formproj, function(res, err){
+                                    // console.log(res);
+                                    // console.log($scope.formproj.familia);
+                                    // console.log($scope.formLimReal[0].dados);
+                                    if($scope.classgeral.includes($scope.formproj.classificacao_geral)){
+                                        angular.forEach($scope.formLimReal, function(value, index){
+                                            if(value.familia==$scope.user.familia){
+                                                LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.user.familia +''}}, {dados: value.dados}, function(info, err) {
+                                                    $state.reload();
+                                                })
+                                            }
+                                        });
+                                    }
+                                    $state.reload();                               
+                                })
+                            }
                         } else {
                             console.log('limiteReal Alterado: ', $scope.formLimReal);
                             //Acerto dos valores para numeric
