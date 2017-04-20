@@ -55,6 +55,7 @@ angular
         $scope.projeto = {};
         $scope.classgeral =[];
         $scope.limreal = {};
+        $scope.salvar_hab = true;
 
         $scope.formlimgraf.valor_limite = 0;
 
@@ -261,6 +262,9 @@ angular
             .$promise
                 .then(function(res, err){
                     $scope.projeto = res;
+                    if ($scope.projeto != null){
+                        $scope.salvar_hab = false;
+                    }
                 });
 
         // Alimenta com todas as Subtorres
