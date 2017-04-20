@@ -524,7 +524,7 @@ angular
                                         for(var i=0; i<$scope.formproj.meses.length; i++){
                                             bool_apr = true;
                                             if(value.dados[j].mes==$scope.formproj.meses[i].mes){
-                                                console.log(value.dados[j].mes);
+                                                // console.log(value.dados[j].mes);
                                                 if(value.dados[j].dependencia == 'S'){
                                                     k=j-1;
                                                     if(value.dados[j].gasto_mes>(value.dados[j].baseline + (value.dados[k].baseline - value.dados[k].gasto_mes))){
