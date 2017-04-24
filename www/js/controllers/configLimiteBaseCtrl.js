@@ -73,7 +73,7 @@ angular
                         }   
                         value.data_tab = trasformVizualDate(value.data_corte.toString())             
                     })
-                    // console.log($scope.limgrafico)
+                    console.log($scope.limgrafico)
 
                     LimiteReal.find()
                         .$promise
@@ -145,11 +145,14 @@ angular
                                 dados_proj[i] = dados_proj[i] + value.meses[j].valor;
                                 dados_proj[i] = Math.round(dados_proj[i] * 100)/100;
                                 //pegar os dados da torre e verificar seu Sistema verificar para retirada desse loop daqui!!!
-                                for(var k=0; k<$scope.sistemas.length; k++){
-                                    if($scope.sistemas[k].familia != value.familia && $scope.sistemas[k].torre == form.torre && $scope.sistemas[k].regiao == value.regiao){
-                                        if($scope.sistemas[k].sistemas.includes(value.sistema)){
-                                            dados_torre_gasto[i] = dados_torre_gasto[i] + value.meses[j].valor;
-                                            dados_torre_gasto[i] = Math.round(dados_torre_gasto[i] * 100)/100;
+                                console.log($scope.sistemas);
+                                if($scope.disptorre){
+                                    for(var k=0; k<$scope.sistemas.length; k++){
+                                        if($scope.sistemas[k].familia != value.familia && $scope.sistemas[k].torre == value.torre && $scope.sistemas[k].regiao == value.regiao){
+                                            if($scope.sistemas[k].sistemas.includes(value.sistema)){
+                                                dados_torre_gasto[i] = dados_torre_gasto[i] + value.meses[j].valor;
+                                                dados_torre_gasto[i] = Math.round(dados_torre_gasto[i] * 100)/100;
+                                            }
                                         }
                                     }
                                 }
@@ -382,9 +385,6 @@ angular
                                                 })
                                             }
                                         })
-                                        .catch(function(err){
-                                            alert(err.status);
-                                        });
                             })
                         }
                     })

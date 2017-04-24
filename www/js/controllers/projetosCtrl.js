@@ -491,7 +491,7 @@ angular
                                                 if ($scope.classgeral.includes($scope.formproj.classificacao_geral) ){
                                                     value.dados[j].gasto_mes =  value.dados[j].gasto_mes + Number(acertaValor($scope.formproj.meses[i].valor));
                                                     if (sistemas_out.includes($scope.formproj.sistema)){
-                                                        value.dados[j].torre_gasto = Number(acertaValor($scope.formproj.meses[i].valor));
+                                                        value.dados[j].torre_gasto = value.dados[j].torre_gasto + Number(acertaValor($scope.formproj.meses[i].valor));
                                                     }
                                                 } else {
                                                     value.dados[j].gasto_mes =  value.dados[j].gasto_mes;
