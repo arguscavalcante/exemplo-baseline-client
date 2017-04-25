@@ -2,7 +2,7 @@
 
 angular
     .module('starter')
-    .controller('configRacionalCtrl', ['$scope', '$state', 'LimiteReal', 'Projeto', function($scope, $state, LimiteReal, Projeto){
+    .controller('configRacionalCtrl', ['$scope', '$state', 'LimiteReal', 'Projeto', 'ClassGeral', function($scope, $state, LimiteReal, Projeto, ClassGeral){
         console.log('configRacionalCtrl')
 
          // Controle de sessao
@@ -18,10 +18,11 @@ angular
         
         $scope.mostrar = {};
         $scope.user = {};
+        $scope.projetos = {};
         $scope.user = {
             gerente: sessionStorage.getItem('login'),
             perfil: sessionStorage.getItem('perfil'),
-            familia: sessionStorage.getItem('familia').split(","),
+            familias: sessionStorage.getItem('familia').split(","),
             nome: sessionStorage.getItem('nome')
         }
 
@@ -43,16 +44,19 @@ angular
         d.setDate(15);
         d.setMonth(d.getMonth() -3);
         $scope.date = [];
-        $scope.racional = {}
+        $scope.racional = {};
+        $scope.classgeral = {};
+        $scope.classgeral_pai = [];
         $scope.tabelalimreal = [];
-        var classgeral = ["Aprovado","Pipeline Aprovado","Pipeline"]
+        $scope.valorClassgeral = [{titulo: "", mes1: 0, mes2: 0, mes3: 0, mes4: 0, mes5: 0, mes6: 0, mes7: 0}];
+        $scope.carregouDados = true;
+        $scope.familiaTabela = "";
         
         $scope.racional.opcao = true;
         $scope.racional.relatorio = false;
         $scope.racional.busca = false;
 
         $scope.limreal = {};
-        $scope.tabelaBase = { familia: "", classgeral: []};
 
         //find, findOne, findById
         LimiteReal.find()
@@ -60,14 +64,8 @@ angular
                 .then(function(res, err){
                     $scope.tabelalimreal = res;
                     // console.log(res);
-                    console.log($scope.tabelalimreal)
+                    // console.log($scope.tabelalimreal)
                 });  
-
-        Projeto.find()
-            .$promise
-                .then(function (res, err){
-
-                });
 
          //Acerto das datas por função -- FACTORY
         function alimentaData(data, qnt) {
@@ -76,8 +74,6 @@ angular
             var mes;
             var zero = '00'
             //Alimentando os valores de data
-            // console.log(date)
-            // console.log(date.getMonth())
             for (var i = 0; i < qnt; i++) {
                 mes = date.getMonth()+1;
                 mes = mes.toString();
@@ -85,45 +81,79 @@ angular
                 vetor.push( mes + '/' + date.getFullYear());
                 date.setMonth(date.getMonth() + 1);
             }
-            // console.log(vetor);
             return vetor;
         }
 
         $scope.date = alimentaData(d, 7);
 
-        angular.forEach(classgeral, function(value, index){
-            $scope.tabelaBase.classgeral.push({ name: value, data: atribuirDado(value, $scope.date) })
-        });
-
-        // console.log($scope.tabelaBase);
-
-        function atribuirDado(tipo, data) {
+        //atribui valores do projetos
+        function atribuirDado(tipo) {
             var dados = [];
-            for (var i = 0; i < data.length; i++) {
+            for (var i = 0; i < 7; i++) {
                 dados.push(0);
             }
-
             angular.forEach($scope.projetos, function (value, index) {
-                if (value.classificacao_geral == tipo) {
-                    for (var i = 0; i < data.length; i++) {
-                        for(var j=0; j<value.meses.length; j++){
-                            if (data[i] == value.meses[j].mes) {
-                                dados[i] = dados[i] + value.meses[j].valor;
+                if (value.familia == $scope.familiaTabela){
+                    if (value.classificacao_geral == tipo) {
+                        for (var i = 0; i < $scope.date.length; i++) {
+                            for(var j=0; j<value.meses.length; j++){
+                                if ($scope.date[i] == value.meses[j].mes) {
+                                    dados[i] = dados[i] + value.meses[j].valor;
+                                    dados[i] = Math.round(dados[i] * 100)/100;
+                                }
                             }
                         }
                     }
                 }
             });
-
-            return dados;
+            console.log(dados.splice(0, 0, tipo))
+            return dados; //.splice(0, 0, tipo);
         }
-        $scope.tabelacriada = '<table><tr><td><b>teste</b></td></tr>'+'</table>';
 
+        function gerarRacional(){ 
+            Projeto.find()
+                .$promise
+                    .then(function (res, err){
+                        $scope.projetos = res;
+                        ClassGeral.find()
+                            .$promise
+                                .then(function (res, err){
+                                    $scope.classgeral = res;
+                                    $scope.carregouDados = false;  
+                                    $scope.classgeral_pai.push("BASELINE");
+                                    var count = 1;
+                                    
+                                    angular.forEach($scope.classgeral, function(value, index){
+                                        if(!$scope.classgeral_pai.includes(value.classgeral_pai)){
+                                            $scope.classgeral_pai.push(value.classgeral_pai);
+                                            $scope.classgeral_pai.push("Delta " + count);
+                                            count++;
+                                        } 
+                                    });
+                                    for (var i = 0; i < $scope.classgeral.length+1; i++) {
+                                        $scope.valorClassgeral.push(0);
+                                    }                                 
+                                });
+                    });
+        }   
+
+        $scope.gerarTabela = function(){
+        
+            console.log($scope.classgeral_pai);
+            //atribuindo os valores dos projetos por mes/Classificacao Geral
+            for (var i = 0; i < $scope.classgeral.length+1; i++) {
+                $scope.valorClassgeral[i] = atribuirDado($scope.classgeral[i].classgeral_id);                
+            }
+
+            console.log($scope.valorClassgeral);
+
+        }
+        
         $scope.racionalGerar = function(){
             console.log('racionalGerar');
             $scope.racional.opcao = false;
             $scope.racional.relatorio = true;
-            building($scope.tabelacriada);
+            gerarRacional();
         }
 
         $scope.valorBonus = function(){
@@ -132,21 +162,4 @@ angular
             $scope.racional.busca = true;
         }
 
-        function building(data){
-            var chart = angular.element(document.getElementsByTagName('table-show'));
-            chart.attr('scope', data);
-            // $compile(chart)($scope);
-        }
-
-    }])
-
-    .directive('tableShow', function() {
-        return {
-            transclude: true,
-            template: function(attr){
-                alert(attr)
-            return attr;
-            }
-        }
-        
-    });
+    }]);

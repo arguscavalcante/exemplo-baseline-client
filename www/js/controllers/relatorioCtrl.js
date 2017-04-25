@@ -90,7 +90,7 @@ angular
             $scope.user.subtorre = $scope.user.familia.substring($scope.user.familia.indexOf("-")+2);
             $scope.relatorio.filtro = true;
             $scope.relatorio.download = true;
-            console.log($scope.user);
+            // console.log($scope.user);
             $timeout(function(){
                 Projeto.find()
                     .$promise

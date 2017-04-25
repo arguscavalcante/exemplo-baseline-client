@@ -568,7 +568,7 @@ angular
                                 angular.forEach($scope.formproj.meses, function(value, index){
                                     value.valor = Number(acertaValor(value.valor));
                                 });
-                                console.log($scope.formproj);
+                                // console.log($scope.formproj);
                                 console.log($scope.formLimReal);
                                 // console.log('passei');
 
@@ -595,7 +595,7 @@ angular
                             angular.forEach($scope.formproj.meses, function(value, index){
                                 value.valor = Number(acertaValor(value.valor));
                             });
-                            console.log($scope.formproj);
+                            // console.log($scope.formproj);
                             console.log($scope.formLimReal);
 
                             Projeto.create($scope.formproj, function(res, err){
