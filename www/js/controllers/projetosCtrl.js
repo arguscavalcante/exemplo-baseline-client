@@ -2,7 +2,7 @@
 
 angular
     .module('starter')
-    .controller('projetosCtrl', ['$scope', '$state', 'User', 'Projeto', 'LimiteReal', 'Fase', 'Regiao', 'ClassGeral', 'LimiteGrafico', function($scope, $state, User, Projeto, LimiteReal, Fase, Regiao, ClassGeral){
+    .controller('projetosCtrl', ['$scope', '$state', '$timeout', 'User', 'Projeto', 'LimiteReal', 'Fase', 'Regiao', 'ClassGeral', 'LimiteGrafico', function($scope, $state, $timeout, User, Projeto, LimiteReal, Fase, Regiao, ClassGeral){
         console.log('projetosCtrl')
 
         // Controle de sessao
@@ -96,6 +96,7 @@ angular
         $scope.tabela = [];
         $scope.tabelagasto = [];
         $scope.tabelabaseline = [];
+        $scope.colordepend = [];
         $scope.tabeladata = [];
         $scope.torre_baseline = [];
 
@@ -270,7 +271,15 @@ angular
                                             if(j<12){
                                                 $scope.tabelagasto.push(value.dados[i].gasto_mes);
                                                 $scope.tabelabaseline.push(value.dados[i].baseline);
+                                                if(value.dados[i].dependencia=='S'){
+                                                    $scope.colordepend[i-1] = {'background-color':'red'};
+                                                    $scope.colordepend.push({'background-color':'red'});
+                                                    $scope.tabela[i] = $scope.tabelabaseline[i] - $scope.tabelagasto[i];
+                                                }else{
+                                                    $scope.colordepend.push({});
+                                                }
                                             }
+                                            // console.log($scope.colordepend)
                                             // console.log(value.dados[i].torre);
                                             if(value.dados[i].torre!=null){
                                                 com_torre = true;
@@ -281,6 +290,14 @@ angular
                                  }
                             }
                         })
+
+                        //ACERTO PARA MOSTRAR CONFORME SOLICITADO
+                        for(var i=0; i< $scope.tabela.length; i++){
+                            if($scope.tabela[i]<0){
+                                $scope.tabelabaseline[i] = $scope.tabelabaseline[i] - $scope.tabela[i];
+                                $scope.tabela[i] = 0;
+                            }
+                        }
                         // console.log($scope.tabelagasto);
                         // console.log($scope.tabelabaseline);
                     });
@@ -288,18 +305,20 @@ angular
         }
 
         // Alimenta objeto com todas as Regiões/Sistemas
-        Regiao.find()
-            .$promise
-                .then(function(res, err){
-                    $scope.regiao = res;
-                    //console.log(res);
-                    
-                    angular.forEach($scope.regiao, function(value,index){
-                        for(var i=0; i<value.sistemas.length; i++){
-                            $scope.sistema.push({regiao: value.regiao, sistema: value.sistemas[i], familia: value.familia});
-                        }
+        $timeout(function(){
+            Regiao.find()
+                .$promise
+                    .then(function(res, err){
+                        $scope.regiao = res;
+                        //console.log(res);
+                        
+                        angular.forEach($scope.regiao, function(value,index){
+                            for(var i=0; i<value.sistemas.length; i++){
+                                $scope.sistema.push({regiao: value.regiao, sistema: value.sistemas[i], familia: value.familia});
+                            }
+                        });
                     });
-                });
+        }, 500);
 
         ClassGeral.find()
             .$promise

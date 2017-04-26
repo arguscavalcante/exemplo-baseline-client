@@ -130,7 +130,7 @@ angular
                                             count++;
                                         } 
                                     });
-                                    for (var i = 0; i < $scope.classgeral.length+1; i++) {
+                                    for (var i = 0; i < $scope.classgeral.length; i++) {
                                         $scope.valorClassgeral.push(0);
                                     }                                 
                                 });
@@ -139,9 +139,9 @@ angular
 
         $scope.gerarTabela = function(){
         
-            console.log($scope.classgeral_pai);
+            console.log($scope.classgeral);
             //atribuindo os valores dos projetos por mes/Classificacao Geral
-            for (var i = 0; i < $scope.classgeral.length+1; i++) {
+            for (var i = 0; i < $scope.classgeral.length; i++) {
                 $scope.valorClassgeral[i] = atribuirDado($scope.classgeral[i].classgeral_id);                
             }
 

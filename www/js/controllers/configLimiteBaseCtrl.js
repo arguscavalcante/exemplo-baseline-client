@@ -66,11 +66,6 @@ angular
                     $scope.limgrafico = res
                     // console.log(res);
                     angular.forEach($scope.limgrafico, function(value, index){
-                        if(value.torre == ''){
-                            value.utilizatorre = 'SIM';
-                        }else{
-                            value.utilizatorre = 'NÃO';
-                        }   
                         value.data_tab = trasformVizualDate(value.data_corte.toString())             
                     })
                     console.log($scope.limgrafico)
@@ -345,7 +340,7 @@ angular
                 }
             })
 
-            //console.log($scope.disptorre);
+            console.log($scope.disptorre);
             if($scope.disptorre){
                 if($scope.formlimgraf.variacao_torre == null || $scope.formlimgraf.variacao_torre < 0){
                     alert('O valor mímino da variação da Torre é zero!');

@@ -43,15 +43,15 @@
                         <tbody>
                              <tr>
                                 <td><b>BASELINE</b></td>
-                                <td ng-repeat="val in tabelabaseline track by $index"> {{val | currency}} </td>
+                                <td ng-repeat="val in tabelabaseline track by $index" ng-style="colordepend[$index]"> {{val | currency}} </td>
                             </tr>
                             <tr>
                                 <td><b>CONSUMIDO</b></td>
-                                <td ng-repeat="val in tabelagasto track by $index"> {{val | currency}} </td>
+                                <td ng-repeat="val in tabelagasto track by $index" ng-style="colordepend[$index]"> {{val | currency}} </td>
                             </tr>
                             <tr>
                                 <td><b>DISPONÍVEL</b></td>
-                                <td ng-repeat="val in tabela track by $index"> {{val | currency}} </td>
+                                <td ng-repeat="val in tabela track by $index" ng-style="colordepend[$index]"> {{val | currency}} </td>
                             </tr>
                         </tbody>
                     </table>
