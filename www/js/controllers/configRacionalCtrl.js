@@ -2,7 +2,7 @@
 
 angular
     .module('starter')
-    .controller('configRacionalCtrl', ['$scope', '$state', 'LimiteReal', 'Projeto', 'ClassGeral', function($scope, $state, LimiteReal, Projeto, ClassGeral){
+    .controller('configRacionalCtrl', ['$scope', '$state', '$timeout', 'LimiteReal', 'Projeto', 'ClassGeral', function($scope, $state, $timeout, LimiteReal, Projeto, ClassGeral){
         console.log('configRacionalCtrl')
 
          // Controle de sessao
@@ -47,8 +47,9 @@ angular
         $scope.racional = {};
         $scope.classgeral = {};
         $scope.classgeral_pai = [];
-        $scope.tabelalimreal = [];
-        $scope.valorClassgeral = [{titulo: "", mes1: 0, mes2: 0, mes3: 0, mes4: 0, mes5: 0, mes6: 0, mes7: 0}];
+        $scope.limreal = [];
+        $scope.valorClassgeral = [];
+        $scope.tabelaRacional = [];
         $scope.carregouDados = true;
         $scope.familiaTabela = "";
         
@@ -62,9 +63,9 @@ angular
         LimiteReal.find()
             .$promise
                 .then(function(res, err){
-                    $scope.tabelalimreal = res;
+                    $scope.limreal = res;
                     // console.log(res);
-                    // console.log($scope.tabelalimreal)
+                    // console.log($scope.limreal)
                 });  
 
          //Acerto das datas por função -- FACTORY
@@ -87,7 +88,7 @@ angular
         $scope.date = alimentaData(d, 7);
 
         //atribui valores do projetos
-        function atribuirDado(tipo) {
+        function atribuirDado(tipo, pai) {
             var dados = [];
             for (var i = 0; i < 7; i++) {
                 dados.push(0);
@@ -106,47 +107,57 @@ angular
                     }
                 }
             });
-            console.log(dados.splice(0, 0, tipo))
+            // console.log(dados.splice(0, 0, tipo))
+            // dados.splice(0, 0, tipo);
+            dados.splice(0, 0, pai)
             return dados; //.splice(0, 0, tipo);
         }
 
         function gerarRacional(){ 
-            Projeto.find()
-                .$promise
-                    .then(function (res, err){
-                        $scope.projetos = res;
-                        ClassGeral.find()
-                            .$promise
-                                .then(function (res, err){
-                                    $scope.classgeral = res;
-                                    $scope.carregouDados = false;  
-                                    $scope.classgeral_pai.push("BASELINE");
-                                    var count = 1;
-                                    
-                                    angular.forEach($scope.classgeral, function(value, index){
-                                        if(!$scope.classgeral_pai.includes(value.classgeral_pai)){
-                                            $scope.classgeral_pai.push(value.classgeral_pai);
-                                            $scope.classgeral_pai.push("Delta " + count);
-                                            count++;
-                                        } 
+            $timeout(function(){
+                Projeto.find()
+                    .$promise
+                        .then(function (res, err){
+                            $scope.projetos = res;
+                            ClassGeral.find()
+                                .$promise
+                                    .then(function (res, err){
+                                        $scope.classgeral = res;
+                                        $scope.carregouDados = false;  
+                                        $scope.classgeral_pai.push("BASELINE");
+                                        var count = 1;
+                                        
+                                        angular.forEach($scope.classgeral, function(value, index){
+                                            if(!$scope.classgeral_pai.includes(value.classgeral_pai)){
+                                                $scope.classgeral_pai.push(value.classgeral_pai);
+                                                $scope.classgeral_pai.push("Delta " + count);
+                                                count++;
+                                            } 
+                                        });
+                                        for (var i = 0; i < $scope.classgeral.length; i++) {
+                                            $scope.valorClassgeral.push(0);
+                                        }                                 
                                     });
-                                    for (var i = 0; i < $scope.classgeral.length; i++) {
-                                        $scope.valorClassgeral.push(0);
-                                    }                                 
-                                });
-                    });
-        }   
+                        });
+            }, 500);
+        }  
+
+        function acertaValoresPai(vetor){
+            console.log(vetor);
+            // $scope.tabelaRacional = 
+        } 
 
         $scope.gerarTabela = function(){
-        
-            console.log($scope.classgeral);
+            var pai;
+            // console.log($scope.classgeral);
             //atribuindo os valores dos projetos por mes/Classificacao Geral
             for (var i = 0; i < $scope.classgeral.length; i++) {
-                $scope.valorClassgeral[i] = atribuirDado($scope.classgeral[i].classgeral_id);                
-            }
+                $scope.valorClassgeral[i] = atribuirDado($scope.classgeral[i].classgeral_id, $scope.classgeral[i].classgeral_pai); 
+                acertaValoresPai(atribuirDado($scope.classgeral[i].classgeral_id, $scope.classgeral[i].classgeral_pai));
+            }           
 
             console.log($scope.valorClassgeral);
-
+            console.log($scope.classgeral_pai);
         }
         
         $scope.racionalGerar = function(){

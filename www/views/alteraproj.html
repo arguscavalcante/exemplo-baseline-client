@@ -46,11 +46,7 @@
                                 <select ng-model="filtroResult.familia" class="form-control" ng-options="val for val in selectOptionFamilia() | orderBy:'toString()' "></select>
                             </td>
                             <td class="col-md-2"><label>Região:</label></td>
-                            <td class="col-md-3">
-                                <select ng-model="filtroResult.regiao" class="form-control">
-                                    <option ng-repeat="id in regiao" value="{{id.Regiao_id}}">{{id.Regiao_id}}</option>
-                                </select>
-                            </td>
+                            <td class="col-md-3"><select ng-model="filtroResult.regiao" ng-options="val for val in selectOptionRegiao()" class="form-control"></select></td>
                         </tr>
                         <tr>
                             <td class="col-md-2"><label>Sistema:</label></td>
@@ -116,15 +112,15 @@
                         <tbody>
                              <tr>
                                 <td><b>BASELINE</b></td>
-                                <td ng-repeat="val in tabelabaseline track by $index"> {{val | currency}} </td>
+                                <td ng-repeat="val in tabelabaseline track by $index" ng-style="colordepend[$index]"> {{val | currency}} </td>
                             </tr>
                             <tr>
-                                <td><b>GASTO</b></td>
-                                <td ng-repeat="val in tabelagasto track by $index"> {{val | currency}} </td>
+                                <td><b>CONSUMO</b></td>
+                                <td ng-repeat="val in tabelagasto track by $index" ng-style="colordepend[$index]"> {{val | currency}} </td>
                             </tr>
                             <tr>
                                 <td><b>DISPONÍVEL</b></td>
-                                <td ng-repeat="val in tabelapag track by $index"> {{val | currency}} </td>
+                                <td ng-repeat="val in tabelapag track by $index" ng-style="colordepend[$index]"> {{val | currency}} </td>
                             </tr>
                         </tbody>
                     </table>
@@ -164,7 +160,7 @@
                         <table class="table table-striped">
                             <tr>
                                 <td><label>Projeto:</label></td>
-                                <td> <input type="text" ng-model="formaltproj.projeto" value="" class="form-control col-md-3" /> </td>
+                                <td> <input type="text" ng-model="formaltproj.projeto" value="" class="form-control col-md-3" ng-disabled="camposform"/> </td>
                                 <td><label>Descrição do Projeto:</label></td>
                                 <td> <input type="text" ng-model="formaltproj.descricao" value="" class="form-control col-md-3" /> </td>
                                 <td><label>Proposta:</label></td>
@@ -173,18 +169,18 @@
                             <tr>
                                 <td><label>Família:</label></td>
                                 <td>
-                                    <select ng-model="formaltproj.familia" class="form-control">
+                                    <select ng-model="formaltproj.familia" class="form-control" disabled>
                                         <option ng-repeat="val in user.familias | orderBy:'toString()'" value="{{val}}">{{val}}</option>
                                     </select>
                                 </td>
                                 <td><label>Região:</label></td>
-                                <td><select ng-model="formaltproj.regiao" ng-options="val for val in selectOptionRegiao()" class="form-control"></select></td>
+                                <td><select ng-model="formaltproj.regiao" ng-options="val for val in selectOptionRegiaoForm()" class="form-control"></select></td>
                                 <td><label>Sistema:</label></td>
                                 <td><select ng-model="formaltproj.sistema" ng-options="val for val in selectOptionSistemaform()"  class="form-control"></select></td>
                             </tr>
                             <tr>
                                 <td><label>Gerente:</label></td>
-                                <td><select ng-model="formaltproj.gerente" class="form-control">
+                                <td><select ng-model="formaltproj.gerente" class="form-control" ng-disabled="camposform">
                                         <option ng-repeat="id in gerentes" value="{{id.login_user}}">{{id.login_user}}</option>
                                     </select> 
                                 </td>
@@ -207,7 +203,7 @@
                         <table class="table table-striped">
                             <tr>
                                 <td><label>Valor Total:</label></td>
-                                <td colspan=2> <input type="text" ng-model="formaltproj.valor_total_proj" class="form-control" ng-disabled="baseline.todos" monetario/> </td>
+                                <td colspan=2> <input type="text" ng-model="formaltproj.valor_total_proj" class="form-control" ng-disabled="baseline.todos" monetarioproj/> </td>
                                 <td></td>
                                 <td><span style="color:red">Disponibilidade</span></td>
                             </tr>
@@ -218,7 +214,7 @@
                                     </select> 
                                 </td>
                                 <td><label>Valor Mes/Ano:</label></td>
-                                <td> <input type="number" ng-model="meses.valor" class="form-control" ng-disabled="baseline.data2[$index].desabilitar" monetario/> </td>
+                                <td> <input type="text" ng-model="meses.valor" class="form-control" ng-disabled="baseline.data2[$index].desabilitar" monetarioproj/> </td>
                                 <td><span style="color:red" data-thousands="." data-decimal="," data-prefix="R$ " id="currency">{{baseline_red[$index] | currency}}</span></td>
                             </tr>   
                         </table>

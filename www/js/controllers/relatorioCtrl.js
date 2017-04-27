@@ -403,8 +403,14 @@ angular
                                     console.log(objChartProj);
                                     grafProjetos(objChartProj);
                                     if($scope.user.perfil == 'Administrador'){
+                                        angular.forEach($scope.projetoscompleto, function(value, index){
+                                            value.familia = value.familia.split(' - ')[1];
+                                        })
                                         $scope.file = exportaJSON($scope.projetoscompleto, ano_limite);
                                     }else{
+                                        angular.forEach($scope.projetos, function(value, index){
+                                            value.familia = value.familia.split(' - ')[1];
+                                        })
                                         $scope.file = exportaJSON($scope.projetos, ano_limite);
                                     }
                         });
