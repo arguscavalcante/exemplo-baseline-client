@@ -19,6 +19,8 @@ angular
         var d = new Date();
         d.setDate(15);
         var com_torre = false;
+        var mudacor = ['lightcoral', 'lightblue'];
+        var contacor = 2;
         $scope.projeto = [];
         $scope.tabela = [];
         $scope.filtroResult = {};
@@ -430,9 +432,10 @@ angular
                                             $scope.tabelagasto.push(value.dados[i].gasto_mes);
                                             $scope.tabelabaseline.push(value.dados[i].baseline);
                                             if(value.dados[i].dependencia=='S'){
-                                                    $scope.colordepend[i-1] = {'background-color':'red'};
-                                                    $scope.colordepend.push({'background-color':'red'});
-                                                    $scope.tabelapag[i] = $scope.tabelabaseline[i] - $scope.tabelagasto[i];
+                                                    $scope.colordepend[i-1] = {'background-color': mudacor[contacor%2]};
+                                                    $scope.colordepend.push({'background-color': mudacor[contacor%2]});
+                                                    contacor++;
+                                                    // $scope.tabelapag[i] = $scope.tabelabaseline[i] - $scope.tabelagasto[i];
                                                 }else{
                                                     $scope.colordepend.push({});
                                                 }

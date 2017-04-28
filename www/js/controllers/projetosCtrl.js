@@ -254,6 +254,8 @@ angular
         
         
         function buscaLimiteReal(){
+            var mudacor = ['lightcoral', 'lightblue'];
+            var contacor = 2;
             // Alimenta objeto com todas os Limites Reais
             LimiteReal.find()
                 .$promise
@@ -263,6 +265,7 @@ angular
                         $scope.baseline.valor = alimentaValor($scope.baseline.data, $scope.limite, $scope.user.familia, false);
                         // console.log($scope.baseline.valor)
                         $scope.tabela = alimentaValor($scope.baseline.data, $scope.limite, $scope.user.familia, true);
+                        console.log($scope.tabela)
                         angular.forEach($scope.limite, function(value, index){
                             if(value.familia == $scope.user.familia){
                                  for(var i=0; i<value.dados.length; i++){
@@ -271,10 +274,11 @@ angular
                                             if(j<12){
                                                 $scope.tabelagasto.push(value.dados[i].gasto_mes);
                                                 $scope.tabelabaseline.push(value.dados[i].baseline);
-                                                if(value.dados[i].dependencia=='S'){
-                                                    $scope.colordepend[i-1] = {'background-color':'red'};
-                                                    $scope.colordepend.push({'background-color':'lightcoral'});
-                                                    $scope.tabela[i] = $scope.tabelabaseline[i] - $scope.tabelagasto[i];
+                                                if(value.dados[i].dependencia=='S'){ 
+                                                    $scope.colordepend[i-1] = {'background-color': mudacor[contacor%2]};
+                                                    $scope.colordepend.push({'background-color': mudacor[contacor%2]});
+                                                    // $scope.tabela[i] = $scope.tabelabaseline[i] - $scope.tabelagasto[i];
+                                                    contacor++;
                                                 }else{
                                                     $scope.colordepend.push({});
                                                 }
