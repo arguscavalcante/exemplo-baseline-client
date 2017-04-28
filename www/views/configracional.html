@@ -47,8 +47,9 @@
                                         <td><b>{{familiaTabela}}</b></td>
                                         <td ng-repeat="id in date"><b> {{id}} </b></td>
                                     </tr>
-                                    <tr ng-repeat="class in valorClassgeral">
-                                        <td ng-repeat="value in class track by $index">{{value}}</td>
+                                    <tr ng-repeat="class in tabelaRacional">
+                                        <td><b>{{class.class}}</b></td>
+                                        <td ng-repeat="value in class.valor track by $index">{{value}}</td>
                                     </tr>
                                 </tbody>
                             </table>

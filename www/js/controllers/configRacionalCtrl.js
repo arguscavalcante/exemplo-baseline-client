@@ -65,7 +65,7 @@ angular
                 .then(function(res, err){
                     $scope.limreal = res;
                     // console.log(res);
-                    // console.log($scope.limreal)
+                    console.log($scope.limreal)
                 });  
 
          //Acerto das datas por função -- FACTORY
@@ -90,7 +90,7 @@ angular
         //atribui valores do projetos
         function atribuirDado(tipo, pai) {
             var dados = [];
-            for (var i = 0; i < 7; i++) {
+            for (var i = 0; i < $scope.date.length; i++) {
                 dados.push(0);
             }
             angular.forEach($scope.projetos, function (value, index) {
@@ -124,40 +124,120 @@ angular
                                     .then(function (res, err){
                                         $scope.classgeral = res;
                                         $scope.carregouDados = false;  
-                                        $scope.classgeral_pai.push("BASELINE");
                                         var count = 1;
-                                        
                                         angular.forEach($scope.classgeral, function(value, index){
                                             if(!$scope.classgeral_pai.includes(value.classgeral_pai)){
                                                 $scope.classgeral_pai.push(value.classgeral_pai);
                                                 $scope.classgeral_pai.push("Delta " + count);
                                                 count++;
                                             } 
-                                        });
-                                        for (var i = 0; i < $scope.classgeral.length; i++) {
-                                            $scope.valorClassgeral.push(0);
-                                        }                                 
+                                            // if(value.classgeral_pai != null){
+                                            //      $scope.valorClassgeral.push(0);
+                                            // }
+                                        });                               
                                     });
                         });
             }, 500);
         }  
 
-        function acertaValoresPai(vetor){
+        function tabelaValoresPai(vetor){
+            var vetorfim = [];
+            var vetordelta = [];
+            var bool = true;
+            var indice;
+            var indicedelta;
             console.log(vetor);
+            angular.forEach($scope.tabelaRacional, function(value, index){
+                if(value.class == vetor[0]){
+                    bool = false
+                }
+            })
+            
+                if(bool){
+                    // console.log('entrei: ', vetor[0]);
+                    for(var i=1; i<vetor.length; i++){
+                        vetorfim.push(vetor[i])
+                    }
+                    // vetorfim.splice(0, 0, vetor[0])
+
+                    $scope.tabelaRacional.push({class:vetor[0], valor: vetorfim});
+
+                    // pega o delta
+                    angular.forEach($scope.classgeral_pai, function(value, index){
+                        if(vetor[0]==value){
+                            indice = index+1;
+                            if(index >0){
+                                indicedelta = index-1;
+                            }else{
+                                indicedelta = index;
+                            }
+                        }
+                    })
+                    console.log(indicedelta)
+                    console.log($scope.tabelaRacional[indicedelta])
+                    angular.forEach($scope.tabelaRacional[indicedelta].valor, function(value, index){
+                        vetordelta.push(value - vetorfim[index]);
+                    })
+
+                    $scope.tabelaRacional.push({class:$scope.classgeral_pai[indice], valor: vetordelta});
+                    
+                } else {
+                    //  angular.forEach($scope.tabelaRacional, function(value, index){
+                    //     if(value.includes(vetor[0])){
+                    //         for(var i=1; i<vetor.length; i++){
+                    //             vetorfim.push(vetor[i] + value[i])
+                    //         }
+                            
+                    //         vetorfim.splice(0, 0, vetor[0])
+                    //         indice = index;
+
+                    //         value = vetorfim;
+                    //     }
+                    // })
+                    // $scope.tabelaRacional[indice] = vetorfim
+
+                }
+
+            
+
+            // $scope.tabelaRacional.push(value);
             // $scope.tabelaRacional = 
         } 
 
         $scope.gerarTabela = function(){
-            var pai;
+            var vetor = [];
+            for(var i=0; i<$scope.date.length; i++){
+                vetor.push(0);
+            }           
+
+            angular.forEach($scope.limreal, function(value, index){
+                if(value.familia == $scope.familiaTabela){
+                    for(var i=0; i<value.dados.length; i++){
+                        // console.log(value.dados[i].mes)
+                        for(var j=0; j<$scope.date.length; j++){
+                            if(value.dados[i].mes == $scope.date[j]){
+                                // console.log('entrei ', value.dados[i].mes)
+                                // console.log(value.dados[i].baseline)
+                                vetor[j] = value.dados[i].baseline;
+                            }
+                        }
+                    }
+                }
+            })
+
+            $scope.tabelaRacional.push({class:"BASELINE", valor: vetor});
+
+            
             // console.log($scope.classgeral);
             //atribuindo os valores dos projetos por mes/Classificacao Geral
             for (var i = 0; i < $scope.classgeral.length; i++) {
-                $scope.valorClassgeral[i] = atribuirDado($scope.classgeral[i].classgeral_id, $scope.classgeral[i].classgeral_pai); 
-                acertaValoresPai(atribuirDado($scope.classgeral[i].classgeral_id, $scope.classgeral[i].classgeral_pai));
+                // console.log($scope.tabelaRacional)
+                // $scope.valorClassgeral[i] = atribuirDado($scope.classgeral[i].classgeral_id, $scope.classgeral[i].classgeral_pai); 
+                tabelaValoresPai(atribuirDado($scope.classgeral[i].classgeral_id, $scope.classgeral[i].classgeral_pai));
             }           
 
-            console.log($scope.valorClassgeral);
-            console.log($scope.classgeral_pai);
+            // console.log( $scope.tabelaRacional);
+            // console.log($scope.classgeral_pai);
         }
         
         $scope.racionalGerar = function(){

@@ -691,33 +691,33 @@ angular
                                     // console.log($scope.formLimReal);
                                     // console.log('passei');
 
-                                //    Projeto.upsertWithWhere({where: {projeto_id: ''+ $scope.formaltproj.projeto_id +''}}, 
-                                //                             {classificacao_geral: ''+ $scope.formaltproj.classificacao_geral +'', 
-                                //                             familia: ''+ $scope.formaltproj.familia +'', 
-                                //                             fase:''+ $scope.formaltproj.fase +'', 
-                                //                             gerente:''+ $scope.formaltproj.gerente +'', 
-                                //                             projeto:''+ $scope.formaltproj.projeto +'', 
-                                //                             descricao: ''+ $scope.formaltproj.descricao +'',
-                                //                             proposta:''+ $scope.formaltproj.proposta +'', 
-                                //                             regiao: ''+ $scope.formaltproj.regiao +'', 
-                                //                             sistema: ''+ $scope.formaltproj.sistema +'', 
-                                //                             valor_total_proj: ''+ $scope.formaltproj.valor_total_proj +'', 
-                                //                             meses: $scope.formaltproj.meses}, 
-                                //                         function(res, err){
-                                //         // console.log(res);
-                                //         // console.log($scope.formaltproj.familia);
-                                //         // console.log($scope.formLimReal[0].dados);
-                                //         if($scope.classgeral.includes($scope.formaltproj.classificacao_geral)){
-                                //             angular.forEach($scope.formLimReal, function(value, index){
-                                //                 if(value.familia==$scope.formaltproj.familia){
-                                //                     LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formaltproj.familia +''}}, {dados: value.dados}, function(info, err) {
-                                //                         $state.reload();
-                                //                     })
-                                //                 }
-                                //             });
-                                //         }
-                                //         $state.reload();                               
-                                //     })
+                                   Projeto.upsertWithWhere({where: {projeto_id: ''+ $scope.formaltproj.projeto_id +''}}, 
+                                                            {classificacao_geral: ''+ $scope.formaltproj.classificacao_geral +'', 
+                                                            familia: ''+ $scope.formaltproj.familia +'', 
+                                                            fase:''+ $scope.formaltproj.fase +'', 
+                                                            gerente:''+ $scope.formaltproj.gerente +'', 
+                                                            projeto:''+ $scope.formaltproj.projeto +'', 
+                                                            descricao: ''+ $scope.formaltproj.descricao +'',
+                                                            proposta:''+ $scope.formaltproj.proposta +'', 
+                                                            regiao: ''+ $scope.formaltproj.regiao +'', 
+                                                            sistema: ''+ $scope.formaltproj.sistema +'', 
+                                                            valor_total_proj: ''+ $scope.formaltproj.valor_total_proj +'', 
+                                                            meses: $scope.formaltproj.meses}, 
+                                                        function(res, err){
+                                        // console.log(res);
+                                        // console.log($scope.formaltproj.familia);
+                                        // console.log($scope.formLimReal[0].dados);
+                                        if($scope.classgeral.includes($scope.formaltproj.classificacao_geral)){
+                                            angular.forEach($scope.formLimReal, function(value, index){
+                                                if(value.familia==$scope.formaltproj.familia){
+                                                    LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formaltproj.familia +''}}, {dados: value.dados}, function(info, err) {
+                                                        $state.reload();
+                                                    })
+                                                }
+                                            });
+                                        }
+                                        $state.reload();                               
+                                    })
                                 }
                             } else {
                                 console.log('limiteReal Alterado: ', $scope.formLimReal);
@@ -729,22 +729,22 @@ angular
                                 // console.log($scope.formaltproj);
                                 // console.log($scope.formLimReal);
 
-                                // Projeto.upsertWithWhere({where: {projeto_id: ''+ $scope.formaltproj.projeto_id +''}}, 
-                                //                             {classificacao_geral: ''+ $scope.formaltproj.classificacao_geral +'', 
-                                //                             familia: ''+ $scope.formaltproj.familia +'', 
-                                //                             fase:''+ $scope.formaltproj.fase +'', 
-                                //                             gerente:''+ $scope.formaltproj.gerente +'', 
-                                //                             projeto:''+ $scope.formaltproj.projeto +'', 
-                                //                             descricao: ''+ $scope.formaltproj.descricao +'',
-                                //                             proposta:''+ $scope.formaltproj.proposta +'', 
-                                //                             regiao: ''+ $scope.formaltproj.regiao +'', 
-                                //                             sistema: ''+ $scope.formaltproj.sistema +'', 
-                                //                             valor_total_proj: ''+ $scope.formaltproj.valor_total_proj +'', 
-                                //                             meses: $scope.formaltproj.meses}, 
-                                //                             function(res, err){
-                                //                 // console.log(info);
-                                //                 $state.reload();
-                                //             })
+                                Projeto.upsertWithWhere({where: {projeto_id: ''+ $scope.formaltproj.projeto_id +''}}, 
+                                                            {classificacao_geral: ''+ $scope.formaltproj.classificacao_geral +'', 
+                                                            familia: ''+ $scope.formaltproj.familia +'', 
+                                                            fase:''+ $scope.formaltproj.fase +'', 
+                                                            gerente:''+ $scope.formaltproj.gerente +'', 
+                                                            projeto:''+ $scope.formaltproj.projeto +'', 
+                                                            descricao: ''+ $scope.formaltproj.descricao +'',
+                                                            proposta:''+ $scope.formaltproj.proposta +'', 
+                                                            regiao: ''+ $scope.formaltproj.regiao +'', 
+                                                            sistema: ''+ $scope.formaltproj.sistema +'', 
+                                                            valor_total_proj: ''+ $scope.formaltproj.valor_total_proj +'', 
+                                                            meses: $scope.formaltproj.meses}, 
+                                                            function(res, err){
+                                                // console.log(info);
+                                                $state.reload();
+                                            })
                             }
                     });
                 });
@@ -805,75 +805,3 @@ angular
         }
 
     }]);
-
-    // .directive("monetarioproj",  ['$filter', function($filter) {
-    //     return {
-    //         restrict : "A",
-    //         require: '?ngModel',
-    //         scope: {},
-    //         link: function (scope, elem, attrs, ctrl, ngModel) {
-    //             if (!ctrl) return;
-
-    //             ctrl.$parsers.unshift(function (viewValue) {
-  
-    //                 var plainNumber;
-    //                 var finalNumber; 
-    //                 var numberString;
-    //                 var decimalString;
-    //                 var integerString;
-    //                 var char;
-
-    //                 var leftZero = '000';
-    //                 var contThousand = 0;
-    //                 var thousandsFormatted = '';
-    //                 var centsSeparator = ','
-    //                 var thousandsSeparator = '.';
-    //                 var symbol = 'R$ ';
-
-    //                 //PARTE 1 - Limpesa dos dos dados de formatação e retirada dos caracteres inválidos
-    //                 plainNumber = viewValue.replace(/[\.|\,|\R|\$]/g, '');
-    //                 plainNumber = plainNumber.trim();
-    //                 // console.log(plainNumber);
-    //                 finalNumber = parseInt(plainNumber);
-
-    //                 //PARTE 2 - Tratamento para inclusão do filtro
-    //                 numberString = finalNumber.toString()
-    //                 // console.log (numberString.length);
-                    
-    //                 if(numberString.length<3){
-    //                     numberString = leftZero.substring(0, leftZero.length - numberString.length) + numberString
-    //                 }
-
-    //                 //PARTE 3 - Inclusão do filtro
-    //                 integerString = numberString.substring(0, numberString.length-2); // Separando o valor inteiro para ser tratado pelo milhar
-    //                 decimalString = numberString.substring(integerString.length, numberString.length);
-
-    //                 if(integerString.length>3){
-    //                     //for para milhar
-    //                     // console.log(integerString);
-    //                     for(var i=integerString.length; i>0; i--){
-    //                         char = integerString.substr(i-1,1);
-    //                         contThousand++;
-    //                         if(contThousand%3==0){
-    //                             char = thousandsSeparator + char;
-    //                         }
-    //                         thousandsFormatted = char + thousandsFormatted;
-    //                         // console.log(thousandsFormatted);
-    //                     }
-    //                 }else{
-    //                     thousandsFormatted = integerString;
-    //                 }
-
-    //                 if(thousandsFormatted.substr(0,1)==thousandsSeparator){
-    //                     thousandsFormatted = thousandsFormatted.substring(1, thousandsFormatted.length);
-    //                 }
-
-    //                 elem.val(symbol + thousandsFormatted + centsSeparator + decimalString);
-
-    //                 return symbol + thousandsFormatted + centsSeparator + decimalString;
-    //             });
-
-                
-    //         }
-    //     };
-    // }]);

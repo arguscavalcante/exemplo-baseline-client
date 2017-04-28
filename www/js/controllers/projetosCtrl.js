@@ -273,7 +273,7 @@ angular
                                                 $scope.tabelabaseline.push(value.dados[i].baseline);
                                                 if(value.dados[i].dependencia=='S'){
                                                     $scope.colordepend[i-1] = {'background-color':'red'};
-                                                    $scope.colordepend.push({'background-color':'red'});
+                                                    $scope.colordepend.push({'background-color':'lightcoral'});
                                                     $scope.tabela[i] = $scope.tabelabaseline[i] - $scope.tabelagasto[i];
                                                 }else{
                                                     $scope.colordepend.push({});
