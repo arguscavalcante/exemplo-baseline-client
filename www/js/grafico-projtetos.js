@@ -5,7 +5,7 @@ function grafProjetos(objChartProj, refresh) {
             type: 'column'
         },
         title: {
-            text: 'Baseline de Projetos'
+            text: ''
         },
         xAxis: {
             categories: objChartProj.categorias,

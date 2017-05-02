@@ -1,60 +1,77 @@
-
-    <section class="menu-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                   <h5 style="color:white;">Olá, {{user.nome}}<h5>
+    
+    <div class="navbar navbar-inverse set-radius-zero">
+        <div class="container navbar-top">
+            <div class="col-md-6">
+                <a class="navbar-brand left-margin" href="http://w3.ibm.com/">
+                    <img src="../img/logo_ibm.png" width="200px" height="77px"/>
+                </a>
+                <a class="navbar-brand" href="http://w3.ibm.com/">
+                    <img src="../img/logo_oi.png" class="logo-position"/>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <div class="row navbar-right">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><h5 class="login-text" >Olá, {{user.nome}}<h5></li>
+                        <li><a ui-sref="config" class="glyphicon glyphicon-cog login-icon" ng-show="mostrar.config"></a></li>
+                        <li><a ui-sref="login" class="glyphicon glyphicon-log-out login-icon right-margin"></a></li>
+                    </ul>
                 </div>
-                <div class="col-md-8">
+                <div class="row">
                     <div class="navbar-collapse collapse ">
-                        <ul id="menu-top" class="nav navbar-nav navbar-right">
-                            <li><a ui-sref="config" ng-show="mostrar.config">Configuração</a></li>
-                            <li><a ui-sref="projetos" ng-show="mostrar.cadastproj">Cadastro de Projetos</a></li>
-                            <li><a ui-sref="alteraproj" ng-show="mostrar.alterproj">Alteração de Projetos</a></li>
+                        <ul id="menu-top" class="nav navbar-nav navbar-right menu-princ">
                             <li><a ui-sref="relatorio" class="menu-top-active" ng-click="atualizaPag()">Relatório</a></li>
-                            <li><a ui-sref="login" class="glyphicon glyphicon-log-out"></a></li>
+                            <li><a ui-sref="projetos" ng-show="mostrar.cadastproj">Cadastro de Projetos</a></li>
+                            <li><a ui-sref="alteraproj" class="right-margin-text" ng-show="mostrar.alterproj">Alteração de Projetos</a></li> 
                         </ul>
                     </div>
                 </div>
-
             </div>
         </div>
-    </section>
+    </div>
     <!-- MENU SECTION END-->
     <div class="content-wrapper">
         <div class="container">
-            <div class="row"  ng-show="opcoes">
-                 <div class="col-md-12">
-                    <label>SELECIONE UMA FAMÍLIA: &nbsp;</label>
-                    <select ng-model="user.familia" class="form-control" ng-change="atribuiFamilia();">
-                         <option ng-repeat="val in user.familias" value="{{val}}">{{val}}</option>
-                    </select>
-                 </div>
+            <div class="row">
+                 <div class="col-md-4 col-md-45"><hr class="dash-relatorio" /></div>
+                 <div class="col-md-3"><span class="tit-relatorio">BASELINE DE PROJETOS</span></div>
+                 <div class="col-md-4 col-md-45"><hr class="dash-relatorio" /></div
             </div>
-            <div class="row" ng-show="grafico">
-                <h3>{{user.familia}}</h3>
-                <div id="grafproj" style="min-width:310px; height:500px;"></div>
+            <div class="row"  ng-show="opcoes">
+                <div class="col-md-12">
+                    <label class="filtro-relat">SELECIONE UMA FAMÍLIA: &nbsp;</label>
+                    <select ng-model="user.familia" class="form-control" ng-change="atribuiFamilia();">
+                        <option ng-repeat="val in user.familias" value="{{val}}">{{val}}</option>
+                    </select>
+                </div>
             </div>
             <div class="row" ng-show="grafico">
                 <div class="col-md-12">
-                    <h3>Filtros:</h3>
                     <form>
-                        <table class="table table-striped">
+                        <table class="table table-relat">
                             <tr>
                                 <td>
-                                    <label>Mês Inicio: &nbsp;</label>
+                                    <label class="filtro-relat">Mês de Inicio: &nbsp;</label>
+                                </td>
+                                <td>
+                                    <label class="filtro-relat">Ano de Inicio: &nbsp;</label>
+                                </td>
+                                <td>
+                                    <label class="filtro-relat">Total de Meses: &nbsp;</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
                                     <select ng-model="formfiltro.mes_inicio" class="form-control" ng-change="redesenharGraf();" ng-disabled="relatorio.filtro">
                                         <option ng-repeat="id in opcaomeses" value="{{id.valor}}">{{id.mes}}</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <label>Ano Inicio: &nbsp;</label>
                                     <select ng-model="formfiltro.ano_inicio" class="form-control" ng-change="redesenharGraf();" ng-disabled="relatorio.filtro">
                                         <option ng-repeat="id in opcaoano" value="{{id}}">{{id}}</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <label>Quantidade de Meses: &nbsp;</label>
                                     <select ng-model="formfiltro.qnt_meses_pos" class="form-control" ng-change="redesenharGraf();" ng-disabled="relatorio.filtro">
                                         <option ng-repeat="id in opcaoqnt" value="{{id}}">{{id}}</option>
                                     </select>
@@ -64,9 +81,12 @@
                     </form>
                 </div>
             </div>
+            <div class="row" ng-show="grafico">
+                <div id="grafproj" style="min-width:310px; height:500px;"></div>
+            </div>
             <div class="row">
                 <div class="col-md-12">
-                    <button type="button" ng-click="downloadFile();" class="btn btn-info" ng-if="file!=''">Download</button>
+                    <button type="button" ng-click="downloadFile();" class="btn btn-info downrelat" ng-if="file!=''">Download</button>
                 </div>
             </div>
         </div>

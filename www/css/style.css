@@ -70,22 +70,32 @@ body {
 
 .login-text{
     color: #FFF;
+    margin-top: 5px;
+    padding: 10px 10px 10px 10px;
 }
 
 .login-icon {
-    height: 60px;
-width: 60px;
-padding: 13px;
-border-radius: 50%;
-font-size: 30px;
-margin-bottom: 20px;
-color: #fff;
-text-align: center;
-cursor:pointer;
-background-color:#F0677C;
--webkit-border-radius:50%;
-    -moz-border-radius:50%;
+    font-size: 20px;
+    padding: 10px 5px 10px 10px !important;
+    color: #fff !important;
 }
+
+.right-margin{
+    margin-right: 80px;
+}
+
+.right-margin-text{
+    margin-right: 62px;
+}
+
+.left-margin{
+    margin-left: 80px;
+}
+
+.menu-princ{
+    margin-top: 50px;
+}
+
 /* =============================================================
    HEADER SECTION STYLES
  ============================================================ */
@@ -104,6 +114,13 @@ header {
     padding-left: 30px;
     margin-top: 40px;
     margin-bottom: 30px;
+}
+
+.logo-position{
+    margin-left: -30px !important;
+    margin-top: 15px;
+    width: 70px;
+    height: 70px;
 }
 
 .navbar-brand {
@@ -181,7 +198,7 @@ header {
 }
 
 .menu-top-active {
-    background-color: #31b0d5;
+    color: #ffff00 !important;
 }
 
 .menu-section .nav > li > a:hover,.menu-section .nav > li > a:focus {
@@ -193,7 +210,9 @@ header {
 }
 
 .navbar-inverse {
-    background-color: #3D3D3D;
+    background: url("../img/background_topo.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
     border-color: transparent;
 }
 
@@ -207,8 +226,13 @@ header {
 }
 
 .navbar-top{
-    height: 140px;
+    height: 170px;
 }
+
+.navbar-right{
+    padding-top: 5px;
+}
+
 
 /* =============================================================
    FOOTER SECTION STYLES
@@ -328,4 +352,50 @@ footer {
 
 .btn-google {
     background-color: #c32f10;
+}
+
+/*==============================================
+    RELATORIO  
+ =============================================*/
+.dash-relatorio{
+    border-top: dashed 3px; 
+    color:gray;
+}
+
+.tit-relatorio{
+    color:gray;
+    font-size: large;
+    font-weight: bold;
+    margin-left: 32px;
+}
+
+.col-md-45{
+    width: 37% !important;
+}
+
+.table-relat{
+    margin-top:20px;
+    margin-bottom: 35px;
+}
+
+.table-relat > tbody > tr > td{
+    border-top: 0px !important;
+}
+
+.filtro-relat{
+    font-weight: normal !important;
+    font-size: small;
+    color: gray;
+    margin-left: 20px;
+}
+
+select.form-control{
+    border-radius: 0px !important;
+    font-size: 11px !important;
+}
+
+.downrelat{
+    padding: 10px 50px 10px 50px;
+    margin-top: 25px;
+    font-size: large;
 }

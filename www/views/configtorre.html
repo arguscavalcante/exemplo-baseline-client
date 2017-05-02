@@ -1,25 +1,33 @@
-﻿
-    <section class="menu-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                   <h5 style="color:white;">Olá, {{user.nome}}<h5>
+﻿    <div class="navbar navbar-inverse set-radius-zero">
+        <div class="container navbar-top">
+            <div class="col-md-6">
+                <a class="navbar-brand left-margin" href="http://w3.ibm.com/">
+                    <img src="../img/logo_ibm.png" width="200px" height="77px"/>
+                </a>
+                <a class="navbar-brand" href="http://w3.ibm.com/">
+                    <img src="../img/logo_oi.png" class="logo-position"/>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <div class="row navbar-right">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><h5 class="login-text" >Olá, {{user.nome}}<h5></li>
+                        <li><a ui-sref="config" class="glyphicon glyphicon-cog login-icon menu-top-active" ng-click="atualizaPag()" ng-show="mostrar.config"></a></li>
+                        <li><a ui-sref="login" class="glyphicon glyphicon-log-out login-icon right-margin"></a></li>
+                    </ul>
                 </div>
-                <div class="col-md-8">
+                <div class="row">
                     <div class="navbar-collapse collapse ">
-                        <ul id="menu-top" class="nav navbar-nav navbar-right">
-                            <li><a ui-sref="config" class="menu-top-active" ng-show="mostrar.config">Configuração</a></li>
-                            <li><a ui-sref="projetos" ng-show="mostrar.cadastproj">Cadastro de Projetos</a></li>
-                            <li><a ui-sref="alteraproj" ng-show="mostrar.alterproj">Alteração de Projetos</a></li>
+                        <ul id="menu-top" class="nav navbar-nav navbar-right menu-princ">
                             <li><a ui-sref="relatorio">Relatório</a></li>
-                            <li><a ui-sref="login" class="glyphicon glyphicon-log-out"></a></li>
+                            <li><a ui-sref="projetos" ng-show="mostrar.cadastproj">Cadastro de Projetos</a></li>
+                            <li><a ui-sref="alteraproj" class="right-margin-text" ng-show="mostrar.alterproj">Alteração de Projetos</a></li> 
                         </ul>
                     </div>
                 </div>
-
             </div>
         </div>
-    </section>
+    </div>
     <!-- MENU SECTION END-->
     <div class="content-wrapper">
         <div class="container">

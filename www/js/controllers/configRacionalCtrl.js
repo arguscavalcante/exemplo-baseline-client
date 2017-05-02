@@ -45,6 +45,7 @@ angular
         d.setMonth(d.getMonth() -3);
         $scope.date = [];
         $scope.racional = {};
+        $scope.filtroBusca = {};
         $scope.classgeral = {};
         $scope.classgeral_pai = [];
         $scope.limreal = [];
@@ -52,10 +53,16 @@ angular
         $scope.tabelaRacional = [];
         $scope.carregouDados = true;
         $scope.familiaTabela = "";
+        $scope.familia = [];
+        $scope.tabelalimreal = [];
+        $scope.class_order = [];
         
         $scope.racional.opcao = true;
         $scope.racional.relatorio = false;
         $scope.racional.busca = false;
+        $scope.racional.desBonus = true;
+
+        $scope.filtroBusca.qnt_itens = 10;
 
         $scope.limreal = {};
 
@@ -64,8 +71,8 @@ angular
             .$promise
                 .then(function(res, err){
                     $scope.limreal = res;
-                    // console.log(res);
                     console.log($scope.limreal)
+                    $scope.racional.desBonus = false;
                 });  
 
          //Acerto das datas por função -- FACTORY
@@ -113,6 +120,76 @@ angular
             return dados; //.splice(0, 0, tipo);
         }
 
+        function currencyValue(valor){
+            var numberString;
+            var decimalString;
+            var integerString;
+            var char;
+            var leftZero = '000';
+            var contThousand = 0;
+            var thousandsFormatted = '';
+            var centsSeparator = ','
+            var thousandsSeparator = '.';
+            var symbol = 'R$ ';
+
+            //PARTE 1 - Limpesa dos dos dados de formatação e retirada dos caracteres inválidos
+            // console.log(plainNumber);
+            if(valor.toString().indexOf(".")==-1){
+                numberString = valor.toString() + '00'
+            } else {
+                numberString = valor.toString().replace('.','')
+            }
+
+            //PARTE 2 - Tratamento para inclusão do filtro
+            // console.log(numberString);
+            
+            if(numberString.length<3){
+                numberString = leftZero.substring(0, leftZero.length - numberString.length) + numberString
+            }
+
+            //PARTE 3 - Inclusão do filtro
+            integerString = numberString.substring(0, numberString.length-2); // Separando o valor inteiro para ser tratado pelo milhar
+            decimalString = numberString.substring(integerString.length, numberString.length);
+
+            if(integerString.length>3){
+                //for para milhar
+                // console.log(integerString);
+                for(var i=integerString.length; i>0; i--){
+                    char = integerString.substr(i-1,1);
+                    contThousand++;
+                    if(contThousand%3==0){
+                        char = thousandsSeparator + char;
+                    }
+                    thousandsFormatted = char + thousandsFormatted;
+                    // console.log(thousandsFormatted);
+                }
+            }else{
+                thousandsFormatted = integerString;
+            }
+
+            if(thousandsFormatted.substr(0,1)==thousandsSeparator){
+                thousandsFormatted = thousandsFormatted.substring(1, thousandsFormatted.length);
+            }
+
+            return symbol + thousandsFormatted + centsSeparator + decimalString;
+        }
+
+        function buscarBonus(){
+            // console.log('entrei');
+             angular.forEach($scope.limreal, function(value, index){
+                for(var i=0; i<value.dados.length; i++){
+                    $scope.tabelalimreal.push({familia: value.familia, 
+                                                mes:value.dados[i].mes, 
+                                                baseline: value.dados[i].baseline, 
+                                                disp_torre: value.dados[i].torre_baseline,
+                                                consumo_torre: value.dados[i].torre_gasto,
+                                                baseline_bonus: currencyValue(value.dados[i].baseline_bonus)
+                                            })
+                }
+                $scope.familia.push(value.familia);
+            })
+        }
+
         function gerarRacional(){ 
             $timeout(function(){
                 Projeto.find()
@@ -129,12 +206,10 @@ angular
                                             if(!$scope.classgeral_pai.includes(value.classgeral_pai)){
                                                 $scope.classgeral_pai.push(value.classgeral_pai);
                                                 $scope.classgeral_pai.push("Delta " + count);
+                                                $scope.class_order.push(value.classgeral_pai);
                                                 count++;
                                             } 
-                                            // if(value.classgeral_pai != null){
-                                            //      $scope.valorClassgeral.push(0);
-                                            // }
-                                        });                               
+                                        });                       
                                     });
                         });
             }, 500);
@@ -146,7 +221,7 @@ angular
             var bool = true;
             var indice;
             var indicedelta;
-            console.log(vetor);
+            // console.log(vetor);
             angular.forEach($scope.tabelaRacional, function(value, index){
                 if(value.class == vetor[0]){
                     bool = false
@@ -161,51 +236,67 @@ angular
                     // vetorfim.splice(0, 0, vetor[0])
 
                     $scope.tabelaRacional.push({class:vetor[0], valor: vetorfim});
-
-                    // pega o delta
-                    angular.forEach($scope.classgeral_pai, function(value, index){
-                        if(vetor[0]==value){
-                            indice = index+1;
-                            if(index >0){
-                                indicedelta = index-1;
-                            }else{
-                                indicedelta = index;
+                    
+                } else {
+                     angular.forEach($scope.tabelaRacional, function(value, index){
+                        if(value.class == vetor[0]){
+                            for(var i=0; i<value.valor.length; i++){
+                                value.valor[i] = vetor[i+1] + value.valor[i];
                             }
                         }
                     })
-                    console.log(indicedelta)
-                    console.log($scope.tabelaRacional[indicedelta])
-                    angular.forEach($scope.tabelaRacional[indicedelta].valor, function(value, index){
-                        vetordelta.push(value - vetorfim[index]);
-                    })
-
-                    $scope.tabelaRacional.push({class:$scope.classgeral_pai[indice], valor: vetordelta});
-                    
-                } else {
-                    //  angular.forEach($scope.tabelaRacional, function(value, index){
-                    //     if(value.includes(vetor[0])){
-                    //         for(var i=1; i<vetor.length; i++){
-                    //             vetorfim.push(vetor[i] + value[i])
-                    //         }
-                            
-                    //         vetorfim.splice(0, 0, vetor[0])
-                    //         indice = index;
-
-                    //         value = vetorfim;
-                    //     }
-                    // })
-                    // $scope.tabelaRacional[indice] = vetorfim
-
                 }
-
-            
-
-            // $scope.tabelaRacional.push(value);
-            // $scope.tabelaRacional = 
         } 
+
+        function tabelaValoresDelta(vetor){
+            // console.log(vetor)
+            var indice_nome;
+            var indice_pos;
+            var vetordelta = [];
+            var vetorfinal = [];
+            var contador = 1;
+            var vetorexiste = false;
+            var contavetor = 0;
+            var delta = [];
+
+            angular.forEach(vetor, function(value, index){
+                vetordelta = []
+                for(var i=0; i<$scope.classgeral_pai.length; i++){ 
+                    if($scope.classgeral_pai[i]==value.class){
+                        indice_nome = i+1;
+                        indice_pos = index+contador;
+                        
+                        if(vetorexiste){
+                            for(var j=0; j<value.valor.length; j++){
+                                delta = vetorfinal[contavetor].valor;
+                                vetordelta.push(Math.round((delta[j] - value.valor[j]) * 100)/100);
+                            }
+                            contavetor++;
+                        }else{
+                            for(var j=0; j<value.valor.length; j++){
+                                vetordelta.push(Math.round((vetor[index-1].valor[j] - value.valor[j]) * 100)/100);
+                            }
+                        }
+                        
+                        vetorfinal.push({class: $scope.classgeral_pai[indice_nome], valor:vetordelta, indice: indice_pos})
+                        vetorexiste = true;
+                        contador++;
+                    }
+                }
+                // console.log(indice_nome);
+                // console.log($scope.classgeral_pai[indice_nome]);
+            })  
+            console.log(vetorfinal);   
+            angular.forEach(vetorfinal, function(value, index){
+                $scope.tabelaRacional.splice(value.indice, 0, {class: value.class, valor: value.valor})       
+            })
+
+        }
 
         $scope.gerarTabela = function(){
             var vetor = [];
+            $scope.tabelaRacional = [];
+
             for(var i=0; i<$scope.date.length; i++){
                 vetor.push(0);
             }           
@@ -231,13 +322,10 @@ angular
             // console.log($scope.classgeral);
             //atribuindo os valores dos projetos por mes/Classificacao Geral
             for (var i = 0; i < $scope.classgeral.length; i++) {
-                // console.log($scope.tabelaRacional)
-                // $scope.valorClassgeral[i] = atribuirDado($scope.classgeral[i].classgeral_id, $scope.classgeral[i].classgeral_pai); 
                 tabelaValoresPai(atribuirDado($scope.classgeral[i].classgeral_id, $scope.classgeral[i].classgeral_pai));
             }           
 
-            // console.log( $scope.tabelaRacional);
-            // console.log($scope.classgeral_pai);
+                    tabelaValoresDelta($scope.tabelaRacional);
         }
         
         $scope.racionalGerar = function(){
@@ -251,6 +339,19 @@ angular
             console.log('valorBonus');
             $scope.racional.opcao = false;
             $scope.racional.busca = true;
+            buscarBonus();
+        }
+
+        $scope.salvarBonus = function(){
+            console.log('salvar Bonus');
+            console.log($scope.tabelalimreal);
+            console.log($scope.limreal);
+            console.log($scope.filtroBusca.familia)
+        }
+
+        $scope.atribuiValor = function(obj){
+            console.log(obj);
+            
         }
 
     }]);
