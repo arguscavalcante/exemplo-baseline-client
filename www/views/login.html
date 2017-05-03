@@ -1,28 +1,10 @@
 ﻿
-    <div class="content-wrapper" style="background-color:#4D4D4D">
+    <div class="content-wrapper">
         <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h4 class="page-head-line">Please Login To Enter </h4>
-
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <form ng-submit="validaLogin('relatorio')">
-                        <label class="login-text">Enter IBM ID : </label>
-                        <input type="text" ng-model="usuario.nome" value="" class="form-control" />
-                        <br />
-                        <label class="login-text">Enter Baseline User Password :  </label>
-                        <input type="password" ng-model="usuario.senha" value="" class="form-control" />
-                        <hr />
-                        <button type="submit" class="btn btn-info" value=""><span class="glyphicon glyphicon-user"></span> &nbsp;Sign In </button>&nbsp;
-                    </form>
-                </div>
-                <div class="col-md-6">
-                    <div class="alert alert-info">
-                        <strong> Precauções e Avisos:</strong>
+            <div class="row login-center">
+                <div class="col-md-8 login-background" >
+                    <div class="login-text">
+                        <strong> AVISOS </strong>
                         <ul>
                             <li>
                                Use somente em navegadores Firefox e Internet Explorer.<br />
@@ -43,9 +25,18 @@
                             </li>
                         </ul>
                     </div>
-
                 </div>
-
+                <div class="col-md-4 login-pag">
+                    <img src="../img/logo_ibm_cinza.png" class="login-logo-ibm" />
+                    <img src="../img/logo_oi_cinza.png" class="login-logo-oi" />
+                    <form ng-submit="validaLogin('relatorio')">
+                        <input type="text" ng-model="usuario.nome" value="" class="form-control" placeholder="IBM id" />
+                        <br />
+                        <input type="password" ng-model="usuario.senha" value="" class="form-control" placeholder="Password" />
+                        <br />
+                        <button type="submit" class="btn btn-info form-control login-submit"> Sign In </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

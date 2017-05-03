@@ -68,12 +68,6 @@ body {
     -moz-border-radius: 0px;
 }
 
-.login-text{
-    color: #FFF;
-    margin-top: 5px;
-    padding: 10px 10px 10px 10px;
-}
-
 .login-icon {
     font-size: 20px;
     padding: 10px 5px 10px 10px !important;
@@ -199,6 +193,7 @@ header {
 
 .menu-top-active {
     color: #ffff00 !important;
+    font-weight: bold !important;
 }
 
 .menu-section .nav > li > a:hover,.menu-section .nav > li > a:focus {
@@ -355,6 +350,62 @@ footer {
 }
 
 /*==============================================
+    LOGIN  
+ =============================================*/
+.login-background{
+    background: url("../img/background_login.jpg");
+    width: 734px;
+    height: 799px;
+    padding: 220px 20px 20px 50px;
+    align-content: center;
+}
+
+.login-center{
+    margin-top:-40px !important;
+}
+
+.login-text{
+    font-size: 15px;
+    color: #fff;
+}
+
+.login-text > strong{
+    font-size: 18px;
+    color: #fff;
+    margin-left: 40px;
+}
+
+.login-text > ul{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.login-text > ul > li{
+    font-size: 15px;
+    color: #fff;
+}
+
+.login-pag{
+    padding-top: 220px;
+}
+
+.login-logo-ibm{
+    height: 200px;
+    width: 200px;
+    margin: -50px 5px -20px 30px;
+}
+
+.login-logo-oi{
+    height: 80px;
+    width: 80px;
+    margin: 10px 0px 45px -5px;
+}
+
+.login-submit{
+    text-align: center;
+}
+
+/*==============================================
     RELATORIO  
  =============================================*/
 .dash-relatorio{
@@ -398,4 +449,14 @@ select.form-control{
     padding: 10px 50px 10px 50px;
     margin-top: 25px;
     font-size: large;
+}
+
+/*==============================================
+    ALTERACAO DE PROJETOS  
+ =============================================*/
+.box-tit-alt{
+    background-color: lightgray;
+    margin: -5px 10px 20px 10px;
+    height: 60px;
+    text-align: center;
 }

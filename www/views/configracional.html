@@ -50,6 +50,10 @@
                                 <option ng-repeat="val in user.familias" value="{{val}}">{{val}}</option>
                             </select>
                             <br />
+                            <span ng-repeat="id in class_order track by $index">
+                                <input type="checkbox" value="{{id}}" ng-click="mostrarTabela(id);" />{{id}}
+                            </span>
+                            <br />
                             <table class="table table-striped table-hover table-responsive">
                                 <tbody>
                                     <tr>

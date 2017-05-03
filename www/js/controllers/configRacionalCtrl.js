@@ -33,13 +33,14 @@ angular
                 $scope.mostrar.alterproj = true;
                 break;
             case 'Gerente':
+                $scope.mostrar.config = false;
                 $scope.mostrar.cadastproj = true;
                 $scope.mostrar.alterproj = true;
                 break;
             default:
                 alert('Não foi identificado o perfil do usuário!');
         }
-        
+
         var d = new Date();
         d.setDate(15);
         d.setMonth(d.getMonth() -3);
@@ -56,7 +57,8 @@ angular
         $scope.familia = [];
         $scope.tabelalimreal = [];
         $scope.class_order = [];
-        
+        $scope.selection = [];
+
         $scope.racional.opcao = true;
         $scope.racional.relatorio = false;
         $scope.racional.busca = false;
@@ -117,6 +119,7 @@ angular
             // console.log(dados.splice(0, 0, tipo))
             // dados.splice(0, 0, tipo);
             dados.splice(0, 0, pai)
+            console.log(dados);
             return dados; //.splice(0, 0, tipo);
         }
 
@@ -200,16 +203,15 @@ angular
                                 .$promise
                                     .then(function (res, err){
                                         $scope.classgeral = res;
-                                        $scope.carregouDados = false;  
-                                        var count = 1;
+                                        $scope.carregouDados = false;   
+                                        var count = 1
                                         angular.forEach($scope.classgeral, function(value, index){
-                                            if(!$scope.classgeral_pai.includes(value.classgeral_pai)){
-                                                $scope.classgeral_pai.push(value.classgeral_pai);
-                                                $scope.classgeral_pai.push("Delta " + count);
+                                            if(!$scope.class_order.includes(value.classgeral_pai)){
                                                 $scope.class_order.push(value.classgeral_pai);
                                                 count++;
                                             } 
-                                        });                       
+                                        });      
+                                        // console.log( $scope.class_order)                
                                     });
                         });
             }, 500);
@@ -221,6 +223,9 @@ angular
             var bool = true;
             var indice;
             var indicedelta;
+            if(!$scope.classgeral_pai.includes(vetor[0])){
+                return;
+            }
             // console.log(vetor);
             angular.forEach($scope.tabelaRacional, function(value, index){
                 if(value.class == vetor[0]){
@@ -228,7 +233,7 @@ angular
                 }
             })
             
-                if(bool){
+                if(bool){ 
                     // console.log('entrei: ', vetor[0]);
                     for(var i=1; i<vetor.length; i++){
                         vetorfim.push(vetor[i])
@@ -293,39 +298,41 @@ angular
 
         }
 
-        $scope.gerarTabela = function(){
+        $scope.gerarTabela = function(){            
             var vetor = [];
             $scope.tabelaRacional = [];
 
-            for(var i=0; i<$scope.date.length; i++){
-                vetor.push(0);
-            }           
+            if($scope.classgeral_pai.length > 0){
+                for(var i=0; i<$scope.date.length; i++){
+                    vetor.push(0);
+                }           
 
-            angular.forEach($scope.limreal, function(value, index){
-                if(value.familia == $scope.familiaTabela){
-                    for(var i=0; i<value.dados.length; i++){
-                        // console.log(value.dados[i].mes)
-                        for(var j=0; j<$scope.date.length; j++){
-                            if(value.dados[i].mes == $scope.date[j]){
-                                // console.log('entrei ', value.dados[i].mes)
-                                // console.log(value.dados[i].baseline)
-                                vetor[j] = value.dados[i].baseline;
+                angular.forEach($scope.limreal, function(value, index){
+                    if(value.familia == $scope.familiaTabela){
+                        for(var i=0; i<value.dados.length; i++){
+                            // console.log(value.dados[i].mes)
+                            for(var j=0; j<$scope.date.length; j++){
+                                if(value.dados[i].mes == $scope.date[j]){
+                                    // console.log('entrei ', value.dados[i].mes)
+                                    // console.log(value.dados[i].baseline)
+                                    vetor[j] = value.dados[i].baseline;
+                                }
                             }
                         }
                     }
-                }
-            })
+                })
 
-            $scope.tabelaRacional.push({class:"BASELINE", valor: vetor});
+                $scope.tabelaRacional.push({class:"BASELINE", valor: vetor});
 
-            
-            // console.log($scope.classgeral);
-            //atribuindo os valores dos projetos por mes/Classificacao Geral
-            for (var i = 0; i < $scope.classgeral.length; i++) {
-                tabelaValoresPai(atribuirDado($scope.classgeral[i].classgeral_id, $scope.classgeral[i].classgeral_pai));
-            }           
+                
+                // console.log($scope.classgeral);
+                //atribuindo os valores dos projetos por mes/Classificacao Geral
+                for (var i = 0; i < $scope.classgeral.length; i++) {
+                    tabelaValoresPai(atribuirDado($scope.classgeral[i].classgeral_id, $scope.classgeral[i].classgeral_pai));
+                }           
 
-                    tabelaValoresDelta($scope.tabelaRacional);
+                        tabelaValoresDelta($scope.tabelaRacional);
+            }    
         }
         
         $scope.racionalGerar = function(){
@@ -352,6 +359,32 @@ angular
         $scope.atribuiValor = function(obj){
             console.log(obj);
             
+        }
+
+        $scope.mostrarTabela = function(id){
+            var idx = $scope.selection.indexOf(id);
+            var count = 1;
+            $scope.classgeral_pai = [];
+            // console.log(idx);
+            if (idx > -1) {
+                $scope.selection.splice(idx, 1);
+            }
+            else {
+                $scope.selection.push(id);
+            }
+
+            console.log($scope.selection);
+            angular.forEach($scope.selection, function(value, index){
+                if(!$scope.classgeral_pai.includes(value)){
+                    $scope.classgeral_pai.push(value);
+                    $scope.classgeral_pai.push("Delta " + count);
+                    count++;
+                } 
+                // console.log(value)
+            });    
+            console.log($scope.classgeral_pai)
+            $scope.gerarTabela();
+            console.log($scope.tabelaRacional)
         }
 
     }]);

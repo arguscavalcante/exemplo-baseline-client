@@ -208,8 +208,8 @@ angular
                     for(var i=0; i<value.dados.length; i++){
                         for(var j=0; j<vetor.length; j++){
                             if(vetor[j]==value.dados[i].mes){
-                                valor[i].baseline = value.dados[i].torre_baseline;
-                                valor[i].gasto = value.dados[i].torre_gasto;
+                                valor[j].baseline = value.dados[i].torre_baseline;
+                                valor[j].gasto = value.dados[i].torre_gasto;
                             }
                         }
                     }
@@ -265,7 +265,7 @@ angular
                         $scope.baseline.valor = alimentaValor($scope.baseline.data, $scope.limite, $scope.user.familia, false);
                         // console.log($scope.baseline.valor)
                         $scope.tabela = alimentaValor($scope.baseline.data, $scope.limite, $scope.user.familia, true);
-                        console.log($scope.tabela)
+                        // console.log($scope.tabela)
                         angular.forEach($scope.limite, function(value, index){
                             if(value.familia == $scope.user.familia){
                                  for(var i=0; i<value.dados.length; i++){
@@ -360,21 +360,25 @@ angular
         $scope.selectOptionSistema = function(){
             var options = [];
             var familia = [];
+            $scope.sistemas = []
+
             angular.forEach($scope.sistema, function(value,index){
-                if(com_torre){
-                    familia = $scope.formproj.familia.split(' - ');
-                    if (value.regiao == $scope.formproj.regiao && value.familia.split(' - ').includes(familia[0])){
-                        options.push(value.sistema);
-                    }
-                } else {
-                    if (value.regiao == $scope.formproj.regiao && value.familia == $scope.formproj.familia){
-                        options.push(value.sistema);
+                if($scope.formproj.familia!=null){
+                    if(com_torre){
+                        familia = $scope.formproj.familia.split(' - ');
+                        if (value.regiao == $scope.formproj.regiao && value.familia.split(' - ').includes(familia[0])){
+                            options.push(value.sistema);
+                        }
+                    } else {
+                        if (value.regiao == $scope.formproj.regiao && value.familia == $scope.formproj.familia){
+                            options.push(value.sistema);
+                        }
                     }
                 }
-                
             })
 
-            return options;       
+            $scope.sistemas = options;   
+            // console.log($scope.sistemas )    
         }
 
         function add(a, b) {
