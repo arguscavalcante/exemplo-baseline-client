@@ -41,27 +41,27 @@
             </div>
             <div class="row" ng-show='cadastrar'>
                 <div class="col-md-12">
-                    <table class="table table-hover size10">
+                    <table class="table table-hover size10 cadast-table">
                         <thead>
                             <tr>
-                                Baseline Disponível
-                            </tr>
-                            <tr>
-                                <td><b>MESES</b></td>
-                                <td ng-repeat="date in tabeladata"><b> {{date}} </b></td>
+                                <td colspan="12"><b>Baseline Disponível</b></td>
                             </tr>
                         </thead>
                         <tbody>
                              <tr>
-                                <td><b>BASELINE</b></td>
+                                <td class='cadast-tab-cabec'><b>MESES</b></td>
+                                <td ng-repeat="date in tabeladata"  class='cadast-tab-cabec'><b> {{date}} </b></td>
+                            </tr>
+                             <tr>
+                                <td class='cadast-tab-cabec'><b>BASELINE</b></td>
                                 <td ng-repeat="val in tabelabaseline track by $index" ng-style="colordepend[$index]"> {{val | currency}} </td>
                             </tr>
                             <tr>
-                                <td><b>CONSUMIDO</b></td>
+                                <td class='cadast-tab-cabec'><b>CONSUMIDO</b></td>
                                 <td ng-repeat="val in tabelagasto track by $index" ng-style="colordepend[$index]"> {{val | currency}} </td>
                             </tr>
                             <tr>
-                                <td><b>DISPONÍVEL</b></td>
+                                <td class='cadast-tab-cabec'><b>DISPONÍVEL</b></td>
                                 <td ng-repeat="val in tabela track by $index" ng-style="colordepend[$index]"> {{val | currency}} </td>
                             </tr>
                         </tbody>

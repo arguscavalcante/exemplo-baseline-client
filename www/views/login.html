@@ -29,7 +29,10 @@
                 <div class="col-md-4 login-pag">
                     <img src="../img/logo_ibm_cinza.png" class="login-logo-ibm" />
                     <img src="../img/logo_oi_cinza.png" class="login-logo-oi" />
-                    <form ng-submit="validaLogin('relatorio')">
+                    <br />
+                    <span class="login-text-warn">Please login to enter</span>
+                    <br />
+                    <form ng-submit="validaLogin('relatorio')" class="login-form">
                         <input type="text" ng-model="usuario.nome" value="" class="form-control" placeholder="IBM id" />
                         <br />
                         <input type="password" ng-model="usuario.senha" value="" class="form-control" placeholder="Password" />

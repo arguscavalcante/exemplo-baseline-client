@@ -106,7 +106,9 @@ angular
                                     }
                                 }
                             })
-                            listarProjetos();
+                            $timeout(function(){
+                                listarProjetos();
+                            }, 500);
                         })
             }, 500);
         } 
@@ -132,7 +134,9 @@ angular
                                     }
                                 }
                             })
-                            listarProjetos();
+                            $timeout(function(){
+                                listarProjetos();
+                            }, 500);
                         });
             }, 1000);
         }
@@ -379,48 +383,50 @@ angular
 
             // console.log(res);
             //Funcao para buscar as classes o valor do limite do grafico
-            ClassGeral.find()
-                .$promise
-                    .then(function (res, err) {
-                        angular.forEach(res, function (value, index){
-                            if(!value.baseline){
-                                $scope.classgeral.push(value.classgeral_id);
-                            }
-                        });
-                        angular.forEach(res, function (value, index){
-                            if(value.baseline){
-                                $scope.classgeral.push(value.classgeral_id);
-                            }
-                        });
-                        // console.log('classificacao geral: ',  $scope.classgeral)
-                        $timeout(function(){
-                            LimiteGrafico.find({ filter: { where: { familia: '' + $scope.user.familia + '' } } })
-                                .$promise
-                                    .then(function (res, err) {
-                                        $scope.limgraf = res;
-                                        // console.log('limite grafico: ', res);
-                                        alimentaProjetos(qnt_meses);//alimenta os dados dos projetos
-                                        alimentaLimites();//alimenta os dados dos limites
+            $timeout(function(){
+                ClassGeral.find()
+                    .$promise
+                        .then(function (res, err) {
+                            angular.forEach(res, function (value, index){
+                                if(!value.baseline){
+                                    $scope.classgeral.push(value.classgeral_id);
+                                }
+                            });
+                            angular.forEach(res, function (value, index){
+                                if(value.baseline){
+                                    $scope.classgeral.push(value.classgeral_id);
+                                }
+                            });
+                            // console.log('classificacao geral: ',  $scope.classgeral)
+                            $timeout(function(){
+                                LimiteGrafico.find({ filter: { where: { familia: '' + $scope.user.familia + '' } } })
+                                    .$promise
+                                        .then(function (res, err) {
+                                            $scope.limgraf = res;
+                                            // console.log('limite grafico: ', res);
+                                            alimentaProjetos(qnt_meses);//alimenta os dados dos projetos
+                                            alimentaLimites();//alimenta os dados dos limites
 
-                                        objChartProj.serie = $scope.projBase;
-                                        // console.log(objChartProj.serie);
-                                        //Inicializa o Grafico de Projetos
-                                        console.log(objChartProj);
-                                        grafProjetos(objChartProj);
-                                        if($scope.user.perfil == 'Administrador'){
-                                            angular.forEach($scope.projetoscompleto, function(value, index){
-                                                value.familia = value.familia.split(' - ')[1];
-                                            })
-                                            $scope.file = exportaJSON($scope.projetoscompleto, ano_limite);
-                                        }else{
-                                            angular.forEach($scope.projetos, function(value, index){
-                                                value.familia = value.familia.split(' - ')[1];
-                                            })
-                                            $scope.file = exportaJSON($scope.projetos, ano_limite);
-                                        }
-                                    });
-                        }, 500)
-                    });
+                                            objChartProj.serie = $scope.projBase;
+                                            // console.log(objChartProj.serie);
+                                            //Inicializa o Grafico de Projetos
+                                            console.log(objChartProj);
+                                            grafProjetos(objChartProj);
+                                            if($scope.user.perfil == 'Administrador'){
+                                                angular.forEach($scope.projetoscompleto, function(value, index){
+                                                    value.familia = value.familia.split(' - ')[1];
+                                                })
+                                                $scope.file = exportaJSON($scope.projetoscompleto, ano_limite);
+                                            }else{
+                                                angular.forEach($scope.projetos, function(value, index){
+                                                    value.familia = value.familia.split(' - ')[1];
+                                                })
+                                                $scope.file = exportaJSON($scope.projetos, ano_limite);
+                                            }
+                                        });
+                            }, 500)
+                        });
+                }, 500)
 
         }
 

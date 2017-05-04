@@ -183,9 +183,15 @@
                                     </select>
                                 </td>
                                 <td><label>Região:</label></td>
-                                <td><select ng-model="formaltproj.regiao" ng-options="val for val in selectOptionRegiaoForm()" class="form-control"></select></td>
+                                <td><select ng-model="formaltproj.regiao" ng-options="val for val in selectOptionRegiaoForm()" class="form-control" ng-change="selectOptionSistemaform()"></select></td>
                                 <td><label>Sistema:</label></td>
-                                <td><select ng-model="formaltproj.sistema" ng-options="val for val in selectOptionSistemaform()"  class="form-control"></select></td>
+                                <td><label>Sistema:</label></td>
+                                <td><input type="text" ng-model="formaltproj.sistema" list="d1" class="form-control">
+                                    <datalist id="d1">
+                                        <option ng-repeat="val in sistemas" value="{{val}}">
+                                    </datalist >
+                                </td>
+                                <!--<td><select ng-model="formaltproj.sistema" ng-options="val for val in selectOptionSistemaform()"  class="form-control"></select></td>-->
                             </tr>
                             <tr>
                                 <td><label>Gerente:</label></td>

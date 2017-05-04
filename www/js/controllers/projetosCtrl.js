@@ -257,6 +257,7 @@ angular
         
         function buscaLimiteReal(){
             var mudacor = ['lightcoral', 'lightblue'];
+            var mudacorborda = ['red', 'blue'];
             var contacor = 2;
             // Alimenta objeto com todas os Limites Reais
             LimiteReal.find()
@@ -276,24 +277,26 @@ angular
                                         $scope.tabeladata.splice($scope.tabeladata.length-1, 1);
                                     }
                                 }
+                                if($scope.tabeladata.length > 12){
+                                     $scope.tabeladata.splice(0, 1);
+                                }
+
                                 for(var i=0; i<value.dados.length; i++){
                                     for(var j=0; j<$scope.tabeladata.length; j++){
                                         if($scope.tabeladata[j]==value.dados[i].mes){
                                             if(j<12){
-                                                $scope.colordepend.push({'background-color': 'transparent'});
                                                 $scope.tabelagasto.push(value.dados[i].gasto_mes);
                                                 $scope.tabelabaseline.push(value.dados[i].baseline);
-                                                if(value.dados[i].dependencia=='S'){ 
-                                                    k = j-1;
-                                                    if(k>-1){
-                                                        $scope.colordepend[k] = {'background-color': mudacor[contacor%2]};
-                                                    }
-                                                    $scope.colordepend[j] = {'background-color': mudacor[contacor%2]};
-                                                    // $scope.tabela[i] = $scope.tabelabaseline[i] - $scope.tabelagasto[i];
+                                                if(value.dados[i].dependencia=='S'){
+                                                    $scope.colordepend[j-1] = {'background-color': mudacor[contacor%2], 'border-color': mudacorborda[contacor%2]};
+                                                    $scope.colordepend.push({'background-color': mudacor[contacor%2], 'border-color': mudacorborda[contacor%2]});
                                                     contacor++;
+                                                    // $scope.tabelapag[i] = $scope.tabelabaseline[i] - $scope.tabelagasto[i];
+                                                }else{
+                                                    $scope.colordepend.push({});
                                                 }
                                             }
-                                            // console.log($scope.colordepend)
+                                            console.log($scope.colordepend)
                                             // console.log(value.dados[i].torre);
                                             if(value.dados[i].torre!=null){
                                                 com_torre = true;

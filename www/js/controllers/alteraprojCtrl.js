@@ -18,6 +18,9 @@ angular
 
         var d = new Date();
         d.setDate(15);
+        var dtab = new Date();
+        dtab.setDate(15);
+        dtab.setMonth(dtab.getMonth() - 1);
         var com_torre = false;
         var mudacor = ['lightcoral', 'lightblue'];
         var contacor = 2;
@@ -36,6 +39,7 @@ angular
         $scope.tabelagasto = [];
         $scope.tabelabaseline = [];
         $scope.colordepend = [];
+        $scope.tabeladata = [];
         $scope.baseline_red = [];
         $scope.camposform = true;
         var qnt_meses = 1;
@@ -215,21 +219,24 @@ angular
         $scope.selectOptionSistemaform = function(){
             var options = [];
             var familia = [];
+            $scope.sistemas = []
+
             angular.forEach($scope.sistema, function(value,index){
-                if(com_torre){
-                    familia = $scope.formaltproj.familia.split(' - ');
-                    if (value.regiao == $scope.formaltproj.regiao && value.familia.split(' - ').includes(familia[0])){
-                        options.push(value.sistema);
-                    }
-                } else {
-                    if (value.regiao == $scope.formaltproj.regiao && value.familia == $scope.formaltproj.familia){
-                        options.push(value.sistema);
+                if($scope.formproj.familia!=null){
+                    if(com_torre){
+                        familia = $scope.formproj.familia.split(' - ');
+                        if (value.regiao == $scope.formproj.regiao && value.familia.split(' - ').includes(familia[0])){
+                            options.push(value.sistema);
+                        }
+                    } else {
+                        if (value.regiao == $scope.formproj.regiao && value.familia == $scope.formproj.familia){
+                            options.push(value.sistema);
+                        }
                     }
                 }
-                
             })
 
-            return options;       
+            $scope.sistemas = options;          
         }
 
         function sumMes(obj){
@@ -422,28 +429,37 @@ angular
                         $scope.limite = res;
                         //console.log(res);
                         $scope.baseline.valor = alimentaValor($scope.baseline.data, $scope.limite, $scope.formaltproj.familia, false);
-                        $scope.tabelapag = alimentaValor($scope.baseline.data, $scope.limite, $scope.formaltproj.familia, true);
+                        $scope.tabeladata = alimentaData(dtab,13)
 
                         angular.forEach($scope.limite, function(value, index){
                             if(value.familia == $scope.formaltproj.familia){
                                 for(var i=0; i<value.dados.length; i++){
-                                    for(var j=0; j<$scope.baseline.data.length; j++){
-                                        if($scope.baseline.data[j]==value.dados[i].mes){
+                                    if($scope.baseline.data[0]==value.dados[i].mes && value.dados[i].dependencia=='S'){
+                                        $scope.tabeladata.splice($scope.tabeladata.length-1, 1);
+                                    }
+                                }
+                                if($scope.tabeladata.length > 12){
+                                        $scope.tabeladata.splice(0, 1);
+                                }
+                                    $scope.tabelapag = alimentaValor($scope.tabeladata, $scope.limite, $scope.formaltproj.familia, true);
+                                for(var i=0; i<value.dados.length; i++){
+                                    for(var j=0; j<$scope.tabeladata.length; j++){
+                                        if($scope.tabeladata[j]==value.dados[i].mes){
                                             $scope.tabelagasto.push(value.dados[i].gasto_mes);
                                             $scope.tabelabaseline.push(value.dados[i].baseline);
                                             if(value.dados[i].dependencia=='S'){
-                                                    $scope.colordepend[i-1] = {'background-color': mudacor[contacor%2]};
-                                                    $scope.colordepend.push({'background-color': mudacor[contacor%2]});
-                                                    contacor++;
-                                                    // $scope.tabelapag[i] = $scope.tabelabaseline[i] - $scope.tabelagasto[i];
-                                                }else{
-                                                    $scope.colordepend.push({});
-                                                }
+                                                $scope.colordepend[j-1] = {'background-color': mudacor[contacor%2]};
+                                                $scope.colordepend.push({'background-color': mudacor[contacor%2]});
+                                                contacor++;
+                                                // $scope.tabelapag[i] = $scope.tabelabaseline[i] - $scope.tabelagasto[i];
+                                            }else{
+                                                $scope.colordepend.push({});
+                                            }
                                         }
                                     }
                                     if(value.dados[i].torre!=null){
                                         com_torre = true;
-                                        $scope.torre_baseline = alimentaValorTorre($scope.baseline.data, $scope.limite, $scope.formaltproj.familia)
+                                        $scope.torre_baseline = alimentaValorTorre($scope.tabeladata, $scope.limite, $scope.formaltproj.familia)
                                     }
                                 }
                             }

@@ -405,6 +405,17 @@ footer {
     text-align: center;
 }
 
+.login-text-warn{
+    text-align: center;
+    color: #3D3D3D;
+    font-size: xx-large;
+    margin-left: 35px;
+}
+
+.login-form{
+    margin-top: 10px;
+}
+
 /*==============================================
     RELATORIO  
  =============================================*/
@@ -450,6 +461,23 @@ select.form-control{
     margin-top: 25px;
     font-size: large;
 }
+
+/*==============================================
+    CADASTRO DE PROJETOS  
+ =============================================*/
+ .cadast-table{
+    border: 1px solid #ddd;
+ }
+
+ .cadast-table > tbody > tr > td{
+    border: 1px solid #ddd;
+ }
+
+ .cadast-tab-cabec{
+     border-color: darkblue !important;
+     background-color: blue;
+     color: white;
+ }
 
 /*==============================================
     ALTERACAO DE PROJETOS  
