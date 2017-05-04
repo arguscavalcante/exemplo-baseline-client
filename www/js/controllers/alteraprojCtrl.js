@@ -312,8 +312,8 @@ angular
                     for(var i=0; i<value.dados.length; i++){
                         for(var j=0; j<vetor.length; j++){
                             if(vetor[j]==value.dados[i].mes){
-                                valor[i].baseline = value.dados[i].torre_baseline;
-                                valor[i].gasto = value.dados[i].torre_gasto;
+                                valor[j].baseline = value.dados[i].torre_baseline;
+                                valor[j].gasto = value.dados[i].torre_gasto;
                             }
                         }
                     }
@@ -363,7 +363,7 @@ angular
                 fase: value.fase,
                 familia: value.familia,
                 sistema: value.sistema,
-                valor_total_proj: currencyValue(value.valor_total_proj)
+                valor_total_proj: value.valor_total_proj
             });
 
             $scope.formaltproj = {

@@ -79,7 +79,7 @@
                         <tr>
                             <td class="col-md-2"><label>Familia:</label></td>
                             <td class="col-md-3">
-                                <select ng-model="filtroBusca.familia" class="form-control">
+                                <select ng-model="filtroBusca.familia" class="form-control" ng-disabled="filtroBusca.familia != null">
                                     <option ng-repeat="id in familia | orderBy:'toString()'" value="{{id}}">{{id}}</option>
                                 </select>
                             </td>

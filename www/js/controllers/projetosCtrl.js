@@ -18,7 +18,11 @@ angular
 
         var d = new Date();
         d.setDate(15);
+        var dtab = new Date();
+        dtab.setDate(15);
+        dtab.setMonth(dtab.getMonth() - 1);
         var meses = 0;
+        var k;
         var user = {};
         var com_torre = false;
         $scope.mostrar = {};
@@ -99,7 +103,6 @@ angular
         $scope.colordepend = [];
         $scope.tabeladata = [];
         $scope.torre_baseline = [];
-
         //Funcao para incluir e excluir meses
         $scope.funcMes = function(valor){
             if(valor==-1){
@@ -220,7 +223,6 @@ angular
         }
 
         $scope.baseline.data = alimentaData(d,num); 
-        $scope.tabeladata = alimentaData(d,12)
 
         // Alimenta objeto com todas os Gerentes
         User.find()
@@ -262,25 +264,33 @@ angular
                     .then(function(res, err){
                         $scope.limite = res;
                         // console.log(res);
+                        $scope.tabeladata = alimentaData(dtab,13)
                         $scope.baseline.valor = alimentaValor($scope.baseline.data, $scope.limite, $scope.user.familia, false);
                         // console.log($scope.baseline.valor)
-                        $scope.tabela = alimentaValor($scope.baseline.data, $scope.limite, $scope.user.familia, true);
+                        $scope.tabela = alimentaValor($scope.tabeladata, $scope.limite, $scope.user.familia, true);
                         // console.log($scope.tabela)
                         angular.forEach($scope.limite, function(value, index){
                             if(value.familia == $scope.user.familia){
-                                 for(var i=0; i<value.dados.length; i++){
-                                    for(var j=0; j<$scope.baseline.data.length; j++){
-                                        if($scope.baseline.data[j]==value.dados[i].mes){
+                                for(var i=0; i<value.dados.length; i++){
+                                    if($scope.baseline.data[0]==value.dados[i].mes && value.dados[i].dependencia=='S'){
+                                        $scope.tabeladata.splice($scope.tabeladata.length-1, 1);
+                                    }
+                                }
+                                for(var i=0; i<value.dados.length; i++){
+                                    for(var j=0; j<$scope.tabeladata.length; j++){
+                                        if($scope.tabeladata[j]==value.dados[i].mes){
                                             if(j<12){
+                                                $scope.colordepend.push({'background-color': 'transparent'});
                                                 $scope.tabelagasto.push(value.dados[i].gasto_mes);
                                                 $scope.tabelabaseline.push(value.dados[i].baseline);
                                                 if(value.dados[i].dependencia=='S'){ 
-                                                    $scope.colordepend[i-1] = {'background-color': mudacor[contacor%2]};
-                                                    $scope.colordepend.push({'background-color': mudacor[contacor%2]});
+                                                    k = j-1;
+                                                    if(k>-1){
+                                                        $scope.colordepend[k] = {'background-color': mudacor[contacor%2]};
+                                                    }
+                                                    $scope.colordepend[j] = {'background-color': mudacor[contacor%2]};
                                                     // $scope.tabela[i] = $scope.tabelabaseline[i] - $scope.tabelagasto[i];
                                                     contacor++;
-                                                }else{
-                                                    $scope.colordepend.push({});
                                                 }
                                             }
                                             // console.log($scope.colordepend)
@@ -291,7 +301,7 @@ angular
                                             }
                                         }
                                     }
-                                 }
+                                }
                             }
                         })
 

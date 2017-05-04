@@ -19,6 +19,7 @@ angular
         $scope.mostrar = {};
         $scope.user = {};
         $scope.projetos = {};
+        $scope.valorAlterado = [];
         $scope.user = {
             gerente: sessionStorage.getItem('login'),
             perfil: sessionStorage.getItem('perfil'),
@@ -73,7 +74,7 @@ angular
             .$promise
                 .then(function(res, err){
                     $scope.limreal = res;
-                    console.log($scope.limreal)
+                    // console.log($scope.limreal)
                     $scope.racional.desBonus = false;
                 });  
 
@@ -119,10 +120,19 @@ angular
             // console.log(dados.splice(0, 0, tipo))
             // dados.splice(0, 0, tipo);
             dados.splice(0, 0, pai)
-            console.log(dados);
+            // console.log(dados);
             return dados; //.splice(0, 0, tipo);
         }
 
+        function acertaValor(value){
+            if(value.toString().indexOf("$")==-1){
+                return value;
+            }else{
+                value = value.replace(/[\.|\R|\$]/g, '');
+                return value.replace(',', '.'); 
+            }
+        }
+        
         function currencyValue(valor){
             var numberString;
             var decimalString;
@@ -199,20 +209,22 @@ angular
                     .$promise
                         .then(function (res, err){
                             $scope.projetos = res;
-                            ClassGeral.find()
-                                .$promise
-                                    .then(function (res, err){
-                                        $scope.classgeral = res;
-                                        $scope.carregouDados = false;   
-                                        var count = 1
-                                        angular.forEach($scope.classgeral, function(value, index){
-                                            if(!$scope.class_order.includes(value.classgeral_pai)){
-                                                $scope.class_order.push(value.classgeral_pai);
-                                                count++;
-                                            } 
-                                        });      
-                                        // console.log( $scope.class_order)                
-                                    });
+                            $timeout(function(){
+                                ClassGeral.find()
+                                    .$promise
+                                        .then(function (res, err){
+                                            $scope.classgeral = res;
+                                            $scope.carregouDados = false;   
+                                            var count = 1
+                                            angular.forEach($scope.classgeral, function(value, index){
+                                                if(!$scope.class_order.includes(value.classgeral_pai)){
+                                                    $scope.class_order.push(value.classgeral_pai);
+                                                    count++;
+                                                } 
+                                            });      
+                                            // console.log( $scope.class_order)                
+                                        });
+                            }, 500);
                         });
             }, 500);
         }  
@@ -226,7 +238,7 @@ angular
             if(!$scope.classgeral_pai.includes(vetor[0])){
                 return;
             }
-            // console.log(vetor);
+            console.log('vetor pai ', vetor);
             angular.forEach($scope.tabelaRacional, function(value, index){
                 if(value.class == vetor[0]){
                     bool = false
@@ -327,8 +339,12 @@ angular
                 
                 // console.log($scope.classgeral);
                 //atribuindo os valores dos projetos por mes/Classificacao Geral
-                for (var i = 0; i < $scope.classgeral.length; i++) {
-                    tabelaValoresPai(atribuirDado($scope.classgeral[i].classgeral_id, $scope.classgeral[i].classgeral_pai));
+                for(var j=0; j<$scope.classgeral_pai.length; j++){
+                    for(var i = 0; i < $scope.classgeral.length; i++) {
+                        if($scope.classgeral_pai[j]==$scope.classgeral[i].classgeral_pai){
+                            tabelaValoresPai(atribuirDado($scope.classgeral[i].classgeral_id, $scope.classgeral[i].classgeral_pai));
+                        }  
+                    }
                 }           
 
                         tabelaValoresDelta($scope.tabelaRacional);
@@ -351,14 +367,52 @@ angular
 
         $scope.salvarBonus = function(){
             console.log('salvar Bonus');
-            console.log($scope.tabelalimreal);
             console.log($scope.limreal);
             console.log($scope.filtroBusca.familia)
+            console.log($scope.valorAlterado)
+            var gravarLimReal = [];
+            if($scope.valorAlterado.length==0){
+                alert('Nenhum registro foi selecionado para alteração!')
+            }else{
+                angular.forEach($scope.limreal, function(value, index){
+                    if(value.familia == $scope.filtroBusca.familia){
+                        gravarLimReal = value;
+                    }
+                })
+
+                angular.forEach($scope.valorAlterado, function(value, index){
+                    for(var i=0; i<gravarLimReal.dados.length; i++){
+                        if(gravarLimReal.dados[i].mes == value.mes){
+                            gravarLimReal.dados[i].baseline_bonus = value.valor
+                        }
+                    }
+                })
+
+                // console.log(gravarLimReal);
+                LimiteReal.upsertWithWhere({where: {familia: ''+ gravarLimReal.familia +''}}, {dados: gravarLimReal.dados}, function(info, err) {
+                    $state.reload();
+                })                
+            }
+           
         }
 
         $scope.atribuiValor = function(obj){
-            console.log(obj);
+            // console.log(obj);
+            var naoAchei = true;
+
+            if($scope.valorAlterado.length > 0){
+                angular.forEach($scope.valorAlterado, function(value, index){
+                    if(value.mes == obj.mes){
+                        naoAchei = false;
+                        value.valor = Number(acertaValor(obj.baseline_bonus));
+                    }
+                })
+            }
+                if(naoAchei){
+                    $scope.valorAlterado.push({mes: obj.mes, valor:Number(acertaValor(obj.baseline_bonus))})
+                }
             
+            // console.log($scope.valorAlterado);
         }
 
         $scope.mostrarTabela = function(id){
@@ -373,7 +427,7 @@ angular
                 $scope.selection.push(id);
             }
 
-            console.log($scope.selection);
+            // console.log($scope.selection);
             angular.forEach($scope.selection, function(value, index){
                 if(!$scope.classgeral_pai.includes(value)){
                     $scope.classgeral_pai.push(value);
@@ -382,9 +436,9 @@ angular
                 } 
                 // console.log(value)
             });    
-            console.log($scope.classgeral_pai)
+            // console.log($scope.classgeral_pai)
             $scope.gerarTabela();
-            console.log($scope.tabelaRacional)
+            // console.log($scope.tabelaRacional)
         }
 
     }]);
