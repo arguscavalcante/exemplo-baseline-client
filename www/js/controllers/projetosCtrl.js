@@ -256,8 +256,8 @@ angular
         
         
         function buscaLimiteReal(){
-            var mudacor = ['lightcoral', 'lightblue'];
-            var mudacorborda = ['red', 'blue'];
+            var mudacor = ['#f7c9c8', '#9dd8ed'];
+            var mudacorborda = ['#d67e7c', '#009bd4'];
             var contacor = 2;
             // Alimenta objeto com todas os Limites Reais
             LimiteReal.find()

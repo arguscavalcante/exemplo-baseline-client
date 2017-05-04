@@ -465,19 +465,52 @@ select.form-control{
 /*==============================================
     CADASTRO DE PROJETOS  
  =============================================*/
- .cadast-table{
+.cadast-table{
     border: 1px solid #ddd;
  }
 
- .cadast-table > tbody > tr > td{
+.cadast-table > tbody > tr > td{
     border: 1px solid #ddd;
  }
 
- .cadast-tab-cabec{
-     border-color: darkblue !important;
-     background-color: blue;
+.cadast-tab-cabec{
+     border-color: #0083b3 !important;
+     background-color: #009bd4;
      color: white;
  }
+
+.cadast-table-tit{
+    text-align: center;
+    font-size: medium;
+}
+
+.cadast-botao-plus{
+    background-color: #83c99a;
+    border-color: #83c99a;
+    color: #446651;
+}
+
+.cadast-botao-minus{
+    background-color: #fa9391;
+    border-color: #fa9391;
+    color: #614544;
+}
+
+.cadast-table-form > tbody > tr > td{
+    border-top: 0px !important;
+}
+
+.cadast-table-form > tbody > tr > td > label{
+    font-weight: normal;
+    font-size: small;
+}
+
+.cadast-form-submit{
+    background-color: #73c9e6;
+    border-color: #73c9e6;
+    color: #3f6670;
+    width: 100px;
+}
 
 /*==============================================
     ALTERACAO DE PROJETOS  

@@ -44,7 +44,7 @@
                     <table class="table table-hover size10 cadast-table">
                         <thead>
                             <tr>
-                                <td colspan="12"><b>Baseline Disponível</b></td>
+                                <td colspan="13" class="cadast-table-tit">Baseline Disponível</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -70,7 +70,7 @@
             </div>
             <div class="row" ng-show='cadastrar'>
                 <div class="col-md-12">
-                    <table class="table table-striped">
+                    <table class="table table-striped cadast-table-form">
                         <tr>
                             <td><label>Projeto:</label></td>
                             <td> <input type="text" ng-model="formproj.projeto" value="" class="form-control col-md-3" /> </td>
@@ -116,7 +116,7 @@
             </div>
             <div class="row" ng-show='cadastrar'>
                 <div class="col-md-8">
-                    <table class="table table-striped">
+                    <table class="table table-striped cadast-table-form">
                         <tr>
                             <td><label>Valor Total:</label></td>
                             <td colspan=2> <input type="text" ng-model="formproj.valor_total_proj" class="form-control" monetarioproj/> </td>
@@ -132,13 +132,13 @@
                             <td> <input type="text" ng-model="meses.valor" class="form-control" monetarioproj/> </td>
                         </tr>   
                     </table>
-                    <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
+                    <button type="button" ng-click="ValidaForm();" class="btn btn-info cadast-form-submit">Salvar</button>
                 </div>
                 <div class="col-md-1">
-                    <table class="table table-striped">
+                    <table class="table table-striped cadast-table-form">
                         <tr>    
-                            <td><button type="button" ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
-                            <td colspan="2"><button type="button"  ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
+                            <td><button type="button" ng-click="funcMes(1);" class="btn btn-info glyphicon-plus cadast-botao-plus"></button></td>
+                            <td colspan="2"><button type="button"  ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus cadast-botao-minus"></button></td>
                         </tr>   
                     </table>
                 </div>
