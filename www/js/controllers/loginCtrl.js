@@ -37,7 +37,7 @@ app.controller('loginCtrl', ['$scope', '$state', '$rootScope', 'User', function(
                     return;
                 }
                 if($scope.login.login_pass == 'Trocar123'){
-                    alert('Trocar senha!!')
+                    // alert('Trocar senha!!')
                     // $('#login-modal').modal()                      // initialized with defaults
                     // $('#login-modal').modal({ keyboard: false })   // initialized with no keyboard
                     // $('#login-modal').modal('show')                
