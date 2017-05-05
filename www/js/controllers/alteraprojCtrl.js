@@ -672,7 +672,7 @@ angular
                                                             return;
                                                         }
                                                     }else{
-                                                        if(value.dados[j].gasto_mes>value.dados[j].baseline+(value.dados[j].baseline*value.dados[j].perc_baseline/100)){
+                                                        if(value.dados[j].gasto_mes>value.dados[j].baseline+(value.dados[j].baseline*value.dados[j].perc_baseline/100) && !$scope.baseline.data2[j].desabilitar){
                                                             alert('O valor imposto no mes ' + value.dados[j].mes + ' é maior que o Baseline.');
                                                             bool_apr = false;
                                                             return;

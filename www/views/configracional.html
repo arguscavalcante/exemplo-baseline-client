@@ -57,10 +57,8 @@
                                     </select>
                                 </td>
                                 <td><label>Ordenação: &nbsp;</label></td>
-                                <td>
-                                    <span ng-repeat="id in class_order track by $index">
-                                        <input type="checkbox" value="{{id}}" ng-click="mostrarTabela(id);" />{{id}}
-                                    </span>
+                                <td  ng-repeat="id in class_order track by $index">
+                                    <input type="checkbox" value="{{id}}" ng-click="mostrarTabela(id);" /><label>&nbsp;{{id}}</label>
                                 </td>
                             </tr>
                         </table>

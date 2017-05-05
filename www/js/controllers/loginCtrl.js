@@ -36,6 +36,13 @@ app.controller('loginCtrl', ['$scope', '$state', '$rootScope', 'User', function(
                     valida = false;
                     return;
                 }
+                if($scope.login.login_pass == 'Trocar123'){
+                    alert('Trocar senha!!')
+                    // $('#login-modal').modal()                      // initialized with defaults
+                    // $('#login-modal').modal({ keyboard: false })   // initialized with no keyboard
+                    // $('#login-modal').modal('show')                
+                    // return;
+                }
                 if ( valida ){
                     // Armazena os dados na Sessão(sessionStorage)
                     sessionStorage.setItem('login', $scope.login.login_user);
@@ -49,6 +56,6 @@ app.controller('loginCtrl', ['$scope', '$state', '$rootScope', 'User', function(
                 }
             });
         }
-    };        
+    };     
 }]);
 
