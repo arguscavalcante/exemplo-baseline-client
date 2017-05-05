@@ -33,53 +33,64 @@
     <div class="content-wrapper">
         <div class="container">
             <div class="row">
-                <div class="col-md-4">
-                    <form>
-                        <label>Classificação Geral: </label>
-                        <input type="text" ng-model="formclassgeral.classgeral_id" value="" class="form-control" />
-                        <br />
-                        <label>Classificação Consolidada? </label>
-                        <input type="checkbox" ng-model="consolidado" value="" class="form" />
-                        <br />
-                        <select ng-model="formclassgeral.classgeral_pai" class="form-control" ng-show="consolidado">
-                            <option value="0">Ele mesmo</option> 
-                            <option ng-repeat="id in classgeral" value="{{id.classgeral_id}}">{{id.classgeral_id}}</option>
-                        </select>
-                        <br />
-                        <label>Interfere no Baseline? </label>
-                        <input type="checkbox" ng-model="formclassgeral.baseline" value="" class="form" />
-                        <br />
-                        <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
-                        <br />
-                    </form>
-                </div>
-                <div class="col-md-2">
-                </div>
-                <div class="col-md-6">
-                    <div>
-                        <h3> Classificações Gerais Cadastradas </h3>
-                        <div>
-                            <table class="table table-striped table-hover table-responsive">
-                                <thead>
-                                    <tr>
-                                        <th>Classificação Geral</th>
-                                        <th>Descrição</th>
-                                        <th>Interfere no Baseline?</th>
-                                        <th>Classificação Geral Pai</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="id in classgeral" ng-click="alteraClassGeral(id)">
-                                        <td>{{id.classgeral_id}}</td>
-                                        <td>{{id.descricao}}</td>
-                                        <td>{{id.basetabela}}</td>
-                                        <td>{{id.classgeral_pai}}</td>
-                                        <td><button type="button" ng-click="deleteClassGeral(id.classgeral_id);" class="btn btn-info glyphicon glyphicon-trash"></button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                 <div class="col-md-4"><hr class="dash-relatorio" /></div>
+                 <div class="col-md-4"><span class="tit-relatorio">CADASTRAR CLASSIFICAÇÃO GERAL</span></div>
+                 <div class="col-md-4"><hr class="dash-relatorio" /></div>
+            </div>
+            <div class="row">
+                <form>
+                    <table class="table table-striped cadast-table-form">
+                        <tr>
+                            <td><label>Classificação Geral: </label></td>
+                            <td>
+                                <input type="text" ng-model="formclassgeral.classgeral_id" value="" class="form-control" />
+                            </td>
+                            <td><label>Classificação Consolidada? </label></td>
+                            <td>
+                                <input type="checkbox" ng-model="consolidado" value="" class="form" />
+                            </td>
+                            <td>
+                                <select ng-model="formclassgeral.classgeral_pai" class="form-control" ng-show="consolidado">
+                                    <option value="0">Ele mesmo</option> 
+                                    <option ng-repeat="id in classgeral" value="{{id.classgeral_id}}">{{id.classgeral_id}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <label>Interfere no Baseline? </label>
+                            </td>
+                            <td>
+                                <input type="checkbox" ng-model="formclassgeral.baseline" value="" class="form" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="7"><button type="button" ng-click="ValidaForm();" class="btn btn-info altera-form-filtro">Salvar</button></td>
+                        </tr>
+                    </table>
+                </form>
+                <div>
+                    <h3>  </h3>
+                    <table class="table table-striped table-hover table-responsive size10 altera-table">
+                        <thead>
+                            <tr>
+                                <td colspan='5' class="cadast-table-tit">Classificações Gerais Cadastradas</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class='cadast-tab-cabec'>Classificação Geral</td>
+                                <td class='cadast-tab-cabec'>Descrição</td>
+                                <td class='cadast-tab-cabec'>Interfere no Baseline?</td>
+                                <td colspan="2" class='cadast-tab-cabec'>Classificação Geral Pai</td>
+                            </tr>
+                            <tr ng-repeat="id in classgeral" ng-click="alteraClassGeral(id)">
+                                <td>{{id.classgeral_id}}</td>
+                                <td>{{id.descricao}}</td>
+                                <td>{{id.basetabela}}</td>
+                                <td>{{id.classgeral_pai}}</td>
+                                <td class="aln-btn"><button type="button" ng-click="deleteClassGeral(id.classgeral_id);" class="btn-lixeira"></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

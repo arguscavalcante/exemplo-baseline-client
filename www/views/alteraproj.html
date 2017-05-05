@@ -40,7 +40,7 @@
             <div class="row" ng-show="buscar">
                 <div class="col-md-12">
                     
-                    <table class="table table-striped table-relat">
+                    <table class="table table-striped cadast-table-form">
                         <tr>
                             <td class="col-md-2"><label>Projeto:</label></td>
                             <td class="col-md-3">
@@ -64,37 +64,30 @@
                             <td class="col-md-3">
                                 <select ng-model="filtroResult.sistema" class="form-control" ng-options="val for val in selectOptionSistema()" ></select>
                             </td>
-                            <td><button type="button" ng-click="limparFiltros();" class="btn btn-info">Limpar Filtros</button></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td><td></td>
-                            <td><label>Quantidade de itens:</label></td>
-                            <td class="col-md-1">
-                                <select ng-model="filtroResult.qnt_itens" class="form-control">
-                                    <option ng-repeat="id in qnt" value="{{id}}">{{id}}</option>
-                                </select>
-                            </td>
+                            <td colspan="2" style="text-align: right"><button type="button" ng-click="limparFiltros();" class="btn btn-info altera-form-filtro">Limpar Filtros</button></td>
                         </tr>
                     </table>
                 </div>
             </div>
             <div class="row" ng-show="mostrar.tabela">
                 <div class="col-md-12">
-                    <table class="table table-striped table-hover table-responsive">
+                    <table class="table table-striped table-hover table-responsive altera-table size10">
                         <thead>
                             <tr>
-                                <th ng-click="ordenar('id.projeto')">Projeto</th>
-                                <th ng-click="ordenar('id.descricao')">Descrição</th>
-                                <th ng-click="ordenar('id.proposta')">Proposta</th>
-                                <th ng-click="ordenar('id.classificacao_geral')">Classificação Geral</th>   
-                                <th ng-click="ordenar('id.fase')">Fase</th>                                     
-                                <th ng-click="ordenar('id.familia')">Familia</th>
-                                <th ng-click="ordenar('id.sistema')">Sistema</th>
-                                <th ng-click="ordenar('id.valor_total_proj')">Valor Total do Projeto</th>
+                                <td colspan="8" class="cadast-table-tit">Projetos Cadastrados</td>
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td ng-click="ordenar('id.projeto')" class='cadast-tab-cabec'>Projeto</td>
+                                <td ng-click="ordenar('id.descricao')" class='cadast-tab-cabec'>Descrição</td>
+                                <td ng-click="ordenar('id.proposta')" class='cadast-tab-cabec'>Proposta</td>
+                                <td ng-click="ordenar('id.classificacao_geral')" class='cadast-tab-cabec'>Classificação Geral</td>   
+                                <td ng-click="ordenar('id.fase')" class='cadast-tab-cabec'>Fase</td>                                     
+                                <td ng-click="ordenar('id.familia')" class='cadast-tab-cabec'>Familia</td>
+                                <td ng-click="ordenar('id.sistema')" class='cadast-tab-cabec'>Sistema</td>
+                                <td ng-click="ordenar('id.valor_total_proj')" class='cadast-tab-cabec'>Valor Total do Projeto</td>
+                            </tr>
                             <tr dir-paginate="id in projeto|filter:{projeto:filtroResult.projeto}|filter:{descricao:filtroResult.descricao}|filter:{sistema:filtroResult.sistema}|filter:{familia:filtroResult.familia}|orderBy:sortKey:reverse|itemsPerPage:filtroResult.qnt_itens" ng-click="alteraProj(id)">
                                 <td>{{id.projeto}}</td>
                                 <td>{{id.descricao}}</td>
@@ -112,25 +105,27 @@
             </div>
             <div class="row" ng-show="mostrar.selecao">
                 <div class="col-md-12">
-                    <h2>Baseline Disponível</h2>
-                    <table class="table table-hover size10">
+                    <table class="table table-hover size10 altera-table">
                         <thead>
                             <tr>
-                                <td><b>MESES</b></td>
-                                <td ng-repeat="date in baseline.data"><b> {{date}} </b></td>
+                                <td colspan="13" class="cadast-table-tit">Baseline Disponível</td>
                             </tr>
                         </thead>
                         <tbody>
-                             <tr>
-                                <td><b>BASELINE</b></td>
-                                <td ng-repeat="val in tabelabaseline track by $index" ng-style="colordepend[$index]"> {{val | currency}} </td>
+                            <tr>
+                                <td class='cadast-tab-cabec'><b>MESES</b></td>
+                                <td ng-repeat="date in baseline.data" class='cadast-tab-cabec'><b> {{date}} </b></td>
                             </tr>
                             <tr>
-                                <td><b>CONSUMO</b></td>
+                                <td class='cadast-tab-cabec'><b>BASELINE</b></td>
+                                <td ng-repeat="val in tabelabaseline track by $index" ng-style="colordepend[$index]" > {{val | currency}} </td>
+                            </tr>
+                            <tr>
+                                <td class='cadast-tab-cabec'><b>CONSUMO</b></td>
                                 <td ng-repeat="val in tabelagasto track by $index" ng-style="colordepend[$index]"> {{val | currency}} </td>
                             </tr>
                             <tr>
-                                <td><b>DISPONÍVEL</b></td>
+                                <td class='cadast-tab-cabec'><b>DISPONÍVEL</b></td>
                                 <td ng-repeat="val in tabelapag track by $index" ng-style="colordepend[$index]"> {{val | currency}} </td>
                             </tr>
                         </tbody>
@@ -139,18 +134,23 @@
             </div>
             <div class="row" ng-show="mostrar.selecao">
                 <div class="col-md-12">
-                    <table class="table table-striped table-hover table-responsive">
+                    <table class="table table-striped table-hover table-responsive altera-table size10">
                         <thead>
-                            <th>Projeto</th>
-                            <th>Descrição</th>
-                            <th>Proposta</th>
-                            <th>Classificação Geral</th>   
-                            <th>Fase</th>                                     
-                            <th>Familia</th>
-                            <th>Sistema</th>
-                            <th>Valor Total do Projeto</th>
+                            <tr>
+                                <td colspan='8' class="cadast-table-tit">Projeto Selecionado</td>
+                            </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td class='cadast-tab-cabec'>Projeto</td>
+                                <td class='cadast-tab-cabec'>Descrição</td>
+                                <td class='cadast-tab-cabec'>Proposta</td>
+                                <td class='cadast-tab-cabec'>Classificação Geral</td>   
+                                <td class='cadast-tab-cabec'>Fase</td>                                     
+                                <td class='cadast-tab-cabec'>Familia</td>
+                                <td class='cadast-tab-cabec'>Sistema</td>
+                                <td class='cadast-tab-cabec'>Valor Total do Projeto</td>
+                            </tr>
                             <tr ng-repeat="dados in tabela">
                                 <td>{{dados.projeto}}</td>
                                 <td>{{dados.descricao}}</td>
@@ -168,7 +168,7 @@
             <div class="row" ng-show="alterar">
                 <div class="row">
                     <div class="col-md-12">
-                        <table class="table table-striped">
+                        <table class="table table-striped cadast-table-form">
                             <tr>
                                 <td><label>Projeto:</label></td>
                                 <td> <input type="text" ng-model="formaltproj.projeto" value="" class="form-control col-md-3" ng-disabled="camposform"/> </td>
@@ -186,7 +186,6 @@
                                 </td>
                                 <td><label>Região:</label></td>
                                 <td><select ng-model="formaltproj.regiao" ng-options="val for val in selectOptionRegiaoForm()" class="form-control" ng-change="selectOptionSistemaform()"></select></td>
-                                <td><label>Sistema:</label></td>
                                 <td><label>Sistema:</label></td>
                                 <td><input type="text" ng-model="formaltproj.sistema" list="d1" class="form-control">
                                     <datalist id="d1">
@@ -235,13 +234,13 @@
                                 <td><span style="color:red" data-thousands="." data-decimal="," data-prefix="R$ " id="currency">{{baseline_red[$index] | currency}}</span></td>
                             </tr>   
                         </table>
-                        <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
+                        <button type="button" ng-click="ValidaForm();" class="btn btn-info cadast-form-submit">Salvar</button>
                     </div>
                     <div class="col-md-1">
                         <table class="table table-striped">
                             <tr>    
-                                <td><button type="button" ng-click="funcMes(1);" class="btn btn-info glyphicon-plus"></button></td>
-                                <td colspan="2"><button type="button"  ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus"></button></td>
+                                <td><button type="button" ng-click="funcMes(1);" class="btn btn-info glyphicon-plus cadast-botao-plus"></button></td>
+                                <td colspan="2"><button type="button"  ng-click="funcMes(-1);" class="btn btn-info glyphicon-minus cadast-botao-minus"></button></td>
                             </tr>   
                         </table>
                     </div>

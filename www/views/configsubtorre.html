@@ -33,54 +33,65 @@
     <div class="content-wrapper">
         <div class="container">
             <div class="row">
-                <div class="col-md-4">
-                    <form>
-                        <label>SubTorre: </label>
-                        <input type="text" ng-model="formsubtorre.subtorre" value="" class="form-control" />
-                        <br />
-                        <label>Torre:&nbsp; </label>
-                        <select ng-model="formsubtorre.torre_id" class="form-control">
-                            <option ng-repeat="id in torre" value="{{id.torre}}">{{id.torre}}</option>
-                        </select>
-                        <br />
-                        <label>Valor Máx. do Gráfico: </label>
-                        <input type="text" ng-model="formsubtorre.max_grafico" value="" class="form-control" monetariosub/>
-                        <br />
-                        <label>Ano Máximo por Contrato: </label>
-                        <input type="text" ng-model="formsubtorre.ano_limite" value="" class="form-control" />
-                        <br />
-                        <br />
-                        <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
-                        <br />
-                    </form>
-                </div>
-                <div class="col-md-2">
-                </div>
-                <div class="col-md-6">
-                    <div>
-                        <h3> SubTorres Cadastradas </h3>
-                        <div>
-                            <table class="table table-striped table-hover table-responsive">
-                                <thead>
-                                    <tr>
-                                        <th>Torre</th>
-                                        <th>SubTorre</th>
-                                        <th>Valor Máx. do Gráfico</th>
-                                        <th>Ano Máx. por Contrato</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="id in subtorre" ng-click="alteraSubtorre(id)">
-                                        <td>{{id.torre_id}}</td>
-                                        <td>{{id.subtorre}}</td>
-                                        <td>{{id.max_grafico | currency}}</td>
-                                        <td>{{id.ano_limite}}</td>
-                                        <td><button type="button" ng-click="deleteSubtorre(id.subtorre);" class="btn btn-info glyphicon glyphicon-trash"></button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                 <div class="col-md-4 col-md-45"><hr class="dash-relatorio" /></div>
+                 <div class="col-md-3"><span class="tit-relatorio">CADASTRAR SUBTORRE</span></div>
+                 <div class="col-md-4 col-md-45"><hr class="dash-relatorio" /></div>
+            </div>
+            <div class="row">
+                <form>
+                    <table class="table table-striped cadast-table-form">
+                        <tr>
+                            <td><label>SubTorre: </label></td>
+                            <td>
+                                <input type="text" ng-model="formsubtorre.subtorre" value="" class="form-control" />
+                            </td>
+                            <td><label>Torre:&nbsp; </label></td>
+                            <td>
+                                <select ng-model="formsubtorre.torre_id" class="form-control">
+                                    <option ng-repeat="id in torre" value="{{id.torre}}">{{id.torre}}</option>
+                                </select>
+                            </td>
+                            <td><label>Valor Máx. do Gráfico: </label></td>
+                            <td>
+                                <input type="text" ng-model="formsubtorre.max_grafico" value="" class="form-control" monetariosub/>
+                            </td>
+                            <td> <label>Ano Máximo por Contrato: </label></td>
+                            <td>
+                                <input type="text" ng-model="formsubtorre.ano_limite" value="" class="form-control" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='4'>
+                                <button type="button" ng-click="ValidaForm();" class="btn btn-info altera-form-filtro">Salvar</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+                <div>
+                    <table class="table table-striped table-hover table-responsive size10 altera-table">
+                        <thead>
+                            <tr>
+                                <td colspan='5' class="cadast-table-tit">SubTorres Cadastradas</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class='cadast-tab-cabec'>Torre</td>
+                                <td class='cadast-tab-cabec'>SubTorre</td>
+                                <td class='cadast-tab-cabec'>Valor Máx. do Gráfico</td>
+                                <td colspan="2" class='cadast-tab-cabec'>Ano Máx. por Contrato</td>
+                            </tr>
+                            <tr ng-repeat="id in subtorre" ng-click="alteraSubtorre(id)">
+                                <td>{{id.torre_id}}</td>
+                                <td>{{id.subtorre}}</td>
+                                <td>{{id.max_grafico | currency}}</td>
+                                <td>{{id.ano_limite}}</td>
+                                <td class="aln-btn">
+                                    <button type="button" ng-click="deleteSubtorre(id.subtorre);" class="btn-lixeira"></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

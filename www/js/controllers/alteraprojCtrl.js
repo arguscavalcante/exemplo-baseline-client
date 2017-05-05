@@ -22,7 +22,8 @@ angular
         dtab.setDate(15);
         dtab.setMonth(dtab.getMonth() - 1);
         var com_torre = false;
-        var mudacor = ['lightcoral', 'lightblue'];
+        var mudacor = ['#f7c9c8', '#9dd8ed'];
+        var mudacorborda = ['#d67e7c', '#009bd4'];;
         var contacor = 2;
         $scope.projeto = [];
         $scope.tabela = [];
@@ -448,8 +449,8 @@ angular
                                             $scope.tabelagasto.push(value.dados[i].gasto_mes);
                                             $scope.tabelabaseline.push(value.dados[i].baseline);
                                             if(value.dados[i].dependencia=='S'){
-                                                $scope.colordepend[j-1] = {'background-color': mudacor[contacor%2]};
-                                                $scope.colordepend.push({'background-color': mudacor[contacor%2]});
+                                                $scope.colordepend[j-1] = {'background-color': mudacor[contacor%2], 'border-color': mudacorborda[contacor%2]};
+                                                $scope.colordepend.push({'background-color': mudacor[contacor%2], 'border-color': mudacorborda[contacor%2]});
                                                 contacor++;
                                                 // $scope.tabelapag[i] = $scope.tabelabaseline[i] - $scope.tabelagasto[i];
                                             }else{

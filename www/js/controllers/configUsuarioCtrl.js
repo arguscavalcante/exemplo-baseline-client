@@ -119,7 +119,7 @@ angular
             }
             
             angular.forEach($scope.usuario, function(value,index){
-                if (angular.lowercase(value.login_user).replace(/[\s]/g, '') == angular.lowercase($scope.formusuario.login_user.replace(/[\s]/g, ''))){
+                if (angular.lowercase(value.login_user).replace(/[\s]/g, '') == angular.lowercase($scope.formusuario.login_user.replace(/[\s]/g, '') && altera!='S')){
                     alert('Esse usuário já existe.');
                     bool = false;
                 }
@@ -131,12 +131,15 @@ angular
                     return;
                 }
 
-                User.upsertWithWhere({where: {login_user: ''+ $scope.formusuario.login_user +''}}, {fase: ''+ $scope.formusuario.fase +'', descricao: ''+ $scope.formusuario.descricao +''}, function(info, err) {
+                User.upsertWithWhere({where: {login_user: ''+ $scope.formusuario.login_user +''}}, 
+                                                {login_pass: ''+ $scope.formusuario.login_pass +'', 
+                                                login_nome: ''+ $scope.formusuario.login_nome +'',
+                                                perfil: ''+ $scope.formusuario.perfil +'',
+                                                familia: $scope.formusuario.familia}
+                                            , function(info, err) {
                     //console.log(info);
-                    User.destroyById({login_user: $scope.formusuario.login_user}, function(err){
-                        $state.reload();
-                        return;
-                    });   
+                    $state.reload();
+                    return;
                 });
             }
 

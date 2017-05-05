@@ -73,7 +73,7 @@ angular
             }
             
             angular.forEach($scope.Fase,function(value,index){
-                if (angular.lowercase(value.fase).replace(/[\s]/g, '') == angular.lowercase($scope.formfase.fase).replace(/[\s]/g, '' && alterar!='S')){
+                if (angular.lowercase(value.fase).replace(/[\s]/g, '') == angular.lowercase($scope.formfase.fase).replace(/[\s]/g, '') && alterar!='S'){
                     alert('Esse registro já existe.');
                     bool = false;
                 }

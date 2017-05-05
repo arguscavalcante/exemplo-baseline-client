@@ -32,62 +32,68 @@
     <div class="content-wrapper">
         <div class="container">
             <div class="row">
-                <div class="col-md-4">
-                    <form>
-                        <label>ID IBM:&nbsp; </label>
-                        <input type="text" ng-model="formusuario.login_user" value="" class="form-control" />
-                        <br />
-                        <label>Nome:&nbsp; </label>
-                        <input type="text" ng-model="formusuario.login_nome" value="" class="form-control" />
-                        <br />
-                        <label>Perfil:&nbsp; </label>
-                        <select ng-model="formusuario.perfil" class="form-control">
-                            <option ng-repeat="id in perfil.opcoes" value="{{id.nome}}">{{id.nome}}</option>
-                        </select>
-                        <br />
-                        <label>Familia:&nbsp; </label>
-                        <select ng-model="formusuario.familia" ng-options="val for val in selectOptionFamilia()" multiple class="form-control"></select>
-                        <br />
-                        
-                        <br />
-                        <button type="button" ng-click="ValidaForm();" class="btn btn-info">Salvar</button>
-                        <br />
-                    </form>
-                </div>
-                <div class="col-md-1">
-                </div>
-                <div class="col-md-7">
-                    <div>
-                        <h3> Usuários Cadastrados </h3>
-                        <div>
-                            <table class="table table-striped table-hover table-responsive">
-                                <thead>
-                                    <tr>
-                                        <th>Login</th>
-                                        <th>Senha</th>
-                                        <th>Nome</th>
-                                        <th>Perfil</th>
-                                        <th>Familia</th>
-                                        <th>Resetar Senha</th>
-                                        <th>Excluir</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="id in usuario" ng-click="alteraUsuario(id)">
-                                        <td>{{id.login_user}}</td>
-                                        <td>******</td>
-                                        <td>{{id.login_nome}}</td>
-                                        <td>{{id.perfil}}</td>
-                                        <td>{{id.familiacons}}</td>
-                                        <td><button type="button" ng-click="trocaSenha(id.login_user);" class="btn btn-info glyphicon glyphicon-transfer"></button></td>
-                                        <td><button type="button" ng-click="excluiUser(id.login_user);" class="btn btn-info glyphicon glyphicon-trash"></button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                 <div class="col-md-4 col-md-45"><hr class="dash-relatorio" /></div>
+                 <div class="col-md-3"><span class="tit-relatorio">CADASTRAR USUÁRIOS</span></div>
+                 <div class="col-md-4 col-md-45"><hr class="dash-relatorio" /></div>
+            </div>
+            <div class="row">
+                <form> 
+                    <table class="table table-striped cadast-table-form">
+                        <tr>
+                            <td><label>ID IBM:&nbsp; </label></td>
+                            <td>
+                                <input type="text" ng-model="formusuario.login_user" value="" class="form-control" />
+                            </td>
+                            <td><label>Nome:&nbsp; </label></td>
+                            <td>
+                                <input type="text" ng-model="formusuario.login_nome" value="" class="form-control" />
+                            </td>
+                            <td><label>Perfil:&nbsp; </label></td>
+                            <td>
+                                <select ng-model="formusuario.perfil" class="form-control">
+                                    <option ng-repeat="id in perfil.opcoes" value="{{id.nome}}">{{id.nome}}</option>
+                                </select>
+                            </td>
+                            <td><label>Familia:&nbsp; </label></td>
+                            <td>
+                                <select ng-model="formusuario.familia" ng-options="val for val in selectOptionFamilia()" multiple class="form-control"></select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='8'><button type="button" ng-click="ValidaForm();" class="btn btn-info altera-form-filtro">Salvar</button></td>
+                        </tr>
+                    </table>
+                </form>
+                <div>
+                    <table class="table table-striped table-hover table-responsive size10 altera-table">
+                        <thead>
+                            <tr>
+                                <td colspan='7' class="cadast-table-tit">Usuários Cadastrados</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class='cadast-tab-cabec'>Login</td>
+                                <td class='cadast-tab-cabec'>Senha</td>
+                                <td class='cadast-tab-cabec'>Nome</td>
+                                <td class='cadast-tab-cabec'>Perfil</td>
+                                <td class='cadast-tab-cabec'>Familia</td>
+                                <td class='cadast-tab-cabec'>Resetar Senha</td>
+                                <td class='cadast-tab-cabec'>Excluir</td>
+                            </tr>
+                            <tr ng-repeat="id in usuario" ng-click="alteraUsuario(id)">
+                                <td>{{id.login_user}}</td>
+                                <td>******</td>
+                                <td>{{id.login_nome}}</td>
+                                <td>{{id.perfil}}</td>
+                                <td>{{id.familiacons}}</td>
+                                <td class="aln-btn"><button type="button" ng-click="trocaSenha(id.login_user);" class="btn-trocar"></button></td>
+                                <td class="aln-btn"><button type="button" ng-click="excluiUser(id.login_user);" class="btn-lixeira"></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
- 
+

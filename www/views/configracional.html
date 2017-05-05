@@ -32,72 +32,86 @@
     <!-- MENU SECTION END-->
     <div class="content-wrapper">
         <div class="container">
+            <div class="row">
+                 <div class="col-md-4 col-md-45"><hr class="dash-relatorio" /></div>
+                 <div class="col-md-3"><span class="tit-relatorio">CONFIGURAR RACIONAL</span></div>
+                 <div class="col-md-4 col-md-45"><hr class="dash-relatorio" /></div>
+            </div>
             <div class="row" ng-show="racional.opcao">
-                <div class="col-md-6">
+                <div class="col-md-6" style="text-align: center">
                     <button type="button" ng-click="racionalGerar();" class="btn btn-info">Gerar Racional</button>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" style="text-align: center">
                     <button type="button" ng-click="valorBonus();" class="btn btn-info" ng-disabled="racional.desBonus">Gerenciar Valor Bonus</button>
                 </div>
             </div>          
             <div class="row" ng-show="racional.relatorio">
                 <div class="col-md-12">
                     <div>
-                        <h3> Racional Cadastrado </h3>
-                        <div>
-                            <label>SELECIONE UMA FAMÍLIA: &nbsp;</label>
-                            <select ng-model="familiaTabela" class="form-control" ng-change="gerarTabela();" ng-disabled="carregouDados">
-                                <option ng-repeat="val in user.familias" value="{{val}}">{{val}}</option>
-                            </select>
-                            <br />
-                            <span ng-repeat="id in class_order track by $index">
-                                <input type="checkbox" value="{{id}}" ng-click="mostrarTabela(id);" />{{id}}
-                            </span>
-                            <br />
-                            <table class="table table-striped table-hover table-responsive">
-                                <tbody>
-                                    <tr>
-                                        <td><b>{{familiaTabela}}</b></td>
-                                        <td ng-repeat="id in date"><b> {{id}} </b></td>
-                                    </tr>
-                                    <tr ng-repeat="class in tabelaRacional">
-                                        <td><b>{{class.class}}</b></td>
-                                        <td ng-repeat="value in class.valor track by $index">{{value | currency}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <table class="table table-striped cadast-table-form">
+                            <tr>
+                                <td><label>Família: &nbsp;</label></td>
+                                <td>
+                                    <select ng-model="familiaTabela" class="form-control" ng-change="gerarTabela();" ng-disabled="carregouDados">
+                                        <option ng-repeat="val in user.familias" value="{{val}}">{{val}}</option>
+                                    </select>
+                                </td>
+                                <td><label>Ordenação: &nbsp;</label></td>
+                                <td>
+                                    <span ng-repeat="id in class_order track by $index">
+                                        <input type="checkbox" value="{{id}}" ng-click="mostrarTabela(id);" />{{id}}
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="table table-striped table-hover table-responsive size10 altera-table">
+                            <thead>
+                                <tr>
+                                    <td colspan='8' class="cadast-table-tit">Racional Gerado</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class='cadast-tab-cabec'><b>{{familiaTabela}}</b></td>
+                                    <td ng-repeat="id in date" class='cadast-tab-cabec'><b> {{id}} </b></td>
+                                </tr>
+                                <tr ng-repeat="class in tabelaRacional">
+                                    <td class='cadast-tab-cabec'><b>{{class.class}}</b></td>
+                                    <td ng-repeat="value in class.valor track by $index">{{value | currency}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
             <div class="row" ng-show="racional.busca">
                 <div class="col-md-12">
-                    <table class="table table-striped">
+                    <table class="table table-striped cadast-table-form">
                         <tr>
-                            <td colspan="4"><h4> Busca </h4></td>
-                        </tr>
-                        <tr>
-                            <td class="col-md-2"><label>Familia:</label></td>
-                            <td class="col-md-3">
-                                <select ng-model="filtroBusca.familia" class="form-control" ng-disabled="filtroBusca.familia != null">
+                            <td><label>Familia:</label></td>
+                            <td>
+                                 <select ng-model="filtroBusca.familia" class="form-control" ng-disabled="filtroBusca.familia != null">
                                     <option ng-repeat="id in familia | orderBy:'toString()'" value="{{id}}">{{id}}</option>
                                 </select>
                             </td>
                         </tr>
                     </table>
                     <div ng-if="filtroBusca.familia!=null">
-                        <table class="table table-striped table-hover table-responsive">
+                        <table class="table table-striped table-hover table-responsive size10 altera-table">
                             <thead>
                                 <tr>
-                                    <th>Familia</th>
-                                    <th>Mês/Ano</th>
-                                    <th>Baseline</th>
-                                    <th>Disponível Torre</th>   
-                                    <th>Consumido Torre</th>                                     
-                                    <th>Bonus Baseline</th>
+                                    <td colspan='6' class="cadast-table-tit">Racionais Cadastrados</td>
                                 </tr>
                             </thead>
                             <tbody>
+                                <tr>
+                                    <td class='cadast-tab-cabec'>Familia</td>
+                                    <td class='cadast-tab-cabec'>Mês/Ano</td>
+                                    <td class='cadast-tab-cabec'>Baseline</td>
+                                    <td class='cadast-tab-cabec'>Disponível Torre</td>   
+                                    <td class='cadast-tab-cabec'>Consumido Torre</td>                                     
+                                    <td class='cadast-tab-cabec'>Bonus Baseline</td>
+                                </tr>
                                 <tr dir-paginate="id in tabelalimreal|filter:{familia:filtroBusca.familia}|itemsPerPage:filtroBusca.qnt_itens">
                                     <td>{{id.familia}}</td>
                                     <td>{{id.mes}}</td>
@@ -110,7 +124,7 @@
                         </table>
                         <dir-pagination-controls max-size="5" boundary-links="true"></dir-pagination-controls>
                         <br />
-                        <button type="button" ng-click="salvarBonus();" class="btn btn-info">Salvar</button>
+                        <button type="button" ng-click="salvarBonus();" class="btn btn-info altera-form-filtro">Salvar</button>
                     </div>
                 </div>
             </div>
