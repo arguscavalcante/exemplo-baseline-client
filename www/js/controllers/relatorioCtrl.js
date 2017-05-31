@@ -228,7 +228,7 @@ angular
             var graf_max = 0;
             if(angular.isUndefined($scope.subtorre.max_grafico)){
                 alert('Parametrização do Gráfico nao encontrada, foi definida a parametrização padrão.');
-                graf_max = 700000
+                graf_max = 2000000
             } else {
                 graf_max = $scope.subtorre.max_grafico;
             }

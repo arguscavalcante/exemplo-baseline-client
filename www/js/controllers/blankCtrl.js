@@ -53,8 +53,9 @@ angular
                 var i =0;
                 $interval(function() {
                     if(i< res.length){
-                        console.log(res[i])
-                        Projeto.destroyById({id: res[i].projeto_id}, function(err){});
+                        if(res[i].projeto_id.includes("carga")){
+                            Projeto.destroyById({id: res[i].projeto_id}, function(err){});
+                        }
                         i++;
                     } else {
                         $interval.cancel();
