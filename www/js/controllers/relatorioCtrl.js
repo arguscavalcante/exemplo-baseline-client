@@ -31,7 +31,8 @@ angular
         $scope.formfiltro = {}; //filtro para regerar o Grafico
         $scope.subtorre = [];
         $scope.subtorres = [];
-        $scope.projetoscompleto = {};
+        $scope.projetoscompleto = [];
+        $scope.projetosres = {};
         $scope.projetos = [];
         $scope.projmeses = [];
         $scope.date = [];
@@ -93,17 +94,14 @@ angular
             $scope.relatorio.download = true;
             // console.log($scope.user);
             $timeout(function(){
-                Projeto.find()
+                Projeto.find({filter: {"where": {"familia":''+$scope.user.familias[i]+''}}})
                     .$promise
                         .then(function (res, err) {
-                            $scope.projetoscompleto = res;
                             $scope.relatorio.filtro = false;
-                            angular.forEach($scope.projetoscompleto, function(value, index){
-                                if(value.familia == $scope.user.familia){
-                                    $scope.projetos.push(value);
-                                    for(var i=0; i<value.meses.length; i++){
-                                        $scope.projmeses.push(value.meses[i]);
-                                    }
+                            $scope.projetos = res;
+                            angular.forEach($scope.projetos, function(value, index){
+                                for(var i=0; i<value.meses.length; i++){
+                                    $scope.projmeses.push(value.meses[i]);
                                 }
                             })
                             $timeout(function(){
@@ -113,34 +111,48 @@ angular
             }, 500);
         } 
 
+        function projetoGet(i) {
+            if (i < 0){
+                listarProjetos();
+                return;
+            }
+
+            setTimeout(function () {
+
+            Projeto.find({filter: {"where": {"familia":''+$scope.user.familias[i]+''}}})
+                .$promise
+                    .then(function (res, err) {
+                        $scope.projetosres = res;
+                        $scope.relatorio.filtro = false;
+                        projetoGet(--i);
+                        angular.forEach($scope.projetosres, function(value, index){
+                            $scope.projetoscompleto.push(value);
+                            if(value.familia == $scope.user.familia){
+                                $scope.projetos.push(value);
+                                for(var i=0; i<value.meses.length; i++){
+                                    $scope.projmeses.push({mes: value.meses[i].mes, valor: value.meses[i].valor, classgeral: value.classificacao_geral});
+                                }
+                            }
+                        })
+                    }); 
+
+            }, 500);
+        }
+
+        
+
         $scope.atribuiFamilia = function(){
-            // console.log($scope.user);
+            console.log($scope.user);
             $scope.user.subtorre = $scope.user.familia.substring($scope.user.familia.indexOf("-")+2);
             $scope.opcoes = false; 
             $scope.grafico = true;
             $scope.relatorio.filtro = true;
             $scope.relatorio.download = true;
-            $timeout(function(){
-                Projeto.find()
-                    .$promise
-                        .then(function (res, err) {
-                            $scope.projetoscompleto = res;
-                            $scope.relatorio.filtro = false;
-                            angular.forEach($scope.projetoscompleto, function(value, index){
-                                if(value.familia == $scope.user.familia){
-                                    $scope.projetos.push(value);
-                                    for(var i=0; i<value.meses.length; i++){
-                                        $scope.projmeses.push({mes: value.meses[i].mes, valor: value.meses[i].valor, classgeral: value.classificacao_geral});
-                                    }
-                                }
-                            })
-                            $timeout(function(){
-                                listarProjetos();
-                            }, 500);
-                        });
-            }, 1000);
+            var i = $scope.user.familias.length - 1;
+
+            projetoGet(i);      
         }
-        
+
         $scope.atualizaPag = function(){
             $state.reload();
         }
@@ -214,7 +226,7 @@ angular
         function alimentaProjetos(qnt) {
             $scope.projBase = []; //reinicia variavel
             var graf_max = 0;
-            if(angular.isUndefined($scope.subtorre)){
+            if(angular.isUndefined($scope.subtorre.max_grafico)){
                 alert('Parametrização do Gráfico nao encontrada, foi definida a parametrização padrão.');
                 graf_max = 700000
             } else {
@@ -248,6 +260,7 @@ angular
             for (var i = 0; i < qnt; i++) {
                 dados.push(0);
             }
+            console.log($scope.projmeses)
             // console.log($scope.projetos);
             angular.forEach($scope.projmeses, function (value, index) {
                 if (value.classgeral == tipo) {

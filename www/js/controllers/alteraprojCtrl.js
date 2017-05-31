@@ -26,6 +26,7 @@ angular
         var mudacorborda = ['#d67e7c', '#009bd4'];;
         var contacor = 2;
         $scope.projeto = [];
+        $scope.projetosres = {};
         $scope.tabela = [];
         $scope.filtroResult = {};
         $scope.formaltproj = {};
@@ -90,19 +91,10 @@ angular
             $state.reload();
         }
 
-        // Alimenta objeto com todos os Projetos
-        Projeto.find()
-            .$promise
-                .then(function(res, err){
-                    // $scope.projeto = res;
-                    // console.log(res);
-                    angular.forEach(res, function(value, index){
-                        if($scope.user.familias.includes(value.familia)){
-                            $scope.projeto.push(value);
-                        } 
-                })
-                // Alimenta objeto com todas as Regiões/Sistemas
-                $timeout(function(){
+         function projetoGet(i) {
+            // $scope.projetosres = {};
+            if (i < 0){
+                 $timeout(function(){
                     Regiao.find()
                         .$promise
                             .then(function(res, err){
@@ -116,7 +108,26 @@ angular
                                 });
                             });
                 }, 500);
-        });
+                return;
+            }
+
+            setTimeout(function () {
+            // console.log($scope.user.familias[i]);
+            Projeto.find({filter: {"where": {"familia":''+$scope.user.familias[i]+''}}})
+                .$promise
+                    .then(function (res, err) {
+                        $scope.projetosres = res;
+                        // console.log(res);
+                        projetoGet(--i);
+                        angular.forEach($scope.projetosres, function(value, index){
+                            $scope.projeto.push(value);
+                        })
+                    }); 
+
+            }, 500);
+        }
+
+        projetoGet($scope.user.familias.length-1);
 
         //Funcao para incluir e excluir meses
         $scope.funcMes = function(valor){
@@ -385,7 +396,6 @@ angular
                 sistema: value.sistema,
                 fase: value.fase,
                 familia: value.familia,
-                sistema: value.sistema,
                 valor_total_proj: currencyValue(value.valor_total_proj),
                 meses: value.meses
             };
@@ -394,7 +404,7 @@ angular
                 value.valor = currencyValue(value.valor)
             });
 
-            // console.log($scope.formaltproj);
+            console.log($scope.formaltproj);
             // console.log($scope.baseline_red)
 
             // // Alimenta objeto com todas os Gerentes

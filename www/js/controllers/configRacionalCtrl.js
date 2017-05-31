@@ -18,7 +18,7 @@ angular
         
         $scope.mostrar = {};
         $scope.user = {};
-        $scope.projetos = {};
+        $scope.projetos = [];
         $scope.valorAlterado = [];
         $scope.user = {
             gerente: sessionStorage.getItem('login'),
@@ -97,26 +97,34 @@ angular
 
         $scope.date = alimentaData(d, 7);
 
+        
+
         //atribui valores do projetos
         function atribuirDado(tipo, pai) {
             var dados = [];
+
             for (var i = 0; i < $scope.date.length; i++) {
                 dados.push(0);
             }
-            angular.forEach($scope.projetos, function (value, index) {
-                if (value.familia == $scope.familiaTabela){
-                    if (value.classificacao_geral == tipo) {
-                        for (var i = 0; i < $scope.date.length; i++) {
-                            for(var j=0; j<value.meses.length; j++){
-                                if ($scope.date[i] == value.meses[j].mes) {
-                                    dados[i] = dados[i] + value.meses[j].valor;
-                                    dados[i] = Math.round(dados[i] * 100)/100;
+
+            Projeto.find({filter: {"where": {"familia":''+$scope.familia[i].familia+''}}})
+                .$promise
+                    .then(function (res, err) {
+                        $scope.projetos = res;
+                        angular.forEach($scope.projetos, function (value, index) {
+                            if (value.classificacao_geral == tipo) {
+                                for (var i = 0; i < $scope.date.length; i++) {
+                                    for(var j=0; j<value.meses.length; j++){
+                                        if ($scope.date[i] == value.meses[j].mes) {
+                                            dados[i] = dados[i] + value.meses[j].valor;
+                                            dados[i] = Math.round(dados[i] * 100)/100;
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    }
-                }
-            });
+                        });
+                    }); 
+
             // console.log(dados.splice(0, 0, tipo))
             // dados.splice(0, 0, tipo);
             dados.splice(0, 0, pai)
@@ -205,26 +213,19 @@ angular
 
         function gerarRacional(){ 
             $timeout(function(){
-                Projeto.find()
+                ClassGeral.find()
                     .$promise
                         .then(function (res, err){
-                            $scope.projetos = res;
-                            $timeout(function(){
-                                ClassGeral.find()
-                                    .$promise
-                                        .then(function (res, err){
-                                            $scope.classgeral = res;
-                                            $scope.carregouDados = false;   
-                                            var count = 1
-                                            angular.forEach($scope.classgeral, function(value, index){
-                                                if(!$scope.class_order.includes(value.classgeral_pai)){
-                                                    $scope.class_order.push(value.classgeral_pai);
-                                                    count++;
-                                                } 
-                                            });      
-                                            // console.log( $scope.class_order)                
-                                        });
-                            }, 500);
+                            $scope.classgeral = res;
+                            $scope.carregouDados = false;   
+                            var count = 1
+                            angular.forEach($scope.classgeral, function(value, index){
+                                if(!$scope.class_order.includes(value.classgeral_pai)){
+                                    $scope.class_order.push(value.classgeral_pai);
+                                    count++;
+                                } 
+                            });      
+                            // console.log( $scope.class_order)                
                         });
             }, 500);
         }  

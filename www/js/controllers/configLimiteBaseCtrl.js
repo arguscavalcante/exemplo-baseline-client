@@ -52,7 +52,7 @@ angular
         $scope.limgrafico = {};
         $scope.formlimgraf = {};
         $scope.subtorre = {};
-        $scope.projeto = {};
+        $scope.projeto = [];
         $scope.classgeral =[];
         $scope.limreal = {};
         $scope.hab_salvar = false;
@@ -254,32 +254,50 @@ angular
             return value.substring(0, 4) + '-' + value.substring(4, value.length) + '-15';
         }
 
+        function projetoGet(i) {
+            var achei = false;
+
+            if (i < 0){
+                Regiao.find()
+                    .$promise
+                        .then(function(res, err){
+                            for(var j=0; j<$scope.familia.length; j++){
+                                angular.forEach(res, function(value, index){
+                                    if(value.familia == $scope.familia[j].familia){
+                                        $scope.sistemas.push({familia: value.familia, torre: $scope.familia[j].torre, regiao:value.regiao, sistemas:value.sistemas})
+                                    }
+                                })
+                            }
+                        })
+
+                $scope.hab_salvar = achei;                
+                return;
+            }
+
+            setTimeout(function () {
+
+                Projeto.find({filter: {"where": {"familia":''+$scope.familia[i].familia+''}}})
+                    .$promise
+                        .then(function (res, err) {
+                            $scope.projetosres = res;
+                            projetoGet(--i);
+                            angular.forEach($scope.projetosres, function(value, index){
+                                $scope.projeto.push(value);
+                                achei = true;
+                            })
+                        }); 
+
+            }, 500);
+        }
+
         // Alimenta com todas as Subtorres
         SubTorre.find().$promise.then(function(res, err){
             $scope.subtorre = res;
             angular.forEach(res, function(value, index){
                 $scope.familia.push({torre: value.torre, familia: value.torre_id + " - " + value.subtorre})
             });
-            Regiao.find()
-                .$promise
-                    .then(function(res, err){
-                        for(var i=0; i<$scope.familia.length; i++){
-                            angular.forEach(res, function(value, index){
-                                if(value.familia == $scope.familia[i].familia){
-                                    $scope.sistemas.push({familia: value.familia, torre: $scope.familia[i].torre, regiao:value.regiao, sistemas:value.sistemas})
-                                }
-                            })
-                        }
-                        $timeout(function(){
-                            // Alimenta com os Projetos
-                            Projeto.find()
-                                .$promise
-                                    .then(function(res, err){
-                                        $scope.projeto = res;
-                                        $scope.hab_salvar = true;
-                                    });
-                        }, 1000);
-                    });
+
+                projetoGet($scope.familia.length);
             //console.log(res);
         });
 
