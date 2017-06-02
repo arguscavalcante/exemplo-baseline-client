@@ -91,9 +91,10 @@ angular
             $state.reload();
         }
 
-         function projetoGet(i) {
-            // $scope.projetosres = {};
-            if (i < 0){
+         function projetoGet(bool, qnt_skips) {
+            var qnt_registros = 199;
+            
+            if (!bool){
                  $timeout(function(){
                     Regiao.find()
                         .$promise
@@ -109,25 +110,29 @@ angular
                             });
                 }, 500);
                 return;
+            } else {
+                setTimeout(function () {
+                    Projeto.find({"filter":{"limit": qnt_registros, "skip": qnt_skips}})
+                        .$promise
+                            .then(function (res, err) {
+                                if(res.length == 0){
+                                    projetoGet(false, 0);
+                                } else {
+                                    $scope.projetosres = res;
+                                    // console.log(res);
+                                    projetoGet(true, qnt_skips+qnt_registros);
+                                    angular.forEach($scope.projetosres, function(value, index){
+                                        $scope.projeto.push(value);
+                                    })
+                                }
+                            }); 
+                }, 500);
             }
 
-            setTimeout(function () {
-            // console.log($scope.user.familias[i]);
-            Projeto.find({filter: {"where": {"familia":''+$scope.user.familias[i]+''}}})
-                .$promise
-                    .then(function (res, err) {
-                        $scope.projetosres = res;
-                        // console.log(res);
-                        projetoGet(--i);
-                        angular.forEach($scope.projetosres, function(value, index){
-                            $scope.projeto.push(value);
-                        })
-                    }); 
-
-            }, 500);
+            
         }
 
-        projetoGet($scope.user.familias.length-1);
+        projetoGet(true, 0);
 
         //Funcao para incluir e excluir meses
         $scope.funcMes = function(valor){
