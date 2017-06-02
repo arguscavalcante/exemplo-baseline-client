@@ -107,7 +107,7 @@ angular
                 dados.push(0);
             }
 
-            Projeto.find({filter: {"where": {"familia":''+$scope.familia[i].familia+''}}})
+            Projeto.find({filter: {"where": {"familia":''+ $scope.familiaTabela +''}}})
                 .$promise
                     .then(function (res, err) {
                         $scope.projetos = res;

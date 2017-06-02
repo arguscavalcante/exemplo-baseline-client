@@ -384,22 +384,22 @@ angular
 
                             $scope.formlimgraf.id = $scope.formlimgraf.data_corte + $scope.formlimgraf.familia.replace(/[\s]/g, '');
                             console.log($scope.formlimreal.dados);
-                            // LimiteGrafico.create($scope.formlimgraf, function(res, err){
-                                //console.log(res);
-                                // LimiteReal.find({filter:{where: {familia: ''+ $scope.formlimreal.familia +''}}})
-                                //     .$promise
-                                //         .then(function(res){
-                                //             if(res.length > 0){
-                                //                 LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formlimreal.familia +''}}, {dados: $scope.formlimreal.dados}, function(res, err){
-                                //                     $state.reload();
-                                //                 })
-                                //             } else {
-                                //                 LimiteReal.create($scope.formlimreal, function(res, err){
-                                //                     $state.reload();
-                                //                 })
-                                //             }
-                                //         })
-                            // })
+                            LimiteGrafico.create($scope.formlimgraf, function(res, err){
+                                // console.log(res);
+                                LimiteReal.find({filter:{where: {familia: ''+ $scope.formlimreal.familia +''}}})
+                                    .$promise
+                                        .then(function(res){
+                                            if(res.length > 0){
+                                                LimiteReal.upsertWithWhere({where: {familia: ''+ $scope.formlimreal.familia +''}}, {dados: $scope.formlimreal.dados}, function(res, err){
+                                                    $state.reload();
+                                                })
+                                            } else {
+                                                LimiteReal.create($scope.formlimreal, function(res, err){
+                                                    $state.reload();
+                                                })
+                                            }
+                                        })
+                            })
                         }
                     })
         }
