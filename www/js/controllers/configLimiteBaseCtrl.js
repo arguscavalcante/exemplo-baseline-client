@@ -255,10 +255,10 @@ angular
         }
 
         function projetoGet(bool, qnt_skips) {
-            var achei = false;
             var qnt_registros = 199;
 
             if (!bool){
+                $scope.hab_salvar = !bool;   
                 Regiao.find()
                     .$promise
                         .then(function(res, err){
@@ -271,7 +271,7 @@ angular
                             }
                         })
 
-                $scope.hab_salvar = achei;                
+                console.log($scope.hab_salvar);       
                 return;
             }else{
                 setTimeout(function () {
@@ -279,11 +279,10 @@ angular
                         .$promise
                             .then(function (res, err) {
                                 $scope.projetosres = res;
-                                projetoGet(--i);
                                 angular.forEach($scope.projetosres, function(value, index){
                                     $scope.projeto.push(value);
-                                    achei = true;
                                 })
+                                    projetoGet(--i);
                             }); 
                 }, 500);
             }
