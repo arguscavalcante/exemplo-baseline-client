@@ -74,7 +74,7 @@ angular
             .$promise
                 .then(function(res, err){
                     $scope.limreal = res;
-                    // console.log($scope.limreal)
+                    console.log($scope.limreal)
                     $scope.racional.desBonus = false;
                 });  
 
@@ -107,23 +107,18 @@ angular
                 dados.push(0);
             }
 
-            Projeto.find({filter: {"where": {"familia":''+ $scope.familiaTabela +''}}})
-                .$promise
-                    .then(function (res, err) {
-                        $scope.projetos = res;
-                        angular.forEach($scope.projetos, function (value, index) {
-                            if (value.classificacao_geral == tipo) {
-                                for (var i = 0; i < $scope.date.length; i++) {
-                                    for(var j=0; j<value.meses.length; j++){
-                                        if ($scope.date[i] == value.meses[j].mes) {
-                                            dados[i] = dados[i] + value.meses[j].valor;
-                                            dados[i] = Math.round(dados[i] * 100)/100;
-                                        }
-                                    }
-                                }
+            angular.forEach($scope.projetos, function (value, index) {
+                if (value.classificacao_geral == tipo) {
+                    for (var i = 0; i < $scope.date.length; i++) {
+                        for(var j=0; j<value.meses.length; j++){
+                            if ($scope.date[i] == value.meses[j].mes) {
+                                dados[i] = dados[i] + value.meses[j].valor;
+                                dados[i] = Math.round(dados[i] * 100)/100;
                             }
-                        });
-                    }); 
+                        }
+                    }
+                }
+            });
 
             // console.log(dados.splice(0, 0, tipo))
             // dados.splice(0, 0, tipo);
@@ -217,7 +212,6 @@ angular
                     .$promise
                         .then(function (res, err){
                             $scope.classgeral = res;
-                            $scope.carregouDados = false;   
                             var count = 1
                             angular.forEach($scope.classgeral, function(value, index){
                                 if(!$scope.class_order.includes(value.classgeral_pai)){
@@ -351,12 +345,39 @@ angular
                         tabelaValoresDelta($scope.tabelaRacional);
             }    
         }
+
+        function projetoGet(bool, qnt_skips) {
+            var qnt_registros = 199;
+
+            if(!bool){
+                $scope.carregouDados = false;
+                return;
+            }else{
+                setTimeout(function () {
+                    Projeto.find({"filter":{"limit": qnt_registros, "skip": qnt_skips}})
+                        .$promise
+                            .then(function (res, err) {
+                                if(res.length == 0){
+                                    projetoGet(false, 0);
+                                } else {
+                                     $scope.projetosres = res;
+                                        projetoGet(true, qnt_skips+qnt_registros);
+                                        angular.forEach($scope.projetosres, function(value, index){
+                                            $scope.projetos.push(value);
+                                        })
+                                }
+                            }); 
+
+                    }, 50);
+            }
+        }
         
         $scope.racionalGerar = function(){
             console.log('racionalGerar');
             $scope.racional.opcao = false;
             $scope.racional.relatorio = true;
             gerarRacional();
+            projetoGet(true, 0);
         }
 
         $scope.valorBonus = function(){

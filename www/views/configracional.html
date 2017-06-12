@@ -58,7 +58,7 @@
                                 </td>
                                 <td><label>Ordenação: &nbsp;</label></td>
                                 <td  ng-repeat="id in class_order track by $index">
-                                    <input type="checkbox" value="{{id}}" ng-click="mostrarTabela(id);" /><label>&nbsp;{{id}}</label>
+                                    <input type="checkbox" value="{{id}}" ng-click="mostrarTabela(id);" ng-disabled="carregouDados"/><label>&nbsp;{{id}}</label>
                                 </td>
                             </tr>
                         </table>

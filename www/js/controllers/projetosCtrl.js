@@ -268,6 +268,10 @@ angular
                         $scope.tabeladata = alimentaData(dtab,13)
                         $scope.baseline.valor = alimentaValor($scope.baseline.data, $scope.limite, $scope.user.familia, false);
                         // console.log($scope.baseline.valor)
+                        if($scope.tabeladata.length > 12){
+                            $scope.tabeladata.splice(0, 1);
+                        }
+
                         $scope.tabela = alimentaValor($scope.tabeladata, $scope.limite, $scope.user.familia, true);
                         // console.log($scope.tabela)
                         angular.forEach($scope.limite, function(value, index){
@@ -280,7 +284,7 @@ angular
                                 if($scope.tabeladata.length > 12){
                                      $scope.tabeladata.splice(0, 1);
                                 }
-
+                                
                                 for(var i=0; i<value.dados.length; i++){
                                     for(var j=0; j<$scope.tabeladata.length; j++){
                                         if($scope.tabeladata[j]==value.dados[i].mes){
@@ -296,7 +300,7 @@ angular
                                                     $scope.colordepend.push({});
                                                 }
                                             }
-                                            console.log($scope.colordepend)
+                                            // console.log($scope.colordepend)
                                             // console.log(value.dados[i].torre);
                                             if(value.dados[i].torre!=null){
                                                 com_torre = true;
