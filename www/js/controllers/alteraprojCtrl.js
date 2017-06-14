@@ -223,8 +223,11 @@ angular
         //Option Regiao
         $scope.selectOptionRegiao = function(){
             var options = [];
+            // console.log($scope.filtroResult.familia);
             angular.forEach($scope.regiao, function(value,index){
+                // console.log(value.falimia)
                 if (value.familia == $scope.filtroResult.familia){
+                    // console.log(value.regiao);
                     options.push(value.regiao);
                 }
             })
@@ -405,6 +408,8 @@ angular
                 meses: value.meses
             };
 
+            // console.log($scope.formaltproj)
+
             angular.forEach($scope.formaltproj.meses, function(value, index){
                 value.valor = currencyValue(value.valor)
             });
@@ -525,6 +530,26 @@ angular
             }
         }
 
+        $scope.VoltaForm = function(){
+            $scope.tabela = [];
+            $scope.tabelapag = [];
+            $scope.tabeladata = [];
+            $scope.formaltproj = {};
+            $scope.baseline_red = [];
+            $scope.baseline= {data: [], valor:[]}; 
+            var d = new Date();
+            d.setDate(15);
+            var dtab = new Date();
+            dtab.setDate(15);
+            dtab.setMonth(dtab.getMonth() - 1);
+
+            //console.log($scope.tabela);
+            $scope.buscar = true;
+            $scope.mostrar.tabela = true;
+            $scope.mostrar.selecao = false;
+            $scope.alterar = false;
+        }
+        
         $scope.ValidaForm = function(){
             var bool = true;
             var achei = false;
@@ -802,7 +827,12 @@ angular
             if(valor.toString().indexOf(".")==-1){
                 numberString = valor.toString() + '00'
             } else {
-                numberString = valor.toString().replace('.','')
+                if(valor.toString().split(".")[1].length == 1){
+                    numberString = valor.toString().replace('.','') + '0'
+                }else{
+                    numberString = valor.toString().replace('.','')
+                }
+                // console.log(numberString);
             }
 
             //PARTE 2 - Tratamento para inclusão do filtro
