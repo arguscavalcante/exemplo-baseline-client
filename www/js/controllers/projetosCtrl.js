@@ -79,6 +79,7 @@ angular
 
         $scope.formproj = {};
         $scope.formproj.proposta = 'Sem Linha';
+        $scope.formproj.hitorico = false;
         $scope.formLimReal = {};
 
         $scope.projetos = {};
